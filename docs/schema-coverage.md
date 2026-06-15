@@ -6,42 +6,43 @@ Legacy rows are test/demo data and are not imported. Legacy tables, columns, SQL
 
 | Legacy table | Laravel destination | Status | Notes |
 | --- | --- | --- | --- |
-| `admin` | `admins` | Implemented | Foundation identity migration. |
-| `tbl_user` | `customers` | Implemented | Foundation identity migration. |
-| `service_details` | `stores` | Implemented | Foundation identity migration. Needs full store columns reviewed in catalog phase. |
-| `tbl_rider` | `riders` | Implemented | Foundation identity migration. |
-| `banner` | `banners` | Pending | Marketing/home display. |
-| `tbl_category` | `categories` | Pending | Product/catalog category. |
-| `zones` | `zones` | Pending | Delivery zone and spatial lookup. |
-| `tbl_mcat` | `store_categories` | Pending | Store category mapping. |
-| `tbl_product` | `products` | Pending | Catalog product. |
-| `tbl_product_attribute` | `product_variants` | Pending | Product variants/pricing. |
-| `tbl_extra` | `product_images` | Pending | Product image gallery. |
-| `tbl_photo` | `store_gallery_images` | Pending | Store gallery. |
-| `tbl_delivery` | `delivery_options` | Pending | Store delivery options. |
-| `tbl_time` | `time_slots` | Pending | Store delivery/pickup slots. |
-| `tbl_coupon` | `coupons` | Pending | Store coupon rules. |
-| `tbl_faq` | `faqs` | Pending | Store FAQ content. |
-| `tbl_page` | `pages` | Pending | CMS/static pages. |
-| `tbl_payment_list` | `payment_methods` | Pending | Payment method catalog. |
-| `tbl_normal_order` | `orders` | Pending | Normal order workflow. |
-| `tbl_normal_order_product` | `order_items` | Pending | Normal order line items. |
-| `tbl_subscribe_order` | `subscription_orders` | Pending | Subscription order workflow. |
-| `tbl_subscribe_order_product` | `subscription_order_items` | Pending | Subscription line items/schedules. |
-| `tbl_notification` | `customer_notifications` | Pending | Customer notification inbox. |
-| `tbl_snoti` | `store_notifications` | Pending | Store notification inbox. |
-| `tbl_rnoti` | `rider_notifications` | Pending | Rider notification inbox. |
-| `tbl_fav` | `favorites` | Pending | Customer favorite stores/products. |
-| `tbl_address` | `customer_addresses` | Pending | Customer saved addresses. |
-| `payout_setting` | `payout_requests` | Pending | Store payout requests. |
-| `tbl_cash` | `cash_collections` | Pending | Cash settlement tracking. |
-| `wallet_report` | `wallet_transactions` | Pending | Customer wallet ledger. |
-| `tbl_setting` | `settings` | Pending | Global settings and integration keys. |
-| `tbl_milk` | `milk_data` or documented obsolete decision | Pending review | Must not be removed until legacy references are reviewed and documented. |
+| `admin` | `admins` | Schema implemented | Foundation identity migration plus legacy `username` coverage. |
+| `tbl_user` | `customers` | Schema implemented | Foundation identity migration plus registration date coverage. |
+| `service_details` | `stores` | Schema implemented | Store profile, zone, bank, charge, media, slogan, and policy columns covered. |
+| `tbl_rider` | `riders` | Schema implemented | Foundation identity migration plus image coverage. |
+| `banner` | `banners` | Schema implemented | Marketing/home display. |
+| `tbl_category` | `categories` | Schema implemented | Product/catalog category. |
+| `zones` | `zones` | Schema implemented | Delivery zone lookup; coordinates stored as text for portable schema tests. |
+| `tbl_mcat` | `store_categories` | Schema implemented | Store category mapping. |
+| `tbl_product` | `products` | Schema implemented | Catalog product. |
+| `tbl_product_attribute` | `product_variants` | Schema implemented | Product variants/pricing. |
+| `tbl_extra` | `product_images` | Schema implemented | Product image gallery. |
+| `tbl_photo` | `store_gallery_images` | Schema implemented | Store gallery. |
+| `tbl_delivery` | `delivery_options` | Schema implemented | Store delivery options. |
+| `tbl_time` | `time_slots` | Schema implemented | Store delivery/pickup slots. |
+| `tbl_coupon` | `coupons` | Schema implemented | Store coupon rules. |
+| `tbl_faq` | `faqs` | Schema implemented | Store FAQ content. |
+| `tbl_page` | `pages` | Schema implemented | CMS/static pages. |
+| `tbl_payment_list` | `payment_methods` | Schema implemented | Payment method catalog. |
+| `tbl_normal_order` | `orders` | Schema implemented | Normal order workflow. |
+| `tbl_normal_order_product` | `order_items` | Schema implemented | Normal order line items. |
+| `tbl_subscribe_order` | `subscription_orders` | Schema implemented | Subscription order workflow. |
+| `tbl_subscribe_order_product` | `subscription_order_items` | Schema implemented | Subscription line items/schedules. |
+| `tbl_notification` | `customer_notifications` | Schema implemented | Customer notification inbox. |
+| `tbl_snoti` | `store_notifications` | Schema implemented | Store notification inbox. |
+| `tbl_rnoti` | `rider_notifications` | Schema implemented | Rider notification inbox. |
+| `tbl_fav` | `favorites` | Schema implemented | Customer favorite stores/products. |
+| `tbl_address` | `customer_addresses` | Schema implemented | Customer saved addresses. |
+| `payout_setting` | `payout_requests` | Schema implemented | Store payout requests. |
+| `tbl_cash` | `cash_collections` | Schema implemented | Cash settlement tracking. |
+| `wallet_report` | `wallet_transactions` | Schema implemented | Customer wallet ledger. |
+| `tbl_setting` | `settings` | Schema implemented | Global settings and integration keys. |
+| `tbl_milk` | `milk_data` | Schema implemented, behavior pending review | Stored as raw reference payload until the legacy purpose is fully reviewed. |
 
 ## Completion Rules
 
-- `Implemented` means the Laravel migration, model relationship coverage, factory/seeder path, and tests exist.
+- `Schema implemented` means the Laravel migration, Eloquent model, explicit `$fillable` coverage, casts, relationship coverage where applicable, and schema tests exist.
+- `Implemented` means the schema, API behavior, factory/seeder path, and feature tests exist.
 - `Pending` means it is required and not yet complete.
 - `Merged` means the legacy table's responsibility was intentionally absorbed into another Laravel model and documented.
 - `Obsolete` means the table was intentionally removed with a documented reason.

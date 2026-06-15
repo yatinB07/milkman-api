@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\RiderFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -19,6 +20,7 @@ class Rider extends Authenticatable
 
     protected $fillable = [
         'store_id',
+        'image_path',
         'name',
         'email',
         'country_code',
@@ -45,5 +47,20 @@ class Rider extends Authenticatable
     public function store(): BelongsTo
     {
         return $this->belongsTo(Store::class);
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function subscriptionOrders(): HasMany
+    {
+        return $this->hasMany(SubscriptionOrder::class);
+    }
+
+    public function riderNotifications(): HasMany
+    {
+        return $this->hasMany(RiderNotification::class);
     }
 }

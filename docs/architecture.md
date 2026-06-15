@@ -16,6 +16,10 @@ API requests should follow this path:
 - Policies own record-level authorization.
 - Resources own response shape.
 
+## Eloquent Models
+
+Application models use explicit `$fillable` arrays. Do not use open `protected $guarded = []` mass assignment. Keep fillable fields aligned with migrations and validated input, define casts for typed columns, and cover model fillable lists and relationships with tests.
+
 ## Auth
 
 Sanctum is used for API tokens. The baseline identity models are:
