@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Schema;
 
+use App\Support\LegacySchemaCoverage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
@@ -12,42 +13,7 @@ class LegacySchemaCoverageTest extends TestCase
 
     public function test_every_legacy_application_table_has_a_laravel_destination(): void
     {
-        $tables = [
-            'admins',
-            'customers',
-            'stores',
-            'riders',
-            'banners',
-            'categories',
-            'zones',
-            'store_categories',
-            'products',
-            'product_variants',
-            'product_images',
-            'store_gallery_images',
-            'delivery_options',
-            'time_slots',
-            'coupons',
-            'faqs',
-            'pages',
-            'payment_methods',
-            'orders',
-            'order_items',
-            'subscription_orders',
-            'subscription_order_items',
-            'customer_notifications',
-            'store_notifications',
-            'rider_notifications',
-            'favorites',
-            'customer_addresses',
-            'payout_requests',
-            'cash_collections',
-            'wallet_transactions',
-            'settings',
-            'milk_data',
-        ];
-
-        foreach ($tables as $table) {
+        foreach (LegacySchemaCoverage::destinationTables() as $table) {
             $this->assertTrue(Schema::hasTable($table), "Expected Laravel table [{$table}] for legacy schema coverage.");
         }
     }

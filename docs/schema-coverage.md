@@ -46,3 +46,30 @@ Legacy rows are test/demo data and are not imported. Legacy tables, columns, SQL
 - `Pending` means it is required and not yet complete.
 - `Merged` means the legacy table's responsibility was intentionally absorbed into another Laravel model and documented.
 - `Obsolete` means the table was intentionally removed with a documented reason.
+
+## Verification Commands
+
+Use these commands during Phase 2 schema work:
+
+```bash
+php artisan milkman:inspect-legacy-schema
+php artisan milkman:verify-schema
+```
+
+`milkman:inspect-legacy-schema` prints the current legacy-to-Laravel table coverage decisions. It ignores legacy rows because the old database only contains disposable test data.
+
+`milkman:verify-schema` checks that every required Laravel destination table exists in the migrated schema.
+
+## Demo Seed Data
+
+`Database\Seeders\DemoDataSeeder` creates an idempotent development dataset without importing legacy rows.
+
+The dataset includes:
+
+- Role-backed demo identities for admin, store, rider, and customer accounts.
+- Store/catalog records: zone, banner, category, store category, product, variant, product image, gallery image, delivery option, time slot, coupon, FAQ, page, and payment method.
+- Customer workflow records: address, favorite store, normal order, subscription order, order items, wallet transaction, and notifications.
+- Store/rider operations records: payout request, cash collection, store notification, and rider notification.
+- Global/reference records: settings and `milk_data` placeholder data for the legacy `tbl_milk` table.
+
+The seeder uses deterministic natural keys such as demo emails, coupon code, and transaction IDs so it can be run repeatedly without creating duplicate demo records.
