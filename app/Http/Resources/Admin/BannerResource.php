@@ -12,6 +12,7 @@ class BannerResource extends JsonResource
     {
         return [
             'id' => $this->resource->getKey(),
+            'title' => $this->resource->getAttribute('title'),
             'image_path' => $this->resource->getAttribute('image_path'),
             'is_active' => $this->resource->getAttribute('is_active'),
             'created_at' => $this->resource->getAttribute('created_at')?->toISOString(),

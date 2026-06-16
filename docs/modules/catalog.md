@@ -59,9 +59,9 @@ PUT    /api/v1/admin/banners/{banner}
 DELETE /api/v1/admin/banners/{banner}
 ```
 
-These endpoints require an admin Sanctum token with `settings.update`. They manage home/app banner records from the legacy `banner` table.
+These endpoints require an admin Sanctum token with `settings.update`. They manage home/app banner records from the legacy `banner` table, including the display `title`, `image_path`, and active flag.
 
-The list endpoint supports `search` and `per_page` and always returns Laravel pagination metadata. Delete requests soft delete banners.
+The list endpoint supports `search` across banner title and image path, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete banners.
 
 The admin banner module uses:
 

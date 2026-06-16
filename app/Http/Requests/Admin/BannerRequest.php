@@ -15,6 +15,7 @@ class BannerRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'title' => ['required', 'string', 'max:255'],
             'image_path' => ['required', 'string'],
             'is_active' => ['sometimes', 'boolean'],
         ];

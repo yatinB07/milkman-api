@@ -13,7 +13,11 @@ class BannerRepository
     {
         return Banner::query()
             ->when($search, function ($query, string $search): void {
-                $query->where('image_path', 'like', "%{$search}%");
+                $query->where(function ($query) use ($search): void {
+                    $query
+                        ->where('title', 'like', "%{$search}%")
+                        ->orWhere('image_path', 'like', "%{$search}%");
+                });
             })
             ->orderByDesc('id')
             ->paginate($perPage);

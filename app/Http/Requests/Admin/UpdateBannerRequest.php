@@ -15,6 +15,7 @@ class UpdateBannerRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'title' => ['sometimes', 'required', 'string', 'max:255'],
             'image_path' => ['sometimes', 'required', 'string'],
             'is_active' => ['sometimes', 'boolean'],
         ];

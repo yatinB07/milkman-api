@@ -129,6 +129,7 @@ class DemoDataSeeder extends Seeder
         Banner::query()->firstOrCreate([
             'image_path' => 'demo/banners/milkman-demo.png',
         ], [
+            'title' => 'MilkMan demo banner',
             'is_active' => true,
         ]);
 

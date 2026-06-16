@@ -18,30 +18,39 @@ class BannerCrudTest extends TestCase
     {
         $token = $this->adminTokenWithPermission('settings.update');
 
-        Banner::factory()->create(['image_path' => 'banners/current.png', 'is_active' => true]);
+        Banner::factory()->create([
+            'title' => 'Current home banner',
+            'image_path' => 'banners/current.png',
+            'is_active' => true,
+        ]);
 
         $this->withToken($token)
             ->getJson('/api/v1/admin/banners')
             ->assertOk()
+            ->assertJsonPath('data.0.title', 'Current home banner')
             ->assertJsonPath('data.0.image_path', 'banners/current.png');
 
         $createdId = $this->withToken($token)
             ->postJson('/api/v1/admin/banners', [
+                'title' => 'New home banner',
                 'image_path' => 'banners/new.png',
                 'is_active' => true,
             ])
             ->assertCreated()
             ->assertJsonPath('message', 'Banner created successfully.')
+            ->assertJsonPath('data.title', 'New home banner')
             ->assertJsonPath('data.image_path', 'banners/new.png')
             ->json('data.id');
 
         $this->withToken($token)
             ->putJson("/api/v1/admin/banners/{$createdId}", [
+                'title' => 'Updated home banner',
                 'image_path' => 'banners/updated.png',
                 'is_active' => false,
             ])
             ->assertOk()
             ->assertJsonPath('message', 'Banner updated successfully.')
+            ->assertJsonPath('data.title', 'Updated home banner')
             ->assertJsonPath('data.image_path', 'banners/updated.png')
             ->assertJsonPath('data.is_active', false);
 
@@ -57,15 +66,15 @@ class BannerCrudTest extends TestCase
     {
         $token = $this->adminTokenWithPermission('settings.update');
 
-        Banner::factory()->create(['image_path' => 'banners/summer.png']);
-        Banner::factory()->create(['image_path' => 'banners/summer-sale.png']);
-        Banner::factory()->create(['image_path' => 'banners/winter.png']);
+        Banner::factory()->create(['title' => 'Summer banner', 'image_path' => 'banners/one.png']);
+        Banner::factory()->create(['title' => 'Summer sale banner', 'image_path' => 'banners/two.png']);
+        Banner::factory()->create(['title' => 'Winter banner', 'image_path' => 'banners/three.png']);
 
         $this->withToken($token)
             ->getJson('/api/v1/admin/banners?search=summer&per_page=1')
             ->assertOk()
             ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.image_path', 'banners/summer-sale.png')
+            ->assertJsonPath('data.0.title', 'Summer sale banner')
             ->assertJsonPath('meta.per_page', 1)
             ->assertJsonPath('meta.total', 2);
     }
@@ -76,10 +85,11 @@ class BannerCrudTest extends TestCase
 
         $this->withToken($token)
             ->postJson('/api/v1/admin/banners', [
+                'title' => '',
                 'image_path' => '',
             ])
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['image_path']);
+            ->assertJsonValidationErrors(['title', 'image_path']);
     }
 
     public function test_admin_banner_routes_require_admin_identity(): void

@@ -40,7 +40,7 @@ class LegacySchemaCoverageTest extends TestCase
 
     public function test_catalog_and_content_tables_cover_legacy_columns(): void
     {
-        $this->assertTableHasColumns('banners', ['image_path', 'is_active']);
+        $this->assertTableHasColumns('banners', ['title', 'image_path', 'is_active']);
         $this->assertTableHasColumns('categories', ['title', 'image_path', 'cover_path', 'is_active']);
         $this->assertTableHasColumns('zones', ['title', 'coordinates', 'alias', 'is_active']);
         $this->assertTableHasColumns('store_categories', ['store_id', 'title', 'image_path', 'is_active']);

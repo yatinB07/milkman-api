@@ -13,6 +13,7 @@ class BannerFactory extends Factory
     public function definition(): array
     {
         return [
+            'title' => fake()->words(3, true),
             'image_path' => 'banners/'.fake()->uuid().'.png',
             'is_active' => true,
         ];
