@@ -15,6 +15,8 @@ API requests should follow this path:
 - Repositories own Eloquent queries, filters, persistence helpers, eager loading, and aggregates.
 - Policies own record-level authorization.
 - Resources own response shape.
+- Code should follow OOP and SOLID principles: focused classes, explicit dependencies, and business rules outside controllers and models.
+- User-facing messages belong in `lang/{locale}` files. Domain/application errors should use named exception classes instead of hardcoded framework exceptions.
 
 ## Eloquent Models
 
