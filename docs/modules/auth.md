@@ -13,6 +13,7 @@ Phase 3 auth uses Sanctum personal access tokens for each MilkMan identity area:
 POST /api/v1/{identity}/auth/login
 GET  /api/v1/{identity}/auth/me
 POST /api/v1/{identity}/auth/logout
+GET  /api/v1/{identity}/auth/permissions/{permission}
 ```
 
 `identity` must be one of `admin`, `customer`, `store`, or `rider`.
@@ -25,6 +26,17 @@ Login returns:
 - Spatie permissions
 
 The profile and logout endpoints require `auth:sanctum`. A token issued for one identity type cannot be used against another identity area.
+
+The permission endpoint verifies a Spatie permission for the authenticated identity and returns:
+
+```json
+{
+  "data": {
+    "permission": "settings.update",
+    "allowed": true
+  }
+}
+```
 
 ## Implementation
 
@@ -39,3 +51,10 @@ Route -> LoginIdentityRequest -> IdentityAuthController -> LoginIdentityAction -
 Inactive accounts are rejected with HTTP 403. Invalid credentials are rejected with HTTP 401.
 
 Auth errors use named exception classes under `App\Exceptions\Auth`, and response text comes from `lang/en/auth.php` so messages can be localized later.
+
+## Policies
+
+Initial Phase 3 ownership policies:
+
+- `StorePolicy`: admins with store permissions can manage stores; store owners can update only their own store.
+- `OrderPolicy`: admins can view/update order status by permission; stores and riders can access assigned orders; customers can view their own orders only.

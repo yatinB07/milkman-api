@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use App\Actions\Auth\CheckIdentityPermissionAction;
 use App\Actions\Auth\LoginIdentityAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginIdentityRequest;
 use App\Http\Resources\Auth\IdentityProfileResource;
+use App\Http\Resources\Auth\PermissionCheckResource;
 use App\Services\IdentityAuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -48,6 +50,23 @@ class IdentityAuthController extends Controller
 
         return response()->json([
             'message' => __('auth.logged_out'),
+        ]);
+    }
+
+    public function permission(
+        Request $request,
+        IdentityAuthService $auth,
+        CheckIdentityPermissionAction $checkPermission,
+        string $identityType,
+        string $permission,
+    ): JsonResponse {
+        $identity = $request->user();
+        $auth->assertTokenMatchesIdentityType($identity, $identityType);
+
+        return response()->json([
+            'data' => new PermissionCheckResource(
+                $checkPermission->execute($identity, $permission),
+            ),
         ]);
     }
 }

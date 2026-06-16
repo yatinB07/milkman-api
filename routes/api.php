@@ -16,6 +16,9 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::middleware('auth:sanctum')->group(function (): void {
                 Route::get('me', [IdentityAuthController::class, 'me'])->name('me');
                 Route::post('logout', [IdentityAuthController::class, 'logout'])->name('logout');
+                Route::get('permissions/{permission}', [IdentityAuthController::class, 'permission'])
+                    ->where('permission', '[A-Za-z0-9_.-]+')
+                    ->name('permission');
             });
         });
 });
