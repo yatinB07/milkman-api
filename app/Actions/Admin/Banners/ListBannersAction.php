@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\Banners;
 
 use App\Repositories\BannerRepository;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListBannersAction
 {
@@ -11,8 +11,8 @@ class ListBannersAction
         private readonly BannerRepository $banners,
     ) {}
 
-    public function execute(): Collection
+    public function execute(?string $search = null, int $perPage = 15): LengthAwarePaginator
     {
-        return $this->banners->all();
+        return $this->banners->paginate($search, $perPage);
     }
 }

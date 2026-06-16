@@ -9,6 +9,7 @@ use App\Actions\Admin\Categories\UpdateCategoryAction;
 use App\Exceptions\Auth\MissingPermissionException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CategoryRequest;
+use App\Http\Requests\Admin\ListAdminResourcesRequest;
 use App\Http\Requests\Admin\UpdateCategoryRequest;
 use App\Http\Resources\Admin\CategoryResource;
 use App\Services\IdentityAuthService;
@@ -18,11 +19,14 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CategoryController extends Controller
 {
-    public function index(Request $request, IdentityAuthService $auth, ListCategoriesAction $categories): AnonymousResourceCollection
-    {
+    public function index(
+        ListAdminResourcesRequest $request,
+        IdentityAuthService $auth,
+        ListCategoriesAction $categories,
+    ): AnonymousResourceCollection {
         $this->authorizeCategoryManagement($request, $auth);
 
-        return CategoryResource::collection($categories->execute());
+        return CategoryResource::collection($categories->execute($request->search(), $request->perPage()));
     }
 
     public function store(CategoryRequest $request, IdentityAuthService $auth, CreateCategoryAction $create): JsonResponse

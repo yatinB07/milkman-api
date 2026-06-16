@@ -40,6 +40,8 @@ DELETE /api/v1/admin/categories/{category}
 
 These endpoints require an admin Sanctum token with `products.manage`. Customer, store, or rider tokens are rejected by identity boundary checks.
 
+The list endpoint supports `search` and `per_page` and always returns Laravel pagination metadata.
+
 The admin category module uses:
 
 - `CategoryController`
@@ -58,6 +60,8 @@ DELETE /api/v1/admin/banners/{banner}
 ```
 
 These endpoints require an admin Sanctum token with `settings.update`. They manage home/app banner records from the legacy `banner` table.
+
+The list endpoint supports `search` and `per_page` and always returns Laravel pagination metadata. Delete requests soft delete banners.
 
 The admin banner module uses:
 

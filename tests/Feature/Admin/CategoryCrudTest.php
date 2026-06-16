@@ -52,7 +52,24 @@ class CategoryCrudTest extends TestCase
             ->assertOk()
             ->assertJsonPath('message', 'Category deleted successfully.');
 
-        $this->assertDatabaseMissing('categories', ['id' => $createdId]);
+        $this->assertSoftDeleted('categories', ['id' => $createdId]);
+    }
+
+    public function test_admin_category_list_is_paginated_and_searchable(): void
+    {
+        $token = $this->adminTokenWithPermission('products.manage');
+
+        Category::factory()->create(['title' => 'Cow Milk']);
+        Category::factory()->create(['title' => 'Buffalo Milk']);
+        Category::factory()->create(['title' => 'Curd']);
+
+        $this->withToken($token)
+            ->getJson('/api/v1/admin/categories?search=milk&per_page=1')
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'Buffalo Milk')
+            ->assertJsonPath('meta.per_page', 1)
+            ->assertJsonPath('meta.total', 2);
     }
 
     public function test_admin_category_create_validates_payload(): void

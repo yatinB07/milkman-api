@@ -4,16 +4,19 @@ namespace App\Repositories;
 
 use App\Exceptions\Catalog\CategoryNotFoundException;
 use App\Models\Category;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class CategoryRepository
 {
-    /** @return Collection<int, Category> */
-    public function all(): Collection
+    /** @return LengthAwarePaginator<int, Category> */
+    public function paginate(?string $search = null, int $perPage = 15): LengthAwarePaginator
     {
         return Category::query()
+            ->when($search, function ($query, string $search): void {
+                $query->where('title', 'like', "%{$search}%");
+            })
             ->orderBy('title')
-            ->get();
+            ->paginate($perPage);
     }
 
     public function create(array $attributes): Category

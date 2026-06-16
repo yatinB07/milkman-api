@@ -18,6 +18,12 @@ API requests should follow this path:
 - Code should follow OOP and SOLID principles: focused classes, explicit dependencies, and business rules outside controllers and models.
 - User-facing messages belong in `lang/{locale}` files. Domain/application errors should use named exception classes instead of hardcoded framework exceptions.
 
+## API Lists And Deletes
+
+List endpoints must be paginated and should expose `search` when a module has searchable text fields. Repositories own pagination, search, filters, sorting, and eager loading.
+
+CRUD delete endpoints soft delete records by default. Hard deletes require an explicit documented exception.
+
 ## Eloquent Models
 
 Application models use explicit `$fillable` arrays. Do not use open `protected $guarded = []` mass assignment. Keep fillable fields aligned with migrations and validated input, define casts for typed columns, and cover model fillable lists and relationships with tests.

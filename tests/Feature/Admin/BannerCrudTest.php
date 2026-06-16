@@ -50,7 +50,24 @@ class BannerCrudTest extends TestCase
             ->assertOk()
             ->assertJsonPath('message', 'Banner deleted successfully.');
 
-        $this->assertDatabaseMissing('banners', ['id' => $createdId]);
+        $this->assertSoftDeleted('banners', ['id' => $createdId]);
+    }
+
+    public function test_admin_banner_list_is_paginated_and_searchable(): void
+    {
+        $token = $this->adminTokenWithPermission('settings.update');
+
+        Banner::factory()->create(['image_path' => 'banners/summer.png']);
+        Banner::factory()->create(['image_path' => 'banners/summer-sale.png']);
+        Banner::factory()->create(['image_path' => 'banners/winter.png']);
+
+        $this->withToken($token)
+            ->getJson('/api/v1/admin/banners?search=summer&per_page=1')
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.image_path', 'banners/summer-sale.png')
+            ->assertJsonPath('meta.per_page', 1)
+            ->assertJsonPath('meta.total', 2);
     }
 
     public function test_admin_banner_create_validates_payload(): void

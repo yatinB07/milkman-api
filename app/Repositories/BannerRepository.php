@@ -4,16 +4,19 @@ namespace App\Repositories;
 
 use App\Exceptions\Catalog\BannerNotFoundException;
 use App\Models\Banner;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class BannerRepository
 {
-    /** @return Collection<int, Banner> */
-    public function all(): Collection
+    /** @return LengthAwarePaginator<int, Banner> */
+    public function paginate(?string $search = null, int $perPage = 15): LengthAwarePaginator
     {
         return Banner::query()
+            ->when($search, function ($query, string $search): void {
+                $query->where('image_path', 'like', "%{$search}%");
+            })
             ->orderByDesc('id')
-            ->get();
+            ->paginate($perPage);
     }
 
     /** @param array<string, mixed> $attributes */

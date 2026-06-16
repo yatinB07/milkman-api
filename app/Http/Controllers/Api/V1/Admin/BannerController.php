@@ -9,6 +9,7 @@ use App\Actions\Admin\Banners\UpdateBannerAction;
 use App\Exceptions\Auth\MissingPermissionException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BannerRequest;
+use App\Http\Requests\Admin\ListAdminResourcesRequest;
 use App\Http\Requests\Admin\UpdateBannerRequest;
 use App\Http\Resources\Admin\BannerResource;
 use App\Services\IdentityAuthService;
@@ -18,11 +19,14 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class BannerController extends Controller
 {
-    public function index(Request $request, IdentityAuthService $auth, ListBannersAction $banners): AnonymousResourceCollection
-    {
+    public function index(
+        ListAdminResourcesRequest $request,
+        IdentityAuthService $auth,
+        ListBannersAction $banners,
+    ): AnonymousResourceCollection {
         $this->authorizeBannerManagement($request, $auth);
 
-        return BannerResource::collection($banners->execute());
+        return BannerResource::collection($banners->execute($request->search(), $request->perPage()));
     }
 
     public function store(BannerRequest $request, IdentityAuthService $auth, CreateBannerAction $create): JsonResponse

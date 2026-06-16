@@ -3,7 +3,7 @@
 namespace App\Actions\Admin\Categories;
 
 use App\Repositories\CategoryRepository;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListCategoriesAction
 {
@@ -11,8 +11,8 @@ class ListCategoriesAction
         private readonly CategoryRepository $categories,
     ) {}
 
-    public function execute(): Collection
+    public function execute(?string $search = null, int $perPage = 15): LengthAwarePaginator
     {
-        return $this->categories->all();
+        return $this->categories->paginate($search, $perPage);
     }
 }
