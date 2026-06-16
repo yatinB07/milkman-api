@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\BannerController;
 use App\Http\Controllers\Api\V1\Admin\CategoryController;
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
 use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
@@ -25,6 +26,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
         ->middleware('auth:sanctum')
         ->name('admin.')
         ->group(function (): void {
+            Route::apiResource('banners', BannerController::class)
+                ->only(['index', 'store', 'update', 'destroy']);
             Route::apiResource('categories', CategoryController::class)
                 ->only(['index', 'store', 'update', 'destroy']);
         });

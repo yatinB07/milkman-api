@@ -47,3 +47,22 @@ The admin category module uses:
 - category actions under `App\Actions\Admin\Categories`
 - `CategoryRepository`
 - `App\Http\Resources\Admin\CategoryResource`
+
+## Admin Banner CRUD
+
+```text
+GET    /api/v1/admin/banners
+POST   /api/v1/admin/banners
+PUT    /api/v1/admin/banners/{banner}
+DELETE /api/v1/admin/banners/{banner}
+```
+
+These endpoints require an admin Sanctum token with `settings.update`. They manage home/app banner records from the legacy `banner` table.
+
+The admin banner module uses:
+
+- `BannerController`
+- `BannerRequest` and `UpdateBannerRequest`
+- banner actions under `App\Actions\Admin\Banners`
+- `BannerRepository`
+- `App\Http\Resources\Admin\BannerResource`
