@@ -1,6 +1,7 @@
 <?php
 
 use App\Support\LegacySchemaCoverage;
+use Database\Seeders\DemoDataSeeder;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
@@ -48,3 +49,14 @@ Artisan::command('milkman:verify-schema', function (): int {
 
     return self::SUCCESS;
 })->purpose('Verify every required legacy table has a Laravel destination table');
+
+Artisan::command('milkman:seed-demo-data', function (): int {
+    $this->call('db:seed', [
+        '--class' => DemoDataSeeder::class,
+        '--force' => true,
+    ]);
+
+    $this->info('Demo data seeded successfully.');
+
+    return self::SUCCESS;
+})->purpose('Seed idempotent MilkMan development/demo data');

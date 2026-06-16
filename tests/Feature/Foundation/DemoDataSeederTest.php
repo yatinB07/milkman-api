@@ -108,4 +108,14 @@ class DemoDataSeederTest extends TestCase
         $this->assertTrue($order->rider()->is($rider));
         $this->assertTrue($subscriptionOrder->store()->is($store));
     }
+
+    public function test_seed_demo_data_command_runs_the_demo_seeder(): void
+    {
+        $this->artisan('milkman:seed-demo-data')
+            ->expectsOutputToContain('Demo data seeded successfully.')
+            ->assertSuccessful();
+
+        $this->assertSame(1, Admin::query()->where('email', 'admin@milkman.test')->count());
+        $this->assertSame(1, Order::query()->where('transaction_id', 'DEMO-ORDER-001')->count());
+    }
 }

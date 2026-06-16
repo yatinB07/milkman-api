@@ -54,11 +54,14 @@ Use these commands during Phase 2 schema work:
 ```bash
 php artisan milkman:inspect-legacy-schema
 php artisan milkman:verify-schema
+php artisan milkman:seed-demo-data
 ```
 
 `milkman:inspect-legacy-schema` prints the current legacy-to-Laravel table coverage decisions. It ignores legacy rows because the old database only contains disposable test data.
 
 `milkman:verify-schema` checks that every required Laravel destination table exists in the migrated schema.
+
+`milkman:seed-demo-data` runs the idempotent demo seeder explicitly. Docker startup does not run seeders automatically.
 
 ## Demo Seed Data
 
@@ -73,3 +76,7 @@ The dataset includes:
 - Global/reference records: settings and `milk_data` placeholder data for the legacy `tbl_milk` table.
 
 The seeder uses deterministic natural keys such as demo emails, coupon code, and transaction IDs so it can be run repeatedly without creating duplicate demo records.
+
+## Factory Coverage
+
+Every legacy-covered application model has a working factory unless it is intentionally documented otherwise. `tests/Feature/Schema/LegacyModelFactoryTest.php` creates each domain model once to prove the factories and foreign-key defaults stay valid.
