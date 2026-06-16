@@ -14,25 +14,34 @@ class DemoDataSeeder extends Seeder
     {
         $this->call(RoleAndPermissionSeeder::class);
 
-        Admin::factory()->create([
-            'name' => 'MilkMan Admin',
+        Admin::query()->firstOrCreate([
             'email' => 'admin@milkman.test',
+        ], [
+            'name' => 'MilkMan Admin',
+            'password' => 'password',
         ])->assignRole('super-admin');
 
-        $store = Store::factory()->create([
-            'title' => 'Demo Milk Store',
+        $store = Store::query()->firstOrCreate([
             'email' => 'store@milkman.test',
+        ], [
+            'title' => 'Demo Milk Store',
+            'password' => 'password',
         ]);
         $store->assignRole('store-owner');
 
-        Rider::factory()->for($store)->create([
-            'name' => 'Demo Rider',
+        Rider::query()->firstOrCreate([
             'email' => 'rider@milkman.test',
+        ], [
+            'store_id' => $store->id,
+            'name' => 'Demo Rider',
+            'password' => 'password',
         ])->assignRole('rider');
 
-        Customer::factory()->create([
-            'name' => 'Demo Customer',
+        Customer::query()->firstOrCreate([
             'email' => 'customer@milkman.test',
+        ], [
+            'name' => 'Demo Customer',
+            'password' => 'password',
         ])->assignRole('customer');
     }
 }

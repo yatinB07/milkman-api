@@ -18,6 +18,7 @@ class DemoDataSeederTest extends TestCase
     public function test_demo_data_seeder_creates_secure_role_backed_identities(): void
     {
         $this->seed(DemoDataSeeder::class);
+        $this->seed(DemoDataSeeder::class);
 
         $admin = Admin::query()->where('email', 'admin@milkman.test')->firstOrFail();
         $store = Store::query()->where('email', 'store@milkman.test')->firstOrFail();
@@ -31,5 +32,9 @@ class DemoDataSeederTest extends TestCase
         $this->assertTrue($rider->hasRole('rider'));
         $this->assertTrue($customer->hasRole('customer'));
         $this->assertTrue($rider->store()->is($store));
+        $this->assertSame(1, Admin::query()->where('email', 'admin@milkman.test')->count());
+        $this->assertSame(1, Store::query()->where('email', 'store@milkman.test')->count());
+        $this->assertSame(1, Rider::query()->where('email', 'rider@milkman.test')->count());
+        $this->assertSame(1, Customer::query()->where('email', 'customer@milkman.test')->count());
     }
 }
