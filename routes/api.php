@@ -1,12 +1,24 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
+use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
 use App\Http\Controllers\Api\V1\HealthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('api.v1.')->group(function (): void {
     Route::get('health', HealthController::class)->name('health');
+
+    Route::prefix('public')->name('public.')->group(function (): void {
+        Route::get('categories', [PublicCatalogController::class, 'categories'])->name('categories.index');
+        Route::get('stores', [PublicCatalogController::class, 'stores'])->name('stores.index');
+        Route::get('stores/{store}', [PublicCatalogController::class, 'store'])
+            ->whereNumber('store')
+            ->name('stores.show');
+        Route::get('stores/{store}/products', [PublicCatalogController::class, 'products'])
+            ->whereNumber('store')
+            ->name('stores.products.index');
+    });
 
     Route::prefix('{identityType}/auth')
         ->whereIn('identityType', ['admin', 'customer', 'store', 'rider'])
