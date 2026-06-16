@@ -14,12 +14,14 @@ class DemoDataSeeder extends Seeder
     {
         $this->call(RoleAndPermissionSeeder::class);
 
-        Admin::query()->firstOrCreate([
+        $admin = Admin::query()->firstOrCreate([
             'email' => 'admin@milkman.test',
         ], [
             'name' => 'MilkMan Admin',
             'password' => 'password',
-        ])->assignRole('super-admin');
+        ]);
+        $admin->assignRole('super-admin');
+        $this->command?->info('Demo admin ready: admin@milkman.test in admins');
 
         $store = Store::query()->firstOrCreate([
             'email' => 'store@milkman.test',
@@ -28,20 +30,25 @@ class DemoDataSeeder extends Seeder
             'password' => 'password',
         ]);
         $store->assignRole('store-owner');
+        $this->command?->info('Demo store ready: store@milkman.test in stores');
 
-        Rider::query()->firstOrCreate([
+        $rider = Rider::query()->firstOrCreate([
             'email' => 'rider@milkman.test',
         ], [
             'store_id' => $store->id,
             'name' => 'Demo Rider',
             'password' => 'password',
-        ])->assignRole('rider');
+        ]);
+        $rider->assignRole('rider');
+        $this->command?->info('Demo rider ready: rider@milkman.test in riders');
 
-        Customer::query()->firstOrCreate([
+        $customer = Customer::query()->firstOrCreate([
             'email' => 'customer@milkman.test',
         ], [
             'name' => 'Demo Customer',
             'password' => 'password',
-        ])->assignRole('customer');
+        ]);
+        $customer->assignRole('customer');
+        $this->command?->info('Demo customer ready: customer@milkman.test in customers');
     }
 }
