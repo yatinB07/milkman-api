@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\CategoryController;
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
 use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
 use App\Http\Controllers\Api\V1\HealthController;
@@ -19,6 +20,14 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             ->whereNumber('store')
             ->name('stores.products.index');
     });
+
+    Route::prefix('admin')
+        ->middleware('auth:sanctum')
+        ->name('admin.')
+        ->group(function (): void {
+            Route::apiResource('categories', CategoryController::class)
+                ->only(['index', 'store', 'update', 'destroy']);
+        });
 
     Route::prefix('{identityType}/auth')
         ->whereIn('identityType', ['admin', 'customer', 'store', 'rider'])
