@@ -75,6 +75,29 @@ The admin customer module uses:
 - `CustomerRepository`
 - `App\Http\Resources\Admin\CustomerResource`
 
+## Admin Customer Address CRUD
+
+```text
+GET    /api/v1/admin/customer-addresses
+GET    /api/v1/admin/customer-addresses/{customerAddress}
+POST   /api/v1/admin/customer-addresses
+PUT    /api/v1/admin/customer-addresses/{customerAddress}
+DELETE /api/v1/admin/customer-addresses/{customerAddress}
+```
+
+These endpoints require an admin Sanctum token with `users.manage`. They manage saved customer addresses from the legacy `tbl_address` table. Legacy `uid`, `a_lat`, `a_long`, `r_instruction`, and `a_type` map to Laravel `customer_id`, `latitude`, `longitude`, `rider_instruction`, and `type`.
+
+The list endpoint supports `search` across address, landmark, rider instruction, address type, customer name, customer email, and customer mobile, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete customer addresses.
+
+The admin customer address module uses:
+
+- `CustomerAddressController`
+- `CustomerAddressRequest` and `UpdateCustomerAddressRequest`
+- `App\Data\Admin\CustomerAddressData` and `App\Data\Admin\ListQueryData`
+- customer address actions under `App\Actions\Admin\CustomerAddresses`
+- `CustomerAddressRepository`
+- `App\Http\Resources\Admin\CustomerAddressResource`
+
 ## Admin Banner CRUD
 
 ```text
