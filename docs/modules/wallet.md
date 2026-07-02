@@ -1,5 +1,30 @@
 # Wallet
 
-Wallet behavior will be implemented in a later phase.
+Wallet behavior is split between ledger management and balance-changing workflows.
 
 Legacy references include `wallet_report`, customer wallet APIs, and order placement wallet deductions.
+
+## Admin Wallet Transaction CRUD
+
+```text
+GET    /api/v1/admin/wallet-transactions
+GET    /api/v1/admin/wallet-transactions/{walletTransaction}
+POST   /api/v1/admin/wallet-transactions
+PUT    /api/v1/admin/wallet-transactions/{walletTransaction}
+DELETE /api/v1/admin/wallet-transactions/{walletTransaction}
+```
+
+These endpoints require an admin Sanctum token with `users.manage`. They manage the wallet ledger records from the legacy `wallet_report` table. Legacy `uid`, `message`, `status`, `amt`, and `tdate` map to Laravel `customer_id`, `message`, `type`, `amount`, and `transacted_at`.
+
+The list endpoint supports `search` across wallet message, transaction type, customer name, customer email, and customer mobile, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete wallet transactions.
+
+The legacy `user_api/u_wallet_up.php` endpoint both increments `tbl_user.wallet` and writes a `wallet_report` credit row. This admin CRUD manages ledger records directly; customer balance updates and order wallet deductions should be implemented through a wallet service when the customer/order APIs are built.
+
+The admin wallet transaction module uses:
+
+- `WalletTransactionController`
+- `WalletTransactionRequest` and `UpdateWalletTransactionRequest`
+- `App\Data\Admin\WalletTransactionData` and `App\Data\Admin\ListQueryData`
+- wallet transaction actions under `App\Actions\Admin\WalletTransactions`
+- `WalletTransactionRepository`
+- `App\Http\Resources\Admin\WalletTransactionResource`

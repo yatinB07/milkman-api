@@ -100,7 +100,7 @@ class LegacySchemaCoverageTest extends TestCase
         $this->assertTableHasColumns('favorites', ['customer_id', 'store_id', 'zone_id', 'deleted_at']);
         $this->assertTableHasColumns('payout_requests', ['store_id', 'amount', 'status', 'proof_path', 'requested_at', 'request_type', 'account_number', 'bank_name', 'account_name', 'ifsc_code', 'upi_id', 'paypal_id']);
         $this->assertTableHasColumns('cash_collections', ['store_id', 'amount', 'message', 'collected_at']);
-        $this->assertTableHasColumns('wallet_transactions', ['customer_id', 'message', 'type', 'amount', 'transacted_at']);
+        $this->assertTableHasColumns('wallet_transactions', ['customer_id', 'message', 'type', 'amount', 'transacted_at', 'deleted_at']);
     }
 
     public function test_notification_settings_and_reference_tables_cover_legacy_columns(): void
