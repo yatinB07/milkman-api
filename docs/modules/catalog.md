@@ -74,3 +74,26 @@ The admin banner module uses:
 - banner actions under `App\Actions\Admin\Banners`
 - `BannerRepository`
 - `App\Http\Resources\Admin\BannerResource`
+
+## Admin Store Category CRUD
+
+```text
+GET    /api/v1/admin/store-categories
+GET    /api/v1/admin/store-categories/{storeCategory}
+POST   /api/v1/admin/store-categories
+PUT    /api/v1/admin/store-categories/{storeCategory}
+DELETE /api/v1/admin/store-categories/{storeCategory}
+```
+
+These endpoints require an admin Sanctum token with `products.manage`. They manage store-owned product category records from the legacy `tbl_mcat` table.
+
+The list endpoint supports `search` across store category title and store title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete store categories.
+
+The admin store category module uses:
+
+- `StoreCategoryController`
+- `StoreCategoryRequest` and `UpdateStoreCategoryRequest`
+- `App\Data\Admin\StoreCategoryData` and `App\Data\Admin\ListQueryData`
+- store category actions under `App\Actions\Admin\StoreCategories`
+- `StoreCategoryRepository`
+- `App\Http\Resources\Admin\StoreCategoryResource`

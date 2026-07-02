@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Exceptions\Catalog\StoreCategoryNotFoundException;
+use App\Models\StoreCategory;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+
+class StoreCategoryRepository
+{
+    /** @return LengthAwarePaginator<int, StoreCategory> */
+    public function paginate(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return StoreCategory::query()
+            ->with('store')
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhereHas('store', function ($query) use ($search): void {
+                            $query->where('title', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->orderBy('title')
+            ->paginate($perPage);
+    }
+
+    /** @param array<string, mixed> $attributes */
+    public function create(array $attributes): StoreCategory
+    {
+        return StoreCategory::query()->create($attributes)->load('store');
+    }
+
+    public function find(int $id): StoreCategory
+    {
+        $storeCategory = StoreCategory::query()
+            ->with('store')
+            ->find($id);
+
+        if (! $storeCategory) {
+            throw new StoreCategoryNotFoundException;
+        }
+
+        return $storeCategory;
+    }
+
+    /** @param array<string, mixed> $attributes */
+    public function update(StoreCategory $storeCategory, array $attributes): StoreCategory
+    {
+        $storeCategory->update($attributes);
+
+        return $storeCategory->refresh()->load('store');
+    }
+
+    public function delete(StoreCategory $storeCategory): void
+    {
+        $storeCategory->delete();
+    }
+}
