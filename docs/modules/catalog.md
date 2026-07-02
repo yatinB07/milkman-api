@@ -191,6 +191,27 @@ The customer coupon module uses:
 - `CouponRepository`
 - `App\Http\Resources\Customer\CouponResource`
 
+## Customer Payment Method APIs
+
+```text
+GET /api/v1/customer/payment-methods
+```
+
+This endpoint requires a customer Sanctum token and returns visible, active payment methods. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `u_paymentgateway.php` returned rows from `tbl_payment_list` where `status = 1`. The Laravel API maps that behavior to `is_active = true` and also respects `is_visible = true`.
+
+The list endpoint supports `search` across title, subtitle, and image path, accepts `per_page`, and returns Laravel pagination metadata.
+
+The customer payment method module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerPaymentMethodController`
+- `ListCustomerResourcesRequest`
+- `App\Data\Customer\ListCustomerQueryData`
+- `ListCustomerPaymentMethodsAction`
+- `PaymentMethodRepository`
+- `App\Http\Resources\Customer\PaymentMethodResource`
+
 ## Admin Favorite CRUD
 
 ```text

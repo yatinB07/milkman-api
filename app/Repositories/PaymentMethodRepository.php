@@ -41,6 +41,24 @@ class PaymentMethodRepository
         return $method;
     }
 
+    /** @return LengthAwarePaginator<int, PaymentMethod> */
+    public function paginateVisibleActive(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return PaymentMethod::query()
+            ->where('is_visible', true)
+            ->where('is_active', true)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query
+                        ->where('title', 'like', "%{$search}%")
+                        ->orWhere('subtitle', 'like', "%{$search}%")
+                        ->orWhere('image_path', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('title')
+            ->paginate($perPage);
+    }
+
     /** @param array<string, mixed> $attributes */
     public function update(PaymentMethod $method, array $attributes): PaymentMethod
     {

@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerAddressController as CustomerAd
 use App\Http\Controllers\Api\V1\Customer\CustomerCouponController;
 use App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController;
 use App\Http\Controllers\Api\V1\Customer\CustomerNotificationController as CustomerNotificationApiController;
+use App\Http\Controllers\Api\V1\Customer\CustomerPaymentMethodController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProfileController;
 use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
 use App\Http\Controllers\Api\V1\HealthController;
@@ -147,6 +148,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('favorites.toggle');
             Route::get('notifications', [CustomerNotificationApiController::class, 'index'])
                 ->name('notifications.index');
+            Route::get('payment-methods', [CustomerPaymentMethodController::class, 'index'])
+                ->name('payment-methods.index');
             Route::get('wallet-transactions', [CustomerWalletController::class, 'index'])
                 ->name('wallet-transactions.index');
             Route::post('wallet/top-ups', [CustomerWalletController::class, 'topUp'])
