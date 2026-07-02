@@ -2,6 +2,7 @@
 
 namespace App\Actions\Admin\Banners;
 
+use App\Data\Admin\ListQueryData;
 use App\Repositories\BannerRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -11,8 +12,8 @@ class ListBannersAction
         private readonly BannerRepository $banners,
     ) {}
 
-    public function execute(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    public function execute(ListQueryData $query): LengthAwarePaginator
     {
-        return $this->banners->paginate($search, $perPage);
+        return $this->banners->paginate($query->search, $query->perPage);
     }
 }

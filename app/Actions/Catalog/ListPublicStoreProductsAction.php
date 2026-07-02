@@ -2,8 +2,9 @@
 
 namespace App\Actions\Catalog;
 
+use App\Data\Catalog\PublicListQueryData;
 use App\Repositories\CatalogRepository;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ListPublicStoreProductsAction
 {
@@ -11,8 +12,8 @@ class ListPublicStoreProductsAction
         private readonly CatalogRepository $catalog,
     ) {}
 
-    public function execute(int $storeId): Collection
+    public function execute(int $storeId, PublicListQueryData $query): LengthAwarePaginator
     {
-        return $this->catalog->activeStoreProducts($storeId);
+        return $this->catalog->activeStoreProducts($storeId, $query);
     }
 }

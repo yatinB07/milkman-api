@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Actions\Admin\Categories\CreateCategoryAction;
 use App\Actions\Admin\Categories\DeleteCategoryAction;
 use App\Actions\Admin\Categories\ListCategoriesAction;
+use App\Actions\Admin\Categories\ShowCategoryAction;
 use App\Actions\Admin\Categories\UpdateCategoryAction;
 use App\Exceptions\Auth\MissingPermissionException;
 use App\Http\Controllers\Controller;
@@ -26,7 +27,7 @@ class CategoryController extends Controller
     ): AnonymousResourceCollection {
         $this->authorizeCategoryManagement($request, $auth);
 
-        return CategoryResource::collection($categories->execute($request->search(), $request->perPage()));
+        return CategoryResource::collection($categories->execute($request->toData()));
     }
 
     public function store(CategoryRequest $request, IdentityAuthService $auth, CreateCategoryAction $create): JsonResponse
@@ -35,8 +36,15 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => __('catalog.category_created'),
-            'data' => new CategoryResource($create->execute($request->validated())),
+            'data' => new CategoryResource($create->execute($request->toData())),
         ], 201);
+    }
+
+    public function show(Request $request, IdentityAuthService $auth, ShowCategoryAction $show, int $category): CategoryResource
+    {
+        $this->authorizeCategoryManagement($request, $auth);
+
+        return new CategoryResource($show->execute($category));
     }
 
     public function update(
@@ -49,7 +57,7 @@ class CategoryController extends Controller
 
         return response()->json([
             'message' => __('catalog.category_updated'),
-            'data' => new CategoryResource($update->execute($category, $request->validated())),
+            'data' => new CategoryResource($update->execute($category, $request->toData())),
         ]);
     }
 

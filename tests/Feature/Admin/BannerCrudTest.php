@@ -18,7 +18,7 @@ class BannerCrudTest extends TestCase
     {
         $token = $this->adminTokenWithPermission('settings.update');
 
-        Banner::factory()->create([
+        $banner = Banner::factory()->create([
             'title' => 'Current home banner',
             'image_path' => 'banners/current.png',
             'is_active' => true,
@@ -29,6 +29,12 @@ class BannerCrudTest extends TestCase
             ->assertOk()
             ->assertJsonPath('data.0.title', 'Current home banner')
             ->assertJsonPath('data.0.image_path', 'banners/current.png');
+
+        $this->withToken($token)
+            ->getJson("/api/v1/admin/banners/{$banner->id}")
+            ->assertOk()
+            ->assertJsonPath('data.id', $banner->id)
+            ->assertJsonPath('data.title', 'Current home banner');
 
         $createdId = $this->withToken($token)
             ->postJson('/api/v1/admin/banners', [

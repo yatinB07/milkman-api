@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\IdentityType;
 use App\Models\Admin;
 use App\Models\Customer;
 use App\Models\Rider;
@@ -13,12 +14,7 @@ class IdentityRepository
     /** @return class-string<Authenticatable> */
     public function modelClass(string $identityType): string
     {
-        return match ($identityType) {
-            'admin' => Admin::class,
-            'customer' => Customer::class,
-            'store' => Store::class,
-            'rider' => Rider::class,
-        };
+        return IdentityType::from($identityType)->modelClass();
     }
 
     public function findActiveCandidateByEmail(string $identityType, string $email): ?Authenticatable

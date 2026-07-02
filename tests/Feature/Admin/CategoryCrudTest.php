@@ -18,12 +18,18 @@ class CategoryCrudTest extends TestCase
     {
         $token = $this->adminTokenWithPermission('products.manage');
 
-        Category::factory()->create(['title' => 'Milk', 'is_active' => true]);
+        $category = Category::factory()->create(['title' => 'Milk', 'is_active' => true]);
 
         $this->withToken($token)
             ->getJson('/api/v1/admin/categories')
             ->assertOk()
             ->assertJsonPath('data.0.title', 'Milk');
+
+        $this->withToken($token)
+            ->getJson("/api/v1/admin/categories/{$category->id}")
+            ->assertOk()
+            ->assertJsonPath('data.id', $category->id)
+            ->assertJsonPath('data.title', 'Milk');
 
         $createdId = $this->withToken($token)
             ->postJson('/api/v1/admin/categories', [

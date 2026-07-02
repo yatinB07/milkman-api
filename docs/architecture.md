@@ -6,10 +6,11 @@ MilkMan API is a Laravel 13 backend for the MilkMan migration. The legacy PHP ap
 
 API requests should follow this path:
 
-`Route -> FormRequest -> Controller -> Action -> Service/Repository -> Model -> Resource`
+`Route -> FormRequest -> Data DTO -> Controller -> Action -> Service/Repository -> Model -> Resource`
 
 - Controllers stay thin and return resources.
 - Form requests own validation and request-level authorization.
+- Data DTOs convert validated request input into explicit objects before it reaches Actions.
 - Actions execute one use case.
 - Services own domain workflows and integrations.
 - Repositories own Eloquent queries, filters, persistence helpers, eager loading, and aggregates.
@@ -23,6 +24,33 @@ API requests should follow this path:
 List endpoints must be paginated and should expose `search` when a module has searchable text fields. Repositories own pagination, search, filters, sorting, and eager loading.
 
 CRUD delete endpoints soft delete records by default. Hard deletes require an explicit documented exception.
+
+Admin list endpoints should convert validated `search` and `per_page` inputs into `App\Data\Admin\ListQueryData`. Module create/update requests should convert validated payloads into module-specific DTOs, such as `BannerData` or `CategoryData`, before calling Actions.
+
+Public list endpoints should convert validated query inputs into `App\Data\Catalog\PublicListQueryData` and return paginated resource collections.
+
+## Repository Coverage
+
+Repositories are required when a module has persistence or query workflows. Do not create empty repositories for models that do not yet have implemented use cases. When a module is implemented, add the repository alongside the Action/Request/Resource tests and keep all Eloquent query building inside that repository.
+
+Current implemented workflow repositories:
+
+- `IdentityRepository`
+- `CatalogRepository`
+- `BannerRepository`
+- `CategoryRepository`
+
+The architecture layering test prevents Controllers and Actions from building Eloquent queries directly.
+
+## Domain Foundations
+
+Shared enum, event, and job classes live under:
+
+- `app/Enums`
+- `app/Events`
+- `app/Jobs`
+
+Add enum cases before hardcoding shared statuses or identity names. Dispatch domain events for important state changes, and put slow notification/media side effects into jobs.
 
 ## Eloquent Models
 

@@ -2,38 +2,42 @@
 
 namespace App\Repositories;
 
+use App\Data\Catalog\PublicListQueryData;
 use App\Exceptions\Catalog\StoreNotFoundException;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Store;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class CatalogRepository
 {
-    /** @return Collection<int, Category> */
-    public function activeCategories(): Collection
+    /** @return LengthAwarePaginator<int, Category> */
+    public function activeCategories(PublicListQueryData $query): LengthAwarePaginator
     {
         return Category::query()
             ->where('is_active', true)
+            ->when($query->search, function ($builder, string $search): void {
+                $builder->where('title', 'like', "%{$search}%");
+            })
             ->orderBy('title')
-            ->get();
+            ->paginate($query->perPage);
     }
 
-    /** @return Collection<int, Store> */
-    public function activeStores(?string $search = null): Collection
+    /** @return LengthAwarePaginator<int, Store> */
+    public function activeStores(PublicListQueryData $query): LengthAwarePaginator
     {
         return Store::query()
             ->with('zone')
             ->where('is_active', true)
-            ->when($search, function ($query, string $search): void {
-                $query->where(function ($query) use ($search): void {
-                    $query->where('title', 'like', "%{$search}%")
+            ->when($query->search, function ($builder, string $search): void {
+                $builder->where(function ($builder) use ($search): void {
+                    $builder->where('title', 'like', "%{$search}%")
                         ->orWhere('full_address', 'like', "%{$search}%")
                         ->orWhere('category_reference', 'like', "%{$search}%");
                 });
             })
             ->orderBy('title')
-            ->get();
+            ->paginate($query->perPage);
     }
 
     public function activeStoreDetail(int $storeId): Store
@@ -57,8 +61,8 @@ class CatalogRepository
         return $store;
     }
 
-    /** @return Collection<int, Product> */
-    public function activeStoreProducts(int $storeId): Collection
+    /** @return LengthAwarePaginator<int, Product> */
+    public function activeStoreProducts(int $storeId, PublicListQueryData $query): LengthAwarePaginator
     {
         $this->activeStoreDetail($storeId);
 
@@ -70,7 +74,13 @@ class CatalogRepository
             ])
             ->where('store_id', $storeId)
             ->where('is_active', true)
+            ->when($query->search, function ($builder, string $search): void {
+                $builder->where(function ($builder) use ($search): void {
+                    $builder->where('title', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
             ->orderBy('title')
-            ->get();
+            ->paginate($query->perPage);
     }
 }

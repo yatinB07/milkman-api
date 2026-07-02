@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Actions\Admin\Banners\CreateBannerAction;
 use App\Actions\Admin\Banners\DeleteBannerAction;
 use App\Actions\Admin\Banners\ListBannersAction;
+use App\Actions\Admin\Banners\ShowBannerAction;
 use App\Actions\Admin\Banners\UpdateBannerAction;
 use App\Exceptions\Auth\MissingPermissionException;
 use App\Http\Controllers\Controller;
@@ -26,7 +27,7 @@ class BannerController extends Controller
     ): AnonymousResourceCollection {
         $this->authorizeBannerManagement($request, $auth);
 
-        return BannerResource::collection($banners->execute($request->search(), $request->perPage()));
+        return BannerResource::collection($banners->execute($request->toData()));
     }
 
     public function store(BannerRequest $request, IdentityAuthService $auth, CreateBannerAction $create): JsonResponse
@@ -35,8 +36,15 @@ class BannerController extends Controller
 
         return response()->json([
             'message' => __('catalog.banner_created'),
-            'data' => new BannerResource($create->execute($request->validated())),
+            'data' => new BannerResource($create->execute($request->toData())),
         ], 201);
+    }
+
+    public function show(Request $request, IdentityAuthService $auth, ShowBannerAction $show, int $banner): BannerResource
+    {
+        $this->authorizeBannerManagement($request, $auth);
+
+        return new BannerResource($show->execute($banner));
     }
 
     public function update(
@@ -49,7 +57,7 @@ class BannerController extends Controller
 
         return response()->json([
             'message' => __('catalog.banner_updated'),
-            'data' => new BannerResource($update->execute($banner, $request->validated())),
+            'data' => new BannerResource($update->execute($banner, $request->toData())),
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Admin\Categories;
 
+use App\Data\Admin\CategoryData;
 use App\Models\Category;
 use App\Repositories\CategoryRepository;
 
@@ -11,12 +12,11 @@ class UpdateCategoryAction
         private readonly CategoryRepository $categories,
     ) {}
 
-    /** @param array<string, mixed> $attributes */
-    public function execute(int $categoryId, array $attributes): Category
+    public function execute(int $categoryId, CategoryData $data): Category
     {
         return $this->categories->update(
             $this->categories->find($categoryId),
-            $attributes,
+            $data->toArray(),
         );
     }
 }

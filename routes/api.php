@@ -27,9 +27,9 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
         ->name('admin.')
         ->group(function (): void {
             Route::apiResource('banners', BannerController::class)
-                ->only(['index', 'store', 'update', 'destroy']);
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('categories', CategoryController::class)
-                ->only(['index', 'store', 'update', 'destroy']);
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
         });
 
     Route::prefix('{identityType}/auth')

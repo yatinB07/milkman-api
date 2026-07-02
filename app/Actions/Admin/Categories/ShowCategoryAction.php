@@ -2,18 +2,17 @@
 
 namespace App\Actions\Admin\Categories;
 
-use App\Data\Admin\CategoryData;
 use App\Models\Category;
 use App\Repositories\CategoryRepository;
 
-class CreateCategoryAction
+class ShowCategoryAction
 {
     public function __construct(
         private readonly CategoryRepository $categories,
     ) {}
 
-    public function execute(CategoryData $data): Category
+    public function execute(int $categoryId): Category
     {
-        return $this->categories->create($data->toArray());
+        return $this->categories->find($categoryId);
     }
 }

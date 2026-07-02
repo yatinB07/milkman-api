@@ -19,27 +19,35 @@ class PublicCatalogApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_public_categories_endpoint_returns_only_active_categories(): void
+    public function test_public_categories_endpoint_returns_only_active_categories_with_pagination_and_search(): void
     {
-        Category::factory()->create(['title' => 'Milk', 'is_active' => true]);
+        Category::factory()->create(['title' => 'Cow Milk', 'is_active' => true]);
+        Category::factory()->create(['title' => 'Buffalo Milk', 'is_active' => true]);
+        Category::factory()->create(['title' => 'Curd', 'is_active' => true]);
         Category::factory()->create(['title' => 'Hidden', 'is_active' => false]);
 
-        $this->getJson('/api/v1/public/categories')
+        $this->getJson('/api/v1/public/categories?search=milk&per_page=1')
             ->assertOk()
-            ->assertJsonPath('data.0.title', 'Milk')
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'Buffalo Milk')
+            ->assertJsonPath('meta.per_page', 1)
+            ->assertJsonPath('meta.total', 2)
             ->assertJsonMissing(['title' => 'Hidden']);
     }
 
-    public function test_public_stores_endpoint_returns_active_stores_and_supports_search(): void
+    public function test_public_stores_endpoint_returns_active_stores_and_supports_search_with_pagination(): void
     {
         Store::factory()->create(['title' => 'Fresh Dairy', 'is_active' => true]);
+        Store::factory()->create(['title' => 'Daily Dairy', 'is_active' => true]);
         Store::factory()->create(['title' => 'Vegetable Shop', 'is_active' => true]);
         Store::factory()->create(['title' => 'Closed Dairy', 'is_active' => false]);
 
-        $this->getJson('/api/v1/public/stores?search=dairy')
+        $this->getJson('/api/v1/public/stores?search=dairy&per_page=1')
             ->assertOk()
             ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.title', 'Fresh Dairy')
+            ->assertJsonPath('meta.per_page', 1)
+            ->assertJsonPath('meta.total', 2)
+            ->assertJsonPath('data.0.title', 'Daily Dairy')
             ->assertJsonMissing(['title' => 'Closed Dairy']);
     }
 
@@ -62,18 +70,22 @@ class PublicCatalogApiTest extends TestCase
             ->assertJsonCount(1, 'data.gallery_images');
     }
 
-    public function test_public_store_products_endpoint_returns_active_products_with_variants_and_images(): void
+    public function test_public_store_products_endpoint_returns_active_products_with_variants_and_images_with_pagination_and_search(): void
     {
         $store = Store::factory()->create(['is_active' => true]);
-        $product = Product::factory()->create(['store_id' => $store->id, 'title' => 'Cow Milk', 'is_active' => true]);
+        Product::factory()->create(['store_id' => $store->id, 'title' => 'Cow Milk', 'is_active' => true]);
+        $product = Product::factory()->create(['store_id' => $store->id, 'title' => 'Buffalo Milk', 'is_active' => true]);
+        Product::factory()->create(['store_id' => $store->id, 'title' => 'Curd', 'is_active' => true]);
         Product::factory()->create(['store_id' => $store->id, 'title' => 'Hidden Milk', 'is_active' => false]);
         ProductVariant::factory()->create(['store_id' => $store->id, 'product_id' => $product->id, 'title' => '1 Litre']);
         ProductImage::factory()->create(['store_id' => $store->id, 'product_id' => $product->id]);
 
-        $this->getJson("/api/v1/public/stores/{$store->id}/products")
+        $this->getJson("/api/v1/public/stores/{$store->id}/products?search=milk&per_page=1")
             ->assertOk()
             ->assertJsonCount(1, 'data')
-            ->assertJsonPath('data.0.title', 'Cow Milk')
+            ->assertJsonPath('meta.per_page', 1)
+            ->assertJsonPath('meta.total', 2)
+            ->assertJsonPath('data.0.title', 'Buffalo Milk')
             ->assertJsonPath('data.0.variants.0.title', '1 Litre')
             ->assertJsonCount(1, 'data.0.images')
             ->assertJsonMissing(['title' => 'Hidden Milk']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Data\Admin\BannerData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateBannerRequest extends FormRequest
@@ -19,5 +20,10 @@ class UpdateBannerRequest extends FormRequest
             'image_path' => ['sometimes', 'required', 'string'],
             'is_active' => ['sometimes', 'boolean'],
         ];
+    }
+
+    public function toData(): BannerData
+    {
+        return BannerData::fromArray($this->validated());
     }
 }

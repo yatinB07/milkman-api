@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Data\Admin\CategoryData;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCategoryRequest extends FormRequest
@@ -20,5 +21,10 @@ class UpdateCategoryRequest extends FormRequest
             'cover_path' => ['sometimes', 'nullable', 'string'],
             'is_active' => ['sometimes', 'boolean'],
         ];
+    }
+
+    public function toData(): CategoryData
+    {
+        return CategoryData::fromArray($this->validated());
     }
 }

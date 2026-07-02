@@ -2,6 +2,7 @@
 
 namespace App\Actions\Admin\Banners;
 
+use App\Data\Admin\BannerData;
 use App\Models\Banner;
 use App\Repositories\BannerRepository;
 
@@ -11,12 +12,11 @@ class UpdateBannerAction
         private readonly BannerRepository $banners,
     ) {}
 
-    /** @param array<string, mixed> $attributes */
-    public function execute(int $bannerId, array $attributes): Banner
+    public function execute(int $bannerId, BannerData $data): Banner
     {
         return $this->banners->update(
             $this->banners->find($bannerId),
-            $attributes,
+            $data->toArray(),
         );
     }
 }
