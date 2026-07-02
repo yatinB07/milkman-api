@@ -34,6 +34,7 @@ class LegacySchemaCoverageTest extends TestCase
             'paypal_id',
             'upi_id',
             'cancel_policy',
+            'deleted_at',
         ]);
         $this->assertTableHasColumns('riders', ['image_path']);
     }

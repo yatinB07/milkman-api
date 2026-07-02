@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\Admin\ProductController;
 use App\Http\Controllers\Api\V1\Admin\ProductImageController;
 use App\Http\Controllers\Api\V1\Admin\ProductVariantController;
 use App\Http\Controllers\Api\V1\Admin\StoreCategoryController;
+use App\Http\Controllers\Api\V1\Admin\StoreController;
 use App\Http\Controllers\Api\V1\Admin\StoreGalleryImageController;
 use App\Http\Controllers\Api\V1\Admin\TimeSlotController;
 use App\Http\Controllers\Api\V1\Admin\ZoneController;
@@ -41,6 +42,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('banners', BannerController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('categories', CategoryController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('stores', StoreController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('store-categories', StoreCategoryController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);

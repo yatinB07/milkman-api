@@ -75,6 +75,29 @@ The admin banner module uses:
 - `BannerRepository`
 - `App\Http\Resources\Admin\BannerResource`
 
+## Admin Store CRUD
+
+```text
+GET    /api/v1/admin/stores
+GET    /api/v1/admin/stores/{store}
+POST   /api/v1/admin/stores
+PUT    /api/v1/admin/stores/{store}
+DELETE /api/v1/admin/stores/{store}
+```
+
+These endpoints require an admin Sanctum token with `stores.manage`. They manage store identity and profile records from the legacy `service_details` table. Legacy fields such as `rimg`, `cover_img`, `rate`, `catid`, `sdesc`, `cdesc`, `dcharge`, `morder`, `commission`, `opentime`, `closetime`, and `is_pickup` map to Laravel `image_path`, `cover_image_path`, `rating`, `category_reference`, `short_description`, `content_description`, `delivery_charge`, `minimum_order_amount`, `commission_percent`, `opens_at`, `closes_at`, and `is_pickup_enabled`.
+
+The list endpoint supports `search` across store title, email, mobile, address, and zone title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete stores. Passwords are accepted only as write input and are hashed by the model cast; API resources never expose the password hash.
+
+The admin store module uses:
+
+- `StoreController`
+- `StoreRequest` and `UpdateStoreRequest`
+- `App\Data\Admin\StoreData` and `App\Data\Admin\ListQueryData`
+- store actions under `App\Actions\Admin\Stores`
+- `StoreRepository`
+- `App\Http\Resources\Admin\StoreResource`
+
 ## Admin Store Category CRUD
 
 ```text
