@@ -98,6 +98,31 @@ The admin customer address module uses:
 - `CustomerAddressRepository`
 - `App\Http\Resources\Admin\CustomerAddressResource`
 
+## Customer Address APIs
+
+```text
+GET    /api/v1/customer/addresses
+GET    /api/v1/customer/addresses/{address}
+POST   /api/v1/customer/addresses
+PUT    /api/v1/customer/addresses/{address}
+DELETE /api/v1/customer/addresses/{address}
+```
+
+These endpoints require a customer Sanctum token and are scoped to the authenticated customer's saved addresses. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `add_address.php` and `update_address.php` accepted `uid`, `lats`, `longs`, `address`, `landmark`, `r_instruction`, and `a_type`. The Laravel API maps those to authenticated customer ownership plus `latitude`, `longitude`, `address`, `landmark`, `rider_instruction`, and `type`.
+
+The list endpoint supports `search` across address, landmark, rider instruction, and type, accepts `per_page`, and returns Laravel pagination metadata. Delete requests soft delete addresses.
+
+The customer address module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerAddressController`
+- `App\Http\Requests\Customer\CustomerAddressRequest` and `UpdateCustomerAddressRequest`
+- `App\Data\Customer\CustomerAddressData` and `ListCustomerQueryData`
+- customer address actions under `App\Actions\Customer\Addresses`
+- `CustomerAddressRepository`
+- `App\Http\Resources\Customer\CustomerAddressResource`
+
 ## Admin Favorite CRUD
 
 ```text

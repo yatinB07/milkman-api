@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Exceptions\Catalog\CustomerAddressNotFoundException;
+use App\Models\Customer;
 use App\Models\CustomerAddress;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -30,6 +31,23 @@ class CustomerAddressRepository
             ->paginate($perPage);
     }
 
+    /** @return LengthAwarePaginator<int, CustomerAddress> */
+    public function paginateForCustomer(Customer $customer, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return CustomerAddress::query()
+            ->whereBelongsTo($customer)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('address', 'like', "%{$search}%")
+                        ->orWhere('landmark', 'like', "%{$search}%")
+                        ->orWhere('rider_instruction', 'like', "%{$search}%")
+                        ->orWhere('type', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate($perPage);
+    }
+
     /** @param array<string, mixed> $attributes */
     public function create(array $attributes): CustomerAddress
     {
@@ -40,6 +58,19 @@ class CustomerAddressRepository
     {
         $address = CustomerAddress::query()
             ->with('customer')
+            ->find($id);
+
+        if (! $address) {
+            throw new CustomerAddressNotFoundException;
+        }
+
+        return $address;
+    }
+
+    public function findForCustomer(Customer $customer, int $id): CustomerAddress
+    {
+        $address = CustomerAddress::query()
+            ->whereBelongsTo($customer)
             ->find($id);
 
         if (! $address) {
