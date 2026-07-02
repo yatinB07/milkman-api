@@ -94,7 +94,7 @@ class LegacyModelFillableTest extends TestCase
 
         return [
             Admin::class => ['name', 'username', 'email', 'password', 'is_active', 'email_verified_at'],
-            Customer::class => ['name', 'email', 'country_code', 'mobile', 'password', 'registered_at', 'referral_code', 'parent_referral_code', 'wallet_balance', 'is_active', 'email_verified_at'],
+            Customer::class => ['name', 'profile_image_path', 'email', 'country_code', 'mobile', 'password', 'registered_at', 'referral_code', 'parent_referral_code', 'wallet_balance', 'is_active', 'email_verified_at'],
             Store::class => ['title', 'zone_id', 'image_path', 'cover_image_path', 'rating', 'slogan', 'slogan_title', 'language_code', 'category_reference', 'email', 'password', 'country_code', 'mobile', 'full_address', 'pincode', 'landmark', 'short_description', 'content_description', 'latitude', 'longitude', 'store_charge', 'delivery_charge', 'minimum_order_amount', 'commission_percent', 'opens_at', 'closes_at', 'is_pickup_enabled', 'is_active', 'registration_status', 'charge_type', 'unit_kilometers', 'unit_price', 'additional_price', 'bank_name', 'ifsc_code', 'receipt_name', 'account_number', 'paypal_id', 'upi_id', 'cancel_policy'],
             Rider::class => ['store_id', 'image_path', 'name', 'email', 'country_code', 'mobile', 'password', 'is_active', 'joined_at'],
             Banner::class => ['title', 'image_path', 'is_active'],

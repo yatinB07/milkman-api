@@ -39,6 +39,7 @@ Current implemented workflow repositories:
 - `CatalogRepository`
 - `BannerRepository`
 - `CategoryRepository`
+- `CustomerRepository`
 - `StoreRepository`
 - `StoreCategoryRepository`
 - `ProductRepository`

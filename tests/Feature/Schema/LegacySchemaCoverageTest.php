@@ -21,7 +21,7 @@ class LegacySchemaCoverageTest extends TestCase
     public function test_identity_tables_cover_legacy_profile_columns(): void
     {
         $this->assertTableHasColumns('admins', ['username']);
-        $this->assertTableHasColumns('customers', ['registered_at']);
+        $this->assertTableHasColumns('customers', ['profile_image_path', 'registered_at', 'deleted_at']);
         $this->assertTableHasColumns('stores', [
             'zone_id',
             'image_path',

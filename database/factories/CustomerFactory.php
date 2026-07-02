@@ -14,6 +14,7 @@ class CustomerFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'profile_image_path' => null,
             'email' => fake()->unique()->safeEmail(),
             'country_code' => '+1',
             'mobile' => fake()->unique()->numerify('##########'),

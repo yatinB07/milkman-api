@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\CustomerFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -13,12 +14,13 @@ use Spatie\Permission\Traits\HasRoles;
 class Customer extends Authenticatable
 {
     /** @use HasFactory<CustomerFactory> */
-    use HasApiTokens, HasFactory, HasRoles, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable, SoftDeletes;
 
     protected string $guard_name = 'sanctum';
 
     protected $fillable = [
         'name',
+        'profile_image_path',
         'email',
         'country_code',
         'mobile',

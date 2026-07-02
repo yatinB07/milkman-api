@@ -52,6 +52,29 @@ The admin category module uses:
 - `CategoryRepository`
 - `App\Http\Resources\Admin\CategoryResource`
 
+## Admin Customer CRUD
+
+```text
+GET    /api/v1/admin/customers
+GET    /api/v1/admin/customers/{customer}
+POST   /api/v1/admin/customers
+PUT    /api/v1/admin/customers/{customer}
+DELETE /api/v1/admin/customers/{customer}
+```
+
+These endpoints require an admin Sanctum token with `users.manage`. They manage customer records from the legacy `tbl_user` table. Legacy `pro_pic`, `ccode`, `registartion_date`, `refercode`, `parentcode`, `wallet`, and `status` map to Laravel `profile_image_path`, `country_code`, `registered_at`, `referral_code`, `parent_referral_code`, `wallet_balance`, and `is_active`.
+
+The list endpoint supports `search` across customer name, email, mobile, referral code, and parent referral code, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete customers. Passwords are accepted only as write input and are hashed by the model cast; API resources never expose the password hash.
+
+The admin customer module uses:
+
+- `CustomerController`
+- `CustomerRequest` and `UpdateCustomerRequest`
+- `App\Data\Admin\CustomerData` and `App\Data\Admin\ListQueryData`
+- customer actions under `App\Actions\Admin\Customers`
+- `CustomerRepository`
+- `App\Http\Resources\Admin\CustomerResource`
+
 ## Admin Banner CRUD
 
 ```text
