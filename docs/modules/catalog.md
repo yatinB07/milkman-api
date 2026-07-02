@@ -98,6 +98,31 @@ The admin customer address module uses:
 - `CustomerAddressRepository`
 - `App\Http\Resources\Admin\CustomerAddressResource`
 
+## Admin Favorite CRUD
+
+```text
+GET    /api/v1/admin/favorites
+GET    /api/v1/admin/favorites/{favorite}
+POST   /api/v1/admin/favorites
+PUT    /api/v1/admin/favorites/{favorite}
+DELETE /api/v1/admin/favorites/{favorite}
+```
+
+These endpoints require an admin Sanctum token with `users.manage`. They manage customer favorite-store records from the legacy `tbl_fav` table. Legacy `uid`, `store_id`, and `zone_id` map to Laravel `customer_id`, `store_id`, and `zone_id`.
+
+The legacy customer API toggled favorites in `user_api/u_fav.php`: if a customer/store pair existed it was removed; otherwise it was inserted with the store's zone. The admin API exposes direct CRUD for operational management and keeps the customer/store pair unique.
+
+The list endpoint supports `search` across customer name/email/mobile, store title, and zone title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete favorites.
+
+The admin favorite module uses:
+
+- `FavoriteController`
+- `FavoriteRequest` and `UpdateFavoriteRequest`
+- `App\Data\Admin\FavoriteData` and `App\Data\Admin\ListQueryData`
+- favorite actions under `App\Actions\Admin\Favorites`
+- `FavoriteRepository`
+- `App\Http\Resources\Admin\FavoriteResource`
+
 ## Admin Banner CRUD
 
 ```text

@@ -48,6 +48,7 @@ Current implemented workflow repositories:
 - `ProductImageRepository`
 - `StoreGalleryImageRepository`
 - `DeliveryOptionRepository`
+- `FavoriteRepository`
 - `TimeSlotRepository`
 - `CouponRepository`
 - `FaqRepository`
