@@ -51,7 +51,7 @@ class LegacySchemaCoverageTest extends TestCase
         $this->assertTableHasColumns('delivery_options', ['store_id', 'title', 'delivery_days', 'is_active', 'deleted_at']);
         $this->assertTableHasColumns('time_slots', ['store_id', 'starts_at', 'ends_at', 'is_active', 'deleted_at']);
         $this->assertTableHasColumns('coupons', ['store_id', 'image_path', 'title', 'code', 'subtitle', 'expires_at', 'minimum_amount', 'value', 'description', 'is_active', 'deleted_at']);
-        $this->assertTableHasColumns('faqs', ['store_id', 'question', 'answer', 'is_active']);
+        $this->assertTableHasColumns('faqs', ['store_id', 'question', 'answer', 'is_active', 'deleted_at']);
         $this->assertTableHasColumns('pages', ['title', 'description', 'is_active']);
         $this->assertTableHasColumns('payment_methods', ['title', 'image_path', 'attributes', 'subtitle', 'is_visible', 'is_active']);
     }

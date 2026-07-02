@@ -40,5 +40,7 @@ class OpenApiDocumentationTest extends TestCase
         $this->assertContains('/admin/time-slots/{timeSlot}', $paths);
         $this->assertContains('/admin/coupons', $paths);
         $this->assertContains('/admin/coupons/{coupon}', $paths);
+        $this->assertContains('/admin/faqs', $paths);
+        $this->assertContains('/admin/faqs/{faq}', $paths);
     }
 }

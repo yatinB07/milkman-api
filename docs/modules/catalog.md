@@ -258,3 +258,26 @@ The admin coupon module uses:
 - coupon actions under `App\Actions\Admin\Coupons`
 - `CouponRepository`
 - `App\Http\Resources\Admin\CouponResource`
+
+## Admin FAQ CRUD
+
+```text
+GET    /api/v1/admin/faqs
+GET    /api/v1/admin/faqs/{faq}
+POST   /api/v1/admin/faqs
+PUT    /api/v1/admin/faqs/{faq}
+DELETE /api/v1/admin/faqs/{faq}
+```
+
+These endpoints require an admin Sanctum token with `stores.manage`. They manage store FAQ content from the legacy `tbl_faq` table. Legacy `status` maps to Laravel `is_active`.
+
+The list endpoint supports `search` across question, answer, and store title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete FAQs.
+
+The admin FAQ module uses:
+
+- `FaqController`
+- `FaqRequest` and `UpdateFaqRequest`
+- `App\Data\Admin\FaqData` and `App\Data\Admin\ListQueryData`
+- FAQ actions under `App\Actions\Admin\Faqs`
+- `FaqRepository`
+- `App\Http\Resources\Admin\FaqResource`
