@@ -189,3 +189,26 @@ The admin store gallery image module uses:
 - store gallery image actions under `App\Actions\Admin\StoreGalleryImages`
 - `StoreGalleryImageRepository`
 - `App\Http\Resources\Admin\StoreGalleryImageResource`
+
+## Admin Delivery Option CRUD
+
+```text
+GET    /api/v1/admin/delivery-options
+GET    /api/v1/admin/delivery-options/{deliveryOption}
+POST   /api/v1/admin/delivery-options
+PUT    /api/v1/admin/delivery-options/{deliveryOption}
+DELETE /api/v1/admin/delivery-options/{deliveryOption}
+```
+
+These endpoints require an admin Sanctum token with `stores.manage`. They manage store delivery configuration records from the legacy `tbl_delivery` table.
+
+The list endpoint supports `search` across delivery option title and store title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete delivery options.
+
+The admin delivery option module uses:
+
+- `DeliveryOptionController`
+- `DeliveryOptionRequest` and `UpdateDeliveryOptionRequest`
+- `App\Data\Admin\DeliveryOptionData` and `App\Data\Admin\ListQueryData`
+- delivery option actions under `App\Actions\Admin\DeliveryOptions`
+- `DeliveryOptionRepository`
+- `App\Http\Resources\Admin\DeliveryOptionResource`

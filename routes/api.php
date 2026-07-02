@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Admin\BannerController;
 use App\Http\Controllers\Api\V1\Admin\CategoryController;
+use App\Http\Controllers\Api\V1\Admin\DeliveryOptionController;
 use App\Http\Controllers\Api\V1\Admin\ProductController;
 use App\Http\Controllers\Api\V1\Admin\ProductImageController;
 use App\Http\Controllers\Api\V1\Admin\ProductVariantController;
@@ -44,6 +45,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('product-images', ProductImageController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('store-gallery-images', StoreGalleryImageController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('delivery-options', DeliveryOptionController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
         });
 
