@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Exceptions\Catalog\OrderNotFoundException;
+use App\Models\Order;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+
+class OrderRepository
+{
+    /** @return LengthAwarePaginator<int, Order> */
+    public function paginate(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return Order::query()
+            ->with(['store', 'customer', 'paymentMethod', 'coupon', 'rider', 'items'])
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('transaction_id', 'like', "%{$search}%")
+                        ->orWhere('customer_name', 'like', "%{$search}%")
+                        ->orWhere('customer_mobile', 'like', "%{$search}%")
+                        ->orWhere('status', 'like', "%{$search}%")
+                        ->orWhere('order_type', 'like', "%{$search}%")
+                        ->orWhereHas('store', function ($query) use ($search): void {
+                            $query->where('title', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%")
+                                ->orWhere('mobile', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('customer', function ($query) use ($search): void {
+                            $query->where('name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%")
+                                ->orWhere('mobile', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('rider', function ($query) use ($search): void {
+                            $query->where('name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%")
+                                ->orWhere('mobile', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->latest('ordered_at')
+            ->paginate($perPage);
+    }
+
+    /** @param array<string, mixed> $attributes */
+    public function create(array $attributes): Order
+    {
+        return Order::query()->create($attributes)->load(['store', 'customer', 'paymentMethod', 'coupon', 'rider', 'items']);
+    }
+
+    public function find(int $id): Order
+    {
+        $order = Order::query()
+            ->with(['store', 'customer', 'paymentMethod', 'coupon', 'rider', 'items'])
+            ->find($id);
+
+        if (! $order) {
+            throw new OrderNotFoundException;
+        }
+
+        return $order;
+    }
+
+    /** @param array<string, mixed> $attributes */
+    public function update(Order $order, array $attributes): Order
+    {
+        $order->update($attributes);
+
+        return $order->refresh()->load(['store', 'customer', 'paymentMethod', 'coupon', 'rider', 'items']);
+    }
+
+    public function delete(Order $order): void
+    {
+        $order->delete();
+    }
+}

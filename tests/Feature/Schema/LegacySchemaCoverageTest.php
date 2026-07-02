@@ -92,7 +92,7 @@ class LegacySchemaCoverageTest extends TestCase
             'signature_path',
         ];
 
-        $this->assertTableHasColumns('orders', $orderColumns);
+        $this->assertTableHasColumns('orders', [...$orderColumns, 'deleted_at']);
         $this->assertTableHasColumns('subscription_orders', $orderColumns);
         $this->assertTableHasColumns('order_items', ['order_id', 'quantity', 'product_title', 'discount', 'image_path', 'price', 'variant_title']);
         $this->assertTableHasColumns('subscription_order_items', ['subscription_order_id', 'quantity', 'product_title', 'discount', 'image_path', 'price', 'variant_title', 'starts_at', 'total_deliveries', 'total_dates', 'completed_dates', 'selected_days', 'time_slot']);
