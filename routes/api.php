@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\V1\Admin\StoreController;
 use App\Http\Controllers\Api\V1\Admin\StoreGalleryImageController;
 use App\Http\Controllers\Api\V1\Admin\StoreNotificationController;
 use App\Http\Controllers\Api\V1\Admin\SubscriptionOrderController;
+use App\Http\Controllers\Api\V1\Admin\SubscriptionOrderItemController;
 use App\Http\Controllers\Api\V1\Admin\TimeSlotController;
 use App\Http\Controllers\Api\V1\Admin\WalletTransactionController;
 use App\Http\Controllers\Api\V1\Admin\ZoneController;
@@ -76,6 +77,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('order-items', OrderItemController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('subscription-orders', SubscriptionOrderController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('subscription-order-items', SubscriptionOrderItemController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('stores', StoreController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);

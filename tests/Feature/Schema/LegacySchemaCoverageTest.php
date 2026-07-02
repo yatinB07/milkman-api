@@ -95,7 +95,7 @@ class LegacySchemaCoverageTest extends TestCase
         $this->assertTableHasColumns('orders', [...$orderColumns, 'deleted_at']);
         $this->assertTableHasColumns('subscription_orders', [...$orderColumns, 'deleted_at']);
         $this->assertTableHasColumns('order_items', ['order_id', 'quantity', 'product_title', 'discount', 'image_path', 'price', 'variant_title', 'deleted_at']);
-        $this->assertTableHasColumns('subscription_order_items', ['subscription_order_id', 'quantity', 'product_title', 'discount', 'image_path', 'price', 'variant_title', 'starts_at', 'total_deliveries', 'total_dates', 'completed_dates', 'selected_days', 'time_slot']);
+        $this->assertTableHasColumns('subscription_order_items', ['subscription_order_id', 'quantity', 'product_title', 'discount', 'image_path', 'price', 'variant_title', 'starts_at', 'total_deliveries', 'total_dates', 'completed_dates', 'selected_days', 'time_slot', 'deleted_at']);
         $this->assertTableHasColumns('customer_addresses', ['customer_id', 'address', 'landmark', 'rider_instruction', 'type', 'latitude', 'longitude', 'deleted_at']);
         $this->assertTableHasColumns('favorites', ['customer_id', 'store_id', 'zone_id', 'deleted_at']);
         $this->assertTableHasColumns('payout_requests', ['store_id', 'amount', 'status', 'proof_path', 'requested_at', 'request_type', 'account_number', 'bank_name', 'account_name', 'ifsc_code', 'upi_id', 'paypal_id', 'deleted_at']);

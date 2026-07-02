@@ -66,6 +66,7 @@ Current implemented workflow repositories:
 - `OrderRepository`
 - `OrderItemRepository`
 - `SubscriptionOrderRepository`
+- `SubscriptionOrderItemRepository`
 
 The architecture layering test prevents Controllers and Actions from building Eloquent queries directly.
 
