@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\Admin\DeliveryOptionController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\Api\V1\Admin\FavoriteController;
 use App\Http\Controllers\Api\V1\Admin\OrderController;
+use App\Http\Controllers\Api\V1\Admin\OrderItemController;
 use App\Http\Controllers\Api\V1\Admin\PageController;
 use App\Http\Controllers\Api\V1\Admin\PaymentMethodController;
 use App\Http\Controllers\Api\V1\Admin\PayoutRequestController;
@@ -70,6 +71,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('cash-collections', CashCollectionController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('orders', OrderController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('order-items', OrderItemController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('stores', StoreController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
