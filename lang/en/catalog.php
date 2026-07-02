@@ -34,4 +34,8 @@ return [
     'store_gallery_image_not_found' => 'Store gallery image was not found.',
     'store_gallery_image_updated' => 'Store gallery image updated successfully.',
     'store_not_found' => 'Store was not found.',
+    'time_slot_created' => 'Time slot created successfully.',
+    'time_slot_deleted' => 'Time slot deleted successfully.',
+    'time_slot_not_found' => 'Time slot was not found.',
+    'time_slot_updated' => 'Time slot updated successfully.',
 ];

@@ -35,5 +35,6 @@ class ArchitectureLayeringTest extends TestCase
         $this->assertFileExists(app_path('Repositories/ProductImageRepository.php'));
         $this->assertFileExists(app_path('Repositories/StoreGalleryImageRepository.php'));
         $this->assertFileExists(app_path('Repositories/DeliveryOptionRepository.php'));
+        $this->assertFileExists(app_path('Repositories/TimeSlotRepository.php'));
     }
 }

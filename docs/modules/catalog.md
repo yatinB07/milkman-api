@@ -212,3 +212,26 @@ The admin delivery option module uses:
 - delivery option actions under `App\Actions\Admin\DeliveryOptions`
 - `DeliveryOptionRepository`
 - `App\Http\Resources\Admin\DeliveryOptionResource`
+
+## Admin Time Slot CRUD
+
+```text
+GET    /api/v1/admin/time-slots
+GET    /api/v1/admin/time-slots/{timeSlot}
+POST   /api/v1/admin/time-slots
+PUT    /api/v1/admin/time-slots/{timeSlot}
+DELETE /api/v1/admin/time-slots/{timeSlot}
+```
+
+These endpoints require an admin Sanctum token with `stores.manage`. They manage store delivery time windows from the legacy `tbl_time` table. Legacy `mintime`, `maxtime`, and `status` map to Laravel `starts_at`, `ends_at`, and `is_active`.
+
+The list endpoint supports `search` across start time, end time, and store title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete time slots.
+
+The admin time slot module uses:
+
+- `TimeSlotController`
+- `TimeSlotRequest` and `UpdateTimeSlotRequest`
+- `App\Data\Admin\TimeSlotData` and `App\Data\Admin\ListQueryData`
+- time slot actions under `App\Actions\Admin\TimeSlots`
+- `TimeSlotRepository`
+- `App\Http\Resources\Admin\TimeSlotResource`
