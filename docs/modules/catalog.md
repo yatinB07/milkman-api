@@ -304,3 +304,26 @@ The admin page module uses:
 - page actions under `App\Actions\Admin\Pages`
 - `PageRepository`
 - `App\Http\Resources\Admin\PageResource`
+
+## Admin Payment Method CRUD
+
+```text
+GET    /api/v1/admin/payment-methods
+GET    /api/v1/admin/payment-methods/{paymentMethod}
+POST   /api/v1/admin/payment-methods
+PUT    /api/v1/admin/payment-methods/{paymentMethod}
+DELETE /api/v1/admin/payment-methods/{paymentMethod}
+```
+
+These endpoints require an admin Sanctum token with `settings.update`. They manage payment gateway records from the legacy `tbl_payment_list` table. Legacy `img`, `attributes`, `subtitle`, `p_show`, and `status` map to Laravel `image_path`, `attributes`, `subtitle`, `is_visible`, and `is_active`.
+
+The list endpoint supports `search` across payment title, subtitle, and image path, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete payment methods.
+
+The admin payment method module uses:
+
+- `PaymentMethodController`
+- `PaymentMethodRequest` and `UpdatePaymentMethodRequest`
+- `App\Data\Admin\PaymentMethodData` and `App\Data\Admin\ListQueryData`
+- payment method actions under `App\Actions\Admin\PaymentMethods`
+- `PaymentMethodRepository`
+- `App\Http\Resources\Admin\PaymentMethodResource`
