@@ -40,6 +40,7 @@ Current implemented workflow repositories:
 - `BannerRepository`
 - `CategoryRepository`
 - `CustomerAddressRepository`
+- `CustomerNotificationRepository`
 - `CustomerRepository`
 - `StoreRepository`
 - `StoreCategoryRepository`

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Admin\CategoryController;
 use App\Http\Controllers\Api\V1\Admin\CouponController;
 use App\Http\Controllers\Api\V1\Admin\CustomerAddressController;
 use App\Http\Controllers\Api\V1\Admin\CustomerController;
+use App\Http\Controllers\Api\V1\Admin\CustomerNotificationController;
 use App\Http\Controllers\Api\V1\Admin\DeliveryOptionController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\Api\V1\Admin\FavoriteController;
@@ -51,6 +52,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('customers', CustomerController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('customer-addresses', CustomerAddressController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('customer-notifications', CustomerNotificationController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('favorites', FavoriteController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
