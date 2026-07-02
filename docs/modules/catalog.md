@@ -120,3 +120,26 @@ The admin product module uses:
 - product actions under `App\Actions\Admin\Products`
 - `ProductRepository`
 - `App\Http\Resources\Admin\ProductResource`
+
+## Admin Product Variant CRUD
+
+```text
+GET    /api/v1/admin/product-variants
+GET    /api/v1/admin/product-variants/{productVariant}
+POST   /api/v1/admin/product-variants
+PUT    /api/v1/admin/product-variants/{productVariant}
+DELETE /api/v1/admin/product-variants/{productVariant}
+```
+
+These endpoints require an admin Sanctum token with `products.manage`. They manage product pricing/volume records from the legacy `tbl_product_attribute` table.
+
+The list endpoint supports `search` across variant title, product title, and store title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete product variants.
+
+The admin product variant module uses:
+
+- `ProductVariantController`
+- `ProductVariantRequest` and `UpdateProductVariantRequest`
+- `App\Data\Admin\ProductVariantData` and `App\Data\Admin\ListQueryData`
+- product variant actions under `App\Actions\Admin\ProductVariants`
+- `ProductVariantRepository`
+- `App\Http\Resources\Admin\ProductVariantResource`
