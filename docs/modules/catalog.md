@@ -166,3 +166,26 @@ The admin product image module uses:
 - product image actions under `App\Actions\Admin\ProductImages`
 - `ProductImageRepository`
 - `App\Http\Resources\Admin\ProductImageResource`
+
+## Admin Store Gallery Image CRUD
+
+```text
+GET    /api/v1/admin/store-gallery-images
+GET    /api/v1/admin/store-gallery-images/{storeGalleryImage}
+POST   /api/v1/admin/store-gallery-images
+PUT    /api/v1/admin/store-gallery-images/{storeGalleryImage}
+DELETE /api/v1/admin/store-gallery-images/{storeGalleryImage}
+```
+
+These endpoints require an admin Sanctum token with `stores.manage`. They manage store gallery records from the legacy `tbl_photo` table.
+
+The list endpoint supports `search` across image path and store title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete store gallery images.
+
+The admin store gallery image module uses:
+
+- `StoreGalleryImageController`
+- `StoreGalleryImageRequest` and `UpdateStoreGalleryImageRequest`
+- `App\Data\Admin\StoreGalleryImageData` and `App\Data\Admin\ListQueryData`
+- store gallery image actions under `App\Actions\Admin\StoreGalleryImages`
+- `StoreGalleryImageRepository`
+- `App\Http\Resources\Admin\StoreGalleryImageResource`

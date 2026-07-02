@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Admin\ProductController;
 use App\Http\Controllers\Api\V1\Admin\ProductImageController;
 use App\Http\Controllers\Api\V1\Admin\ProductVariantController;
 use App\Http\Controllers\Api\V1\Admin\StoreCategoryController;
+use App\Http\Controllers\Api\V1\Admin\StoreGalleryImageController;
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
 use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
 use App\Http\Controllers\Api\V1\HealthController;
@@ -41,6 +42,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('product-variants', ProductVariantController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('product-images', ProductImageController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('store-gallery-images', StoreGalleryImageController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
         });
 
