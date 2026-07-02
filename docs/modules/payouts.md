@@ -26,3 +26,28 @@ The admin payout request module uses:
 - payout request actions under `App\Actions\Admin\PayoutRequests`
 - `PayoutRequestRepository`
 - `App\Http\Resources\Admin\PayoutRequestResource`
+
+## Admin Cash Collection CRUD
+
+```text
+GET    /api/v1/admin/cash-collections
+GET    /api/v1/admin/cash-collections/{cashCollection}
+POST   /api/v1/admin/cash-collections
+PUT    /api/v1/admin/cash-collections/{cashCollection}
+DELETE /api/v1/admin/cash-collections/{cashCollection}
+```
+
+These endpoints require an admin Sanctum token with `payouts.approve`. They manage COD cash settlement records from the legacy `tbl_cash` table. Legacy `rid`, `message`, `amt`, and `pdate` map to Laravel `store_id`, `message`, `amount`, and `collected_at`.
+
+The list endpoint supports `search` across collection message and store identity fields, accepts `per_page`, and returns Laravel pagination metadata. Delete requests soft delete cash collection rows.
+
+The legacy admin panel calculated remaining COD cash before inserting `tbl_cash`. This CRUD preserves the stored settlement log; richer settlement calculations should live in a dedicated payout/cash service when reporting workflows are added.
+
+The admin cash collection module uses:
+
+- `CashCollectionController`
+- `CashCollectionRequest` and `UpdateCashCollectionRequest`
+- `App\Data\Admin\CashCollectionData` and `App\Data\Admin\ListQueryData`
+- cash collection actions under `App\Actions\Admin\CashCollections`
+- `CashCollectionRepository`
+- `App\Http\Resources\Admin\CashCollectionResource`

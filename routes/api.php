@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\BannerController;
+use App\Http\Controllers\Api\V1\Admin\CashCollectionController;
 use App\Http\Controllers\Api\V1\Admin\CategoryController;
 use App\Http\Controllers\Api\V1\Admin\CouponController;
 use App\Http\Controllers\Api\V1\Admin\CustomerAddressController;
@@ -63,6 +64,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('wallet-transactions', WalletTransactionController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('payout-requests', PayoutRequestController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('cash-collections', CashCollectionController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('stores', StoreController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
