@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\V1\Admin\ProductVariantController;
 use App\Http\Controllers\Api\V1\Admin\StoreCategoryController;
 use App\Http\Controllers\Api\V1\Admin\StoreGalleryImageController;
 use App\Http\Controllers\Api\V1\Admin\TimeSlotController;
+use App\Http\Controllers\Api\V1\Admin\ZoneController;
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
 use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
 use App\Http\Controllers\Api\V1\HealthController;
@@ -62,6 +63,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('pages', PageController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('payment-methods', PaymentMethodController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('zones', ZoneController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
         });
 

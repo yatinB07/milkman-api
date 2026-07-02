@@ -327,3 +327,26 @@ The admin payment method module uses:
 - payment method actions under `App\Actions\Admin\PaymentMethods`
 - `PaymentMethodRepository`
 - `App\Http\Resources\Admin\PaymentMethodResource`
+
+## Admin Zone CRUD
+
+```text
+GET    /api/v1/admin/zones
+GET    /api/v1/admin/zones/{zone}
+POST   /api/v1/admin/zones
+PUT    /api/v1/admin/zones/{zone}
+DELETE /api/v1/admin/zones/{zone}
+```
+
+These endpoints require an admin Sanctum token with `settings.update`. They manage delivery zone records from the legacy `zones` table. Legacy `status` maps to Laravel `is_active`; legacy polygon display text is retained as `alias`.
+
+The list endpoint supports `search` across zone title and alias, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete zones.
+
+The admin zone module uses:
+
+- `ZoneController`
+- `ZoneRequest` and `UpdateZoneRequest`
+- `App\Data\Admin\ZoneData` and `App\Data\Admin\ListQueryData`
+- zone actions under `App\Actions\Admin\Zones`
+- `ZoneRepository`
+- `App\Http\Resources\Admin\ZoneResource`

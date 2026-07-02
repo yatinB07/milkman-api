@@ -54,4 +54,8 @@ return [
     'time_slot_deleted' => 'Time slot deleted successfully.',
     'time_slot_not_found' => 'Time slot was not found.',
     'time_slot_updated' => 'Time slot updated successfully.',
+    'zone_created' => 'Zone created successfully.',
+    'zone_deleted' => 'Zone deleted successfully.',
+    'zone_not_found' => 'Zone was not found.',
+    'zone_updated' => 'Zone updated successfully.',
 ];
