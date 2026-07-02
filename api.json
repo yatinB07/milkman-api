@@ -3037,6 +3037,74 @@
                 }
             }
         },
+        "/customer/home": {
+            "get": {
+                "operationId": "v1.customer.home.show",
+                "tags": [
+                    "CustomerHome"
+                ],
+                "parameters": [
+                    {
+                        "name": "latitude",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "minimum": -90,
+                            "maximum": 90
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "minimum": -180,
+                            "maximum": 180
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": [
+                                "integer",
+                                "null"
+                            ],
+                            "minimum": 1,
+                            "maximum": 20
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`CustomerHomeResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerHomeResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/admin/customer-notifications": {
             "get": {
                 "operationId": "v1.admin.customer-notifications.index",
@@ -14463,6 +14531,51 @@
                     "updated_at"
                 ],
                 "title": "CustomerAddressResource"
+            },
+            "CustomerHomeResource": {
+                "type": "object",
+                "properties": {
+                    "banners": {
+                        "type": "array",
+                        "items": {}
+                    },
+                    "categories": {
+                        "type": "array",
+                        "items": {}
+                    },
+                    "favorite_stores": {
+                        "type": "array",
+                        "items": {}
+                    },
+                    "spotlight_stores": {
+                        "type": "array",
+                        "items": {}
+                    },
+                    "top_stores": {
+                        "type": "array",
+                        "items": {}
+                    },
+                    "currency": {
+                        "type": "string"
+                    },
+                    "wallet_balance": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "banners",
+                    "categories",
+                    "favorite_stores",
+                    "spotlight_stores",
+                    "top_stores",
+                    "currency",
+                    "wallet_balance",
+                    "location"
+                ],
+                "title": "CustomerHomeResource"
             },
             "CustomerNotificationRequest": {
                 "type": "object",

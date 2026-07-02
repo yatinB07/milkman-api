@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Customer\CustomerAddressController as CustomerAddressApiController;
 use App\Http\Controllers\Api\V1\Customer\CustomerCouponController;
 use App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController;
+use App\Http\Controllers\Api\V1\Customer\CustomerHomeController;
 use App\Http\Controllers\Api\V1\Customer\CustomerNotificationController as CustomerNotificationApiController;
 use App\Http\Controllers\Api\V1\Customer\CustomerPaymentMethodController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProfileController;
@@ -131,6 +132,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
         ->middleware('auth:sanctum')
         ->name('customer.')
         ->group(function (): void {
+            Route::get('home', [CustomerHomeController::class, 'show'])
+                ->name('home.show');
             Route::get('profile', [CustomerProfileController::class, 'show'])
                 ->name('profile.show');
             Route::put('profile', [CustomerProfileController::class, 'update'])

@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\Catalog\CategoryNotFoundException;
 use App\Models\Category;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 class CategoryRepository
 {
@@ -17,6 +18,16 @@ class CategoryRepository
             })
             ->orderBy('title')
             ->paginate($perPage);
+    }
+
+    /** @return Collection<int, Category> */
+    public function activeForHome(int $limit): Collection
+    {
+        return Category::query()
+            ->where('is_active', true)
+            ->orderBy('title')
+            ->limit($limit)
+            ->get();
     }
 
     public function create(array $attributes): Category

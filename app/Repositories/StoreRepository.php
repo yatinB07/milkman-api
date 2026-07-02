@@ -3,8 +3,10 @@
 namespace App\Repositories;
 
 use App\Exceptions\Catalog\StoreNotFoundException;
+use App\Models\Customer;
 use App\Models\Store;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 class StoreRepository
 {
@@ -26,6 +28,43 @@ class StoreRepository
             })
             ->orderBy('title')
             ->paginate($perPage);
+    }
+
+    /** @return Collection<int, Store> */
+    public function activeForHome(int $limit): Collection
+    {
+        return Store::query()
+            ->with('zone')
+            ->where('is_active', true)
+            ->latest('id')
+            ->limit($limit)
+            ->get();
+    }
+
+    /** @return Collection<int, Store> */
+    public function topRatedForHome(int $limit): Collection
+    {
+        return Store::query()
+            ->with('zone')
+            ->where('is_active', true)
+            ->orderByDesc('rating')
+            ->orderBy('title')
+            ->limit($limit)
+            ->get();
+    }
+
+    /** @return Collection<int, Store> */
+    public function favoriteStoresForHome(Customer $customer, int $limit): Collection
+    {
+        return Store::query()
+            ->with('zone')
+            ->where('is_active', true)
+            ->whereHas('favorites', function ($query) use ($customer): void {
+                $query->where('customer_id', $customer->getKey());
+            })
+            ->orderBy('title')
+            ->limit($limit)
+            ->get();
     }
 
     /** @param array<string, mixed> $attributes */

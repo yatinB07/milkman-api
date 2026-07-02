@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\Catalog\BannerNotFoundException;
 use App\Models\Banner;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 class BannerRepository
 {
@@ -21,6 +22,16 @@ class BannerRepository
             })
             ->orderByDesc('id')
             ->paginate($perPage);
+    }
+
+    /** @return Collection<int, Banner> */
+    public function activeForHome(int $limit): Collection
+    {
+        return Banner::query()
+            ->where('is_active', true)
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->get();
     }
 
     /** @param array<string, mixed> $attributes */

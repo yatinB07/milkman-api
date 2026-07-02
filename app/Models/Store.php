@@ -152,6 +152,11 @@ class Store extends Authenticatable
         return $this->hasMany(CashCollection::class);
     }
 
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
     public function storeNotifications(): HasMany
     {
         return $this->hasMany(StoreNotification::class);

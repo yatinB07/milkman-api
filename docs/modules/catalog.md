@@ -97,6 +97,27 @@ The customer profile module uses:
 - `CustomerRepository` and `SettingRepository`
 - `App\Http\Resources\Customer\CustomerProfileResource`
 
+## Customer Home API
+
+```text
+GET /api/v1/customer/home?latitude={lat}&longitude={lng}&per_page={size}
+```
+
+This endpoint requires a customer Sanctum token and returns the mobile home payload. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `u_home_data.php` required `uid`, `lats`, and `longs`, then returned active banners, active categories, favorite stores, spotlight stores, top stores, wallet balance, and app currency. The Laravel API keeps the same coverage with authenticated customer ownership instead of a trusted `uid` payload. Latitude and longitude are accepted for compatibility and future zone-aware filtering; current home sections use active relational store data until spatial zone parsing is formalized.
+
+Home sections are capped by `per_page`, default to five records, and return active-only records. Favorite stores are scoped to the authenticated customer.
+
+The customer home module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerHomeController`
+- `CustomerHomeRequest`
+- `App\Data\Customer\CustomerHomeQueryData`
+- `ShowCustomerHomeAction`
+- `BannerRepository`, `CategoryRepository`, `StoreRepository`, and `SettingRepository`
+- `App\Http\Resources\Customer\CustomerHomeResource`
+
 ## Admin Customer Address CRUD
 
 ```text
