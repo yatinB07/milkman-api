@@ -235,3 +235,26 @@ The admin time slot module uses:
 - time slot actions under `App\Actions\Admin\TimeSlots`
 - `TimeSlotRepository`
 - `App\Http\Resources\Admin\TimeSlotResource`
+
+## Admin Coupon CRUD
+
+```text
+GET    /api/v1/admin/coupons
+GET    /api/v1/admin/coupons/{coupon}
+POST   /api/v1/admin/coupons
+PUT    /api/v1/admin/coupons/{coupon}
+DELETE /api/v1/admin/coupons/{coupon}
+```
+
+These endpoints require an admin Sanctum token with `stores.manage`. They manage store coupon records from the legacy `tbl_coupon` table. Legacy `coupon_img`, `coupon_code`, `expire_date`, `min_amt`, `coupon_val`, and `status` map to Laravel `image_path`, `code`, `expires_at`, `minimum_amount`, `value`, and `is_active`.
+
+The list endpoint supports `search` across coupon title, subtitle, code, and store title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete coupons.
+
+The admin coupon module uses:
+
+- `CouponController`
+- `CouponRequest` and `UpdateCouponRequest`
+- `App\Data\Admin\CouponData` and `App\Data\Admin\ListQueryData`
+- coupon actions under `App\Actions\Admin\Coupons`
+- `CouponRepository`
+- `App\Http\Resources\Admin\CouponResource`

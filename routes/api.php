@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Admin\BannerController;
 use App\Http\Controllers\Api\V1\Admin\CategoryController;
+use App\Http\Controllers\Api\V1\Admin\CouponController;
 use App\Http\Controllers\Api\V1\Admin\DeliveryOptionController;
 use App\Http\Controllers\Api\V1\Admin\ProductController;
 use App\Http\Controllers\Api\V1\Admin\ProductImageController;
@@ -50,6 +51,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('delivery-options', DeliveryOptionController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('time-slots', TimeSlotController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('coupons', CouponController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
         });
 
