@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Data\Customer\CustomerStoreSearchQueryData;
 use App\Exceptions\Catalog\StoreNotFoundException;
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Store;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -65,6 +67,43 @@ class StoreRepository
             ->orderBy('title')
             ->limit($limit)
             ->get();
+    }
+
+    /** @return LengthAwarePaginator<int, Store> */
+    public function paginateForCustomer(Customer $customer, CustomerStoreSearchQueryData $query): LengthAwarePaginator
+    {
+        $categoryTitle = $query->categoryId
+            ? Category::query()->whereKey($query->categoryId)->value('title')
+            : null;
+
+        return Store::query()
+            ->with([
+                'zone',
+                'coupons' => fn ($couponQuery) => $couponQuery
+                    ->where('is_active', true)
+                    ->orderBy('title')
+                    ->limit(1),
+            ])
+            ->withCount('favorites')
+            ->withExists([
+                'favorites as is_favorite' => fn ($favoriteQuery) => $favoriteQuery
+                    ->where('customer_id', $customer->getKey()),
+            ])
+            ->where('is_active', true)
+            ->when($query->search, function ($builder, string $search): void {
+                $builder->where(function ($builder) use ($search): void {
+                    $builder->where('title', 'like', "%{$search}%")
+                        ->orWhere('full_address', 'like', "%{$search}%")
+                        ->orWhere('slogan', 'like', "%{$search}%")
+                        ->orWhere('slogan_title', 'like', "%{$search}%")
+                        ->orWhere('category_reference', 'like', "%{$search}%");
+                });
+            })
+            ->when($categoryTitle, function ($builder, string $categoryTitle): void {
+                $builder->where('category_reference', 'like', "%{$categoryTitle}%");
+            })
+            ->latest('id')
+            ->paginate($query->perPage);
     }
 
     /** @param array<string, mixed> $attributes */

@@ -40,6 +40,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerHomeController;
 use App\Http\Controllers\Api\V1\Customer\CustomerNotificationController as CustomerNotificationApiController;
 use App\Http\Controllers\Api\V1\Customer\CustomerPaymentMethodController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProfileController;
+use App\Http\Controllers\Api\V1\Customer\CustomerStoreController;
 use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
 use App\Http\Controllers\Api\V1\HealthController;
 use Illuminate\Http\Request;
@@ -140,6 +141,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('profile.update');
             Route::apiResource('addresses', CustomerAddressApiController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::get('stores', [CustomerStoreController::class, 'index'])
+                ->name('stores.index');
             Route::get('stores/{store}/coupons', [CustomerCouponController::class, 'index'])
                 ->whereNumber('store')
                 ->name('stores.coupons.index');

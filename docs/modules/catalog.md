@@ -118,6 +118,27 @@ The customer home module uses:
 - `BannerRepository`, `CategoryRepository`, `StoreRepository`, and `SettingRepository`
 - `App\Http\Resources\Customer\CustomerHomeResource`
 
+## Customer Store Search APIs
+
+```text
+GET /api/v1/customer/stores?latitude={lat}&longitude={lng}&search={term}&category_id={category}&per_page={size}
+```
+
+This endpoint requires a customer Sanctum token and returns active stores with customer-specific favorite metadata. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `u_search_store.php` searched active stores by keyword, while `u_cat_wise_store.php` filtered active stores by legacy category id. The Laravel API combines those list behaviors into one paginated endpoint with optional `search` and `category_id`. The category filter maps the selected Laravel category title against the store `category_reference` field until the legacy `catid` relationship is normalized.
+
+The list endpoint accepts `per_page`, always returns Laravel pagination metadata, includes total favorite counts, exposes whether the authenticated customer has favorited each store, and includes the first active coupon snippet when available.
+
+The customer store search module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerStoreController`
+- `CustomerStoreSearchRequest`
+- `App\Data\Customer\CustomerStoreSearchQueryData`
+- `ListCustomerStoresAction`
+- `StoreRepository`
+- `App\Http\Resources\Customer\CustomerStoreResource`
+
 ## Admin Customer Address CRUD
 
 ```text
