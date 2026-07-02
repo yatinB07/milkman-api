@@ -4153,6 +4153,70 @@
                 }
             }
         },
+        "/customer/stores/{store}": {
+            "get": {
+                "operationId": "v1.customer.stores.show",
+                "tags": [
+                    "CustomerStore"
+                ],
+                "parameters": [
+                    {
+                        "name": "store",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "minimum": -90,
+                            "maximum": 90
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "minimum": -180,
+                            "maximum": 180
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`CustomerStoreDetailResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerStoreDetailResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/customer/wallet-transactions": {
             "get": {
                 "operationId": "v1.customer.wallet-transactions.index",
@@ -15054,6 +15118,167 @@
                     "updated_at"
                 ],
                 "title": "CustomerResource"
+            },
+            "CustomerStoreDetailResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "image_path": {
+                        "type": "string"
+                    },
+                    "cover_image_path": {
+                        "type": "string"
+                    },
+                    "rating": {
+                        "type": "string"
+                    },
+                    "slogan": {
+                        "type": "string"
+                    },
+                    "slogan_title": {
+                        "type": "string"
+                    },
+                    "short_description": {
+                        "type": "string"
+                    },
+                    "category_reference": {
+                        "type": "string"
+                    },
+                    "full_address": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "string"
+                    },
+                    "longitude": {
+                        "type": "string"
+                    },
+                    "delivery_charge": {
+                        "type": "string"
+                    },
+                    "minimum_order_amount": {
+                        "type": "string"
+                    },
+                    "is_favorite": {
+                        "type": "boolean"
+                    },
+                    "total_favorites": {
+                        "type": "integer"
+                    },
+                    "coupon": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            },
+                            "subtitle": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "title",
+                            "subtitle"
+                        ]
+                    },
+                    "zone": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "title"
+                        ]
+                    },
+                    "mobile": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "opens_at": {
+                        "type": "string"
+                    },
+                    "closes_at": {
+                        "type": "string"
+                    },
+                    "cancel_policy": {
+                        "type": "string"
+                    },
+                    "is_pickup_enabled": {
+                        "type": "string"
+                    },
+                    "landmark": {
+                        "type": "string"
+                    },
+                    "distance_km": {
+                        "type": "string"
+                    },
+                    "gallery_images": {
+                        "type": "string"
+                    },
+                    "faqs": {
+                        "type": "string"
+                    },
+                    "categories": {
+                        "type": "object"
+                    },
+                    "reviews": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "id",
+                    "title",
+                    "image_path",
+                    "cover_image_path",
+                    "rating",
+                    "slogan",
+                    "slogan_title",
+                    "short_description",
+                    "category_reference",
+                    "full_address",
+                    "latitude",
+                    "longitude",
+                    "delivery_charge",
+                    "minimum_order_amount",
+                    "is_favorite",
+                    "total_favorites",
+                    "coupon",
+                    "mobile",
+                    "email",
+                    "opens_at",
+                    "closes_at",
+                    "cancel_policy",
+                    "is_pickup_enabled",
+                    "landmark",
+                    "distance_km",
+                    "gallery_images",
+                    "faqs",
+                    "categories",
+                    "reviews"
+                ],
+                "title": "CustomerStoreDetailResource"
             },
             "CustomerStoreResource": {
                 "type": "object",

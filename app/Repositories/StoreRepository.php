@@ -106,6 +106,51 @@ class StoreRepository
             ->paginate($query->perPage);
     }
 
+    public function findActiveForCustomer(Customer $customer, int $storeId): Store
+    {
+        $store = Store::query()
+            ->with([
+                'zone',
+                'galleryImages' => fn ($query) => $query->where('is_active', true)->orderBy('id'),
+                'faqs' => fn ($query) => $query->where('is_active', true)->orderBy('id'),
+                'storeCategories' => fn ($query) => $query
+                    ->where('is_active', true)
+                    ->with([
+                        'products' => fn ($productQuery) => $productQuery
+                            ->where('is_active', true)
+                            ->whereHas('variants')
+                            ->with([
+                                'variants' => fn ($variantQuery) => $variantQuery->orderBy('id'),
+                            ])
+                            ->orderBy('title'),
+                    ])
+                    ->orderBy('title'),
+                'orders' => fn ($query) => $query
+                    ->with('customer')
+                    ->where('status', 'Completed')
+                    ->where('is_rated', true)
+                    ->latest('reviewed_at'),
+                'subscriptionOrders' => fn ($query) => $query
+                    ->with('customer')
+                    ->where('status', 'Completed')
+                    ->where('is_rated', true)
+                    ->latest('reviewed_at'),
+            ])
+            ->withCount('favorites')
+            ->withExists([
+                'favorites as is_favorite' => fn ($favoriteQuery) => $favoriteQuery
+                    ->where('customer_id', $customer->getKey()),
+            ])
+            ->where('is_active', true)
+            ->find($storeId);
+
+        if (! $store) {
+            throw new StoreNotFoundException;
+        }
+
+        return $store;
+    }
+
     /** @param array<string, mixed> $attributes */
     public function create(array $attributes): Store
     {

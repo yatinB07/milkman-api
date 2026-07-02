@@ -122,22 +122,25 @@ The customer home module uses:
 
 ```text
 GET /api/v1/customer/stores?latitude={lat}&longitude={lng}&search={term}&category_id={category}&per_page={size}
+GET /api/v1/customer/stores/{store}?latitude={lat}&longitude={lng}
 ```
 
-This endpoint requires a customer Sanctum token and returns active stores with customer-specific favorite metadata. Admin, store, and rider tokens are rejected by identity boundary checks.
+These endpoints require a customer Sanctum token and return active stores with customer-specific favorite metadata. Admin, store, and rider tokens are rejected by identity boundary checks.
 
 Legacy `u_search_store.php` searched active stores by keyword, while `u_cat_wise_store.php` filtered active stores by legacy category id. The Laravel API combines those list behaviors into one paginated endpoint with optional `search` and `category_id`. The category filter maps the selected Laravel category title against the store `category_reference` field until the legacy `catid` relationship is normalized.
 
 The list endpoint accepts `per_page`, always returns Laravel pagination metadata, includes total favorite counts, exposes whether the authenticated customer has favorited each store, and includes the first active coupon snippet when available.
 
+Legacy `u_store_data.php` returned store detail, customer favorite state, distance, category-wise products with variants, active gallery photos, active FAQs, and merged normal/subscription reviews. The Laravel detail endpoint keeps that coverage with active-only store sections, authenticated customer favorite state, and a modern nested response.
+
 The customer store search module uses:
 
 - `App\Http\Controllers\Api\V1\Customer\CustomerStoreController`
-- `CustomerStoreSearchRequest`
-- `App\Data\Customer\CustomerStoreSearchQueryData`
-- `ListCustomerStoresAction`
+- `CustomerStoreSearchRequest` and `CustomerStoreDetailRequest`
+- `App\Data\Customer\CustomerStoreSearchQueryData` and `CustomerStoreDetailQueryData`
+- `ListCustomerStoresAction` and `ShowCustomerStoreAction`
 - `StoreRepository`
-- `App\Http\Resources\Customer\CustomerStoreResource`
+- `App\Http\Resources\Customer\CustomerStoreResource` and `CustomerStoreDetailResource`
 
 ## Admin Customer Address CRUD
 

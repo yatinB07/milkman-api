@@ -143,6 +143,9 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::get('stores', [CustomerStoreController::class, 'index'])
                 ->name('stores.index');
+            Route::get('stores/{store}', [CustomerStoreController::class, 'show'])
+                ->whereNumber('store')
+                ->name('stores.show');
             Route::get('stores/{store}/coupons', [CustomerCouponController::class, 'index'])
                 ->whereNumber('store')
                 ->name('stores.coupons.index');
