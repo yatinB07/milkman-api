@@ -133,7 +133,7 @@ class LegacySchemaCoverageTest extends TestCase
             'otp_auth_token',
             'deleted_at',
         ]);
-        $this->assertTableHasColumns('milk_data', ['data']);
+        $this->assertTableHasColumns('milk_data', ['data', 'deleted_at']);
     }
 
     /**

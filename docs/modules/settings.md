@@ -33,3 +33,26 @@ The admin setting module uses:
 - setting actions under `App\Actions\Admin\Settings`
 - `SettingRepository`
 - `App\Http\Resources\Admin\SettingResource`
+
+## Admin Milk Data CRUD
+
+```text
+GET    /api/v1/admin/milk-data
+GET    /api/v1/admin/milk-data/{milkData}
+POST   /api/v1/admin/milk-data
+PUT    /api/v1/admin/milk-data/{milkData}
+DELETE /api/v1/admin/milk-data/{milkData}
+```
+
+These endpoints require an admin Sanctum token with `settings.update`. They intentionally expose the legacy `tbl_milk` destination as a raw reference payload because the active legacy code no longer reads it; `controller/mediconfig.php` contains the note that the old dependency was removed.
+
+The list endpoint supports `search` across the raw payload, accepts `per_page`, returns Laravel pagination metadata, and soft deletes records. No new business meaning is inferred for this table until a future source confirms its purpose.
+
+The admin milk data module uses:
+
+- `MilkDataController`
+- `MilkDataRequest` and `UpdateMilkDataRequest`
+- `App\Data\Admin\MilkDataData` and `App\Data\Admin\ListQueryData`
+- milk data actions under `App\Actions\Admin\MilkData`
+- `MilkDataRepository`
+- `App\Http\Resources\Admin\MilkDataResource`

@@ -63,6 +63,7 @@ Current implemented workflow repositories:
 - `PayoutRequestRepository`
 - `CashCollectionRepository`
 - `SettingRepository`
+- `MilkDataRepository`
 - `OrderRepository`
 - `OrderItemRepository`
 - `SubscriptionOrderRepository`

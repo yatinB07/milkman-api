@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Admin\CustomerNotificationController;
 use App\Http\Controllers\Api\V1\Admin\DeliveryOptionController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\Api\V1\Admin\FavoriteController;
+use App\Http\Controllers\Api\V1\Admin\MilkDataController;
 use App\Http\Controllers\Api\V1\Admin\OrderController;
 use App\Http\Controllers\Api\V1\Admin\OrderItemController;
 use App\Http\Controllers\Api\V1\Admin\PageController;
@@ -113,6 +114,9 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('zones', ZoneController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('settings', SettingController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('milk-data', MilkDataController::class)
+                ->parameters(['milk-data' => 'milkData'])
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
         });
 

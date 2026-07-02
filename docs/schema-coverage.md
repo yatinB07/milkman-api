@@ -37,7 +37,7 @@ Legacy rows are test/demo data and are not imported. Legacy tables, columns, SQL
 | `tbl_cash` | `cash_collections` | Schema implemented | Cash settlement tracking. |
 | `wallet_report` | `wallet_transactions` | Schema implemented | Customer wallet ledger. |
 | `tbl_setting` | `settings` | Schema implemented | Global settings and integration keys. |
-| `tbl_milk` | `milk_data` | Schema implemented, behavior pending review | Stored as raw reference payload until the legacy purpose is fully reviewed. |
+| `tbl_milk` | `milk_data` | Implemented | Stored as an admin-managed raw reference payload because no active legacy source usage remains after the `controller/mediconfig.php` dependency removal. |
 
 ## Completion Rules
 

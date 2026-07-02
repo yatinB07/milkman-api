@@ -80,5 +80,7 @@ class OpenApiDocumentationTest extends TestCase
         $this->assertContains('/admin/zones/{zone}', $paths);
         $this->assertContains('/admin/settings', $paths);
         $this->assertContains('/admin/settings/{setting}', $paths);
+        $this->assertContains('/admin/milk-data', $paths);
+        $this->assertContains('/admin/milk-data/{milkData}', $paths);
     }
 }
