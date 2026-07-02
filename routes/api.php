@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\Admin\RiderController;
 use App\Http\Controllers\Api\V1\Admin\StoreCategoryController;
 use App\Http\Controllers\Api\V1\Admin\StoreController;
 use App\Http\Controllers\Api\V1\Admin\StoreGalleryImageController;
+use App\Http\Controllers\Api\V1\Admin\StoreNotificationController;
 use App\Http\Controllers\Api\V1\Admin\TimeSlotController;
 use App\Http\Controllers\Api\V1\Admin\WalletTransactionController;
 use App\Http\Controllers\Api\V1\Admin\ZoneController;
@@ -72,6 +73,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('product-images', ProductImageController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('store-gallery-images', StoreGalleryImageController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('store-notifications', StoreNotificationController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('delivery-options', DeliveryOptionController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);

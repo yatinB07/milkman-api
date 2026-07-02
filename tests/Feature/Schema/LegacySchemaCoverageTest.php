@@ -106,7 +106,7 @@ class LegacySchemaCoverageTest extends TestCase
     public function test_notification_settings_and_reference_tables_cover_legacy_columns(): void
     {
         $this->assertTableHasColumns('customer_notifications', ['customer_id', 'notified_at', 'title', 'description', 'deleted_at']);
-        $this->assertTableHasColumns('store_notifications', ['store_id', 'notified_at', 'title', 'description']);
+        $this->assertTableHasColumns('store_notifications', ['store_id', 'notified_at', 'title', 'description', 'deleted_at']);
         $this->assertTableHasColumns('rider_notifications', ['rider_id', 'notified_at', 'title', 'message']);
         $this->assertTableHasColumns('settings', [
             'web_name',

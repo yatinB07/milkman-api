@@ -28,3 +28,26 @@ The admin customer notification module uses:
 - customer notification actions under `App\Actions\Admin\CustomerNotifications`
 - `CustomerNotificationRepository`
 - `App\Http\Resources\Admin\CustomerNotificationResource`
+
+## Admin Store Notification CRUD
+
+```text
+GET    /api/v1/admin/store-notifications
+GET    /api/v1/admin/store-notifications/{storeNotification}
+POST   /api/v1/admin/store-notifications
+PUT    /api/v1/admin/store-notifications/{storeNotification}
+DELETE /api/v1/admin/store-notifications/{storeNotification}
+```
+
+These endpoints require an admin Sanctum token with `stores.manage`. They manage store inbox records from the legacy `tbl_snoti` table. Legacy `sid`, `datetime`, `title`, and `description` map to Laravel `store_id`, `notified_at`, `title`, and `description`.
+
+The list endpoint supports `search` across notification title, description, store title, store email, and store mobile, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete store notifications.
+
+The admin store notification module uses:
+
+- `StoreNotificationController`
+- `StoreNotificationRequest` and `UpdateStoreNotificationRequest`
+- `App\Data\Admin\StoreNotificationData` and `App\Data\Admin\ListQueryData`
+- store notification actions under `App\Actions\Admin\StoreNotifications`
+- `StoreNotificationRepository`
+- `App\Http\Resources\Admin\StoreNotificationResource`
