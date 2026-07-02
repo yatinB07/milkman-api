@@ -281,3 +281,26 @@ The admin FAQ module uses:
 - FAQ actions under `App\Actions\Admin\Faqs`
 - `FaqRepository`
 - `App\Http\Resources\Admin\FaqResource`
+
+## Admin Page CRUD
+
+```text
+GET    /api/v1/admin/pages
+GET    /api/v1/admin/pages/{page}
+POST   /api/v1/admin/pages
+PUT    /api/v1/admin/pages/{page}
+DELETE /api/v1/admin/pages/{page}
+```
+
+These endpoints require an admin Sanctum token with `settings.update`. They manage CMS/static page content from the legacy `tbl_page` table. Legacy `status` maps to Laravel `is_active`.
+
+The list endpoint supports `search` across page title and description, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete pages.
+
+The admin page module uses:
+
+- `PageController`
+- `PageRequest` and `UpdatePageRequest`
+- `App\Data\Admin\PageData` and `App\Data\Admin\ListQueryData`
+- page actions under `App\Actions\Admin\Pages`
+- `PageRepository`
+- `App\Http\Resources\Admin\PageResource`

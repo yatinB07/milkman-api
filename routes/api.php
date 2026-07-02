@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Admin\CategoryController;
 use App\Http\Controllers\Api\V1\Admin\CouponController;
 use App\Http\Controllers\Api\V1\Admin\DeliveryOptionController;
 use App\Http\Controllers\Api\V1\Admin\FaqController;
+use App\Http\Controllers\Api\V1\Admin\PageController;
 use App\Http\Controllers\Api\V1\Admin\ProductController;
 use App\Http\Controllers\Api\V1\Admin\ProductImageController;
 use App\Http\Controllers\Api\V1\Admin\ProductVariantController;
@@ -56,6 +57,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('coupons', CouponController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('faqs', FaqController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('pages', PageController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
         });
 
