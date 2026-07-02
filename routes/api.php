@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Admin\BannerController;
 use App\Http\Controllers\Api\V1\Admin\CategoryController;
 use App\Http\Controllers\Api\V1\Admin\ProductController;
+use App\Http\Controllers\Api\V1\Admin\ProductImageController;
 use App\Http\Controllers\Api\V1\Admin\ProductVariantController;
 use App\Http\Controllers\Api\V1\Admin\StoreCategoryController;
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
@@ -38,6 +39,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('products', ProductController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('product-variants', ProductVariantController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('product-images', ProductImageController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
         });
 

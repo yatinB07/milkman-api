@@ -143,3 +143,26 @@ The admin product variant module uses:
 - product variant actions under `App\Actions\Admin\ProductVariants`
 - `ProductVariantRepository`
 - `App\Http\Resources\Admin\ProductVariantResource`
+
+## Admin Product Image CRUD
+
+```text
+GET    /api/v1/admin/product-images
+GET    /api/v1/admin/product-images/{productImage}
+POST   /api/v1/admin/product-images
+PUT    /api/v1/admin/product-images/{productImage}
+DELETE /api/v1/admin/product-images/{productImage}
+```
+
+These endpoints require an admin Sanctum token with `products.manage`. They manage product gallery records from the legacy `tbl_extra` table.
+
+The list endpoint supports `search` across image path, product title, and store title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete product images.
+
+The admin product image module uses:
+
+- `ProductImageController`
+- `ProductImageRequest` and `UpdateProductImageRequest`
+- `App\Data\Admin\ProductImageData` and `App\Data\Admin\ListQueryData`
+- product image actions under `App\Actions\Admin\ProductImages`
+- `ProductImageRepository`
+- `App\Http\Resources\Admin\ProductImageResource`

@@ -42,6 +42,7 @@ Current implemented workflow repositories:
 - `StoreCategoryRepository`
 - `ProductRepository`
 - `ProductVariantRepository`
+- `ProductImageRepository`
 
 The architecture layering test prevents Controllers and Actions from building Eloquent queries directly.
 
