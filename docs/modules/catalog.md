@@ -97,3 +97,26 @@ The admin store category module uses:
 - store category actions under `App\Actions\Admin\StoreCategories`
 - `StoreCategoryRepository`
 - `App\Http\Resources\Admin\StoreCategoryResource`
+
+## Admin Product CRUD
+
+```text
+GET    /api/v1/admin/products
+GET    /api/v1/admin/products/{product}
+POST   /api/v1/admin/products
+PUT    /api/v1/admin/products/{product}
+DELETE /api/v1/admin/products/{product}
+```
+
+These endpoints require an admin Sanctum token with `products.manage`. They manage catalog product records from the legacy `tbl_product` table.
+
+The list endpoint supports `search` across product title, description, store title, and store category title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete products.
+
+The admin product module uses:
+
+- `ProductController`
+- `ProductRequest` and `UpdateProductRequest`
+- `App\Data\Admin\ProductData` and `App\Data\Admin\ListQueryData`
+- product actions under `App\Actions\Admin\Products`
+- `ProductRepository`
+- `App\Http\Resources\Admin\ProductResource`
