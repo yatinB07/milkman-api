@@ -3344,6 +3344,120 @@
                 }
             }
         },
+        "/customer/profile": {
+            "get": {
+                "operationId": "v1.customer.profile.show",
+                "tags": [
+                    "CustomerProfile"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerProfileResource"
+                                        },
+                                        "referral": {
+                                            "type": "object",
+                                            "properties": {
+                                                "signup_credit": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "0.00"
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                "referral_credit": {
+                                                    "anyOf": [
+                                                        {
+                                                            "type": "string"
+                                                        },
+                                                        {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "0.00"
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "signup_credit",
+                                                "referral_credit"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "referral"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "put": {
+                "operationId": "v1.customer.profile.update",
+                "tags": [
+                    "CustomerProfile"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCustomerProfileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Profile updated successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerProfileResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/customer/wallet-transactions": {
             "get": {
                 "operationId": "v1.customer.wallet-transactions.index",
@@ -13931,6 +14045,66 @@
                 ],
                 "title": "CustomerNotificationResource"
             },
+            "CustomerProfileResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "profile_image_path": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "country_code": {
+                        "type": "string"
+                    },
+                    "mobile": {
+                        "type": "string"
+                    },
+                    "registered_at": {
+                        "type": "string"
+                    },
+                    "referral_code": {
+                        "type": "string"
+                    },
+                    "parent_referral_code": {
+                        "type": "string"
+                    },
+                    "wallet_balance": {
+                        "type": "string"
+                    },
+                    "is_active": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "profile_image_path",
+                    "email",
+                    "country_code",
+                    "mobile",
+                    "registered_at",
+                    "referral_code",
+                    "parent_referral_code",
+                    "wallet_balance",
+                    "is_active",
+                    "created_at",
+                    "updated_at"
+                ],
+                "title": "CustomerProfileResource"
+            },
             "CustomerRequest": {
                 "type": "object",
                 "properties": {
@@ -17407,6 +17581,24 @@
                     }
                 },
                 "title": "UpdateCustomerNotificationRequest"
+            },
+            "UpdateCustomerProfileRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "password": {
+                        "type": "string",
+                        "minLength": 8
+                    }
+                },
+                "required": [
+                    "name",
+                    "password"
+                ],
+                "title": "UpdateCustomerProfileRequest"
             },
             "UpdateCustomerRequest": {
                 "type": "object",

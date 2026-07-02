@@ -49,6 +49,11 @@ class SettingRepository
         return $setting;
     }
 
+    public function current(): ?Setting
+    {
+        return Setting::query()->latest()->first();
+    }
+
     /** @param array<string, mixed> $attributes */
     public function update(Setting $setting, array $attributes): Setting
     {

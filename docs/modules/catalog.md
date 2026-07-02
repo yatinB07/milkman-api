@@ -75,6 +75,28 @@ The admin customer module uses:
 - `CustomerRepository`
 - `App\Http\Resources\Admin\CustomerResource`
 
+## Customer Profile APIs
+
+```text
+GET /api/v1/customer/profile
+PUT /api/v1/customer/profile
+```
+
+These endpoints require a customer Sanctum token. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `u_getdata.php` returned the customer's referral code plus signup and referral credits from settings. `GET /customer/profile` returns the authenticated customer profile and a `referral` object with `signup_credit` and `referral_credit`.
+
+Legacy `u_profile_edit.php` updated `name` and `password`. `PUT /customer/profile` keeps that behavior and relies on the customer model's hashed password cast so the new password is never stored as plain text.
+
+The customer profile module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerProfileController`
+- `UpdateCustomerProfileRequest`
+- `App\Data\Customer\CustomerProfileData`
+- customer profile actions under `App\Actions\Customer\Profile`
+- `CustomerRepository` and `SettingRepository`
+- `App\Http\Resources\Customer\CustomerProfileResource`
+
 ## Admin Customer Address CRUD
 
 ```text
