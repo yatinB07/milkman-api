@@ -167,6 +167,30 @@ The customer favorite module uses:
 - `FavoriteRepository`
 - `App\Http\Resources\Customer\FavoriteResource`
 
+## Customer Coupon APIs
+
+```text
+GET  /api/v1/customer/stores/{store}/coupons
+POST /api/v1/customer/coupons/check
+```
+
+These endpoints require a customer Sanctum token. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `u_couponlist.php` returned active, non-expired coupons for a store and disabled expired coupons as a side effect. The Laravel API returns active, non-expired coupons without mutating expired rows during reads.
+
+Legacy `u_check_coupon.php` only checked that a coupon id existed. The Laravel API checks that the coupon exists, is active, and is not expired before returning `Coupon applied successfully.`
+
+The list endpoint supports `search` across title, subtitle, code, and description, accepts `per_page`, and returns Laravel pagination metadata.
+
+The customer coupon module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerCouponController`
+- `CouponCheckRequest`
+- `App\Data\Customer\CouponCheckData` and `ListCustomerQueryData`
+- customer coupon actions under `App\Actions\Customer\Coupons`
+- `CouponRepository`
+- `App\Http\Resources\Customer\CouponResource`
+
 ## Admin Favorite CRUD
 
 ```text

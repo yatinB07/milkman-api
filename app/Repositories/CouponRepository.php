@@ -46,6 +46,41 @@ class CouponRepository
         return $coupon;
     }
 
+    /** @return LengthAwarePaginator<int, Coupon> */
+    public function paginateActiveForStore(int $storeId, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return Coupon::query()
+            ->with('store')
+            ->where('store_id', $storeId)
+            ->where('is_active', true)
+            ->whereDate('expires_at', '>=', now()->toDateString())
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('subtitle', 'like', "%{$search}%")
+                        ->orWhere('code', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate($perPage);
+    }
+
+    public function findActive(int $id): Coupon
+    {
+        $coupon = Coupon::query()
+            ->with('store')
+            ->where('is_active', true)
+            ->whereDate('expires_at', '>=', now()->toDateString())
+            ->find($id);
+
+        if (! $coupon) {
+            throw new CouponNotFoundException;
+        }
+
+        return $coupon;
+    }
+
     /** @param array<string, mixed> $attributes */
     public function update(Coupon $coupon, array $attributes): Coupon
     {

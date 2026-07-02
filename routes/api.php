@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\V1\Admin\ZoneController;
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
 use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Customer\CustomerAddressController as CustomerAddressApiController;
+use App\Http\Controllers\Api\V1\Customer\CustomerCouponController;
 use App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController;
 use App\Http\Controllers\Api\V1\Customer\CustomerNotificationController as CustomerNotificationApiController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProfileController;
@@ -135,6 +136,11 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('profile.update');
             Route::apiResource('addresses', CustomerAddressApiController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::get('stores/{store}/coupons', [CustomerCouponController::class, 'index'])
+                ->whereNumber('store')
+                ->name('stores.coupons.index');
+            Route::post('coupons/check', [CustomerCouponController::class, 'check'])
+                ->name('coupons.check');
             Route::get('favorites', [CustomerFavoriteController::class, 'index'])
                 ->name('favorites.index');
             Route::post('favorites/toggle', [CustomerFavoriteController::class, 'toggle'])

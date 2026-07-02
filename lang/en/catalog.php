@@ -24,6 +24,7 @@ return [
     'customer_address_saved' => 'Address saved successfully.',
     'customer_address_updated' => 'Customer address updated successfully.',
     'customer_address_updated_short' => 'Address updated successfully.',
+    'customer_coupon_applied' => 'Coupon applied successfully.',
     'customer_created' => 'Customer created successfully.',
     'customer_deleted' => 'Customer deleted successfully.',
     'customer_favorite_removed' => 'Store successfully removed from favourite list.',
