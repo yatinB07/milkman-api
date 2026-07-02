@@ -28,3 +28,26 @@ The admin wallet transaction module uses:
 - wallet transaction actions under `App\Actions\Admin\WalletTransactions`
 - `WalletTransactionRepository`
 - `App\Http\Resources\Admin\WalletTransactionResource`
+
+## Customer Wallet APIs
+
+```text
+GET  /api/v1/customer/wallet-transactions
+POST /api/v1/customer/wallet/top-ups
+```
+
+These endpoints require a customer Sanctum token. Admin, store, and rider tokens are rejected by the identity boundary checks.
+
+`GET /customer/wallet-transactions` returns only the authenticated customer's wallet ledger, ordered newest first. It supports `search` across message and type, accepts `per_page`, returns Laravel pagination metadata, and includes the current `wallet_balance`.
+
+`POST /customer/wallet/top-ups` credits the authenticated customer's wallet and writes a `Credit` ledger row with the legacy message `Wallet Balance Added!!`. The balance update and ledger insert are executed in `WalletService` inside one database transaction so the two records cannot drift apart.
+
+The customer wallet module uses:
+
+- `CustomerWalletController`
+- `ListCustomerResourcesRequest` and `WalletTopUpRequest`
+- `App\Data\Customer\ListCustomerQueryData` and `WalletTopUpData`
+- customer wallet actions under `App\Actions\Customer\Wallet`
+- `WalletService`
+- `WalletTransactionRepository`
+- `App\Http\Resources\Customer\WalletTransactionResource`

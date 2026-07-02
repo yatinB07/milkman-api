@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Exceptions\Catalog\WalletTransactionNotFoundException;
+use App\Models\Customer;
 use App\Models\WalletTransaction;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -22,6 +23,21 @@ class WalletTransactionRepository
                                 ->orWhere('email', 'like', "%{$search}%")
                                 ->orWhere('mobile', 'like', "%{$search}%");
                         });
+                });
+            })
+            ->latest('transacted_at')
+            ->paginate($perPage);
+    }
+
+    /** @return LengthAwarePaginator<int, WalletTransaction> */
+    public function paginateForCustomer(Customer $customer, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return WalletTransaction::query()
+            ->whereBelongsTo($customer)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('message', 'like', "%{$search}%")
+                        ->orWhere('type', 'like', "%{$search}%");
                 });
             })
             ->latest('transacted_at')

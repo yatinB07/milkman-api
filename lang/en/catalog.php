@@ -29,6 +29,7 @@ return [
     'customer_notification_updated' => 'Customer notification updated successfully.',
     'customer_not_found' => 'Customer was not found.',
     'customer_updated' => 'Customer updated successfully.',
+    'customer_wallet_updated' => 'Wallet updated successfully.',
     'delivery_option_created' => 'Delivery option created successfully.',
     'delivery_option_deleted' => 'Delivery option deleted successfully.',
     'delivery_option_not_found' => 'Delivery option was not found.',

@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\V1\Admin\WalletTransactionController;
 use App\Http\Controllers\Api\V1\Admin\ZoneController;
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
 use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
+use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
 use App\Http\Controllers\Api\V1\HealthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -118,6 +119,16 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('milk-data', MilkDataController::class)
                 ->parameters(['milk-data' => 'milkData'])
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
+        });
+
+    Route::prefix('customer')
+        ->middleware('auth:sanctum')
+        ->name('customer.')
+        ->group(function (): void {
+            Route::get('wallet-transactions', [CustomerWalletController::class, 'index'])
+                ->name('wallet-transactions.index');
+            Route::post('wallet/top-ups', [CustomerWalletController::class, 'topUp'])
+                ->name('wallet.top-ups.store');
         });
 
     Route::prefix('{identityType}/auth')
