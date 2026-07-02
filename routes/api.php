@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\Admin\ProductController;
 use App\Http\Controllers\Api\V1\Admin\ProductImageController;
 use App\Http\Controllers\Api\V1\Admin\ProductVariantController;
 use App\Http\Controllers\Api\V1\Admin\RiderController;
+use App\Http\Controllers\Api\V1\Admin\RiderNotificationController;
 use App\Http\Controllers\Api\V1\Admin\StoreCategoryController;
 use App\Http\Controllers\Api\V1\Admin\StoreController;
 use App\Http\Controllers\Api\V1\Admin\StoreGalleryImageController;
@@ -75,6 +76,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('store-gallery-images', StoreGalleryImageController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('store-notifications', StoreNotificationController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('rider-notifications', RiderNotificationController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('delivery-options', DeliveryOptionController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);

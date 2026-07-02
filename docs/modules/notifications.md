@@ -51,3 +51,26 @@ The admin store notification module uses:
 - store notification actions under `App\Actions\Admin\StoreNotifications`
 - `StoreNotificationRepository`
 - `App\Http\Resources\Admin\StoreNotificationResource`
+
+## Admin Rider Notification CRUD
+
+```text
+GET    /api/v1/admin/rider-notifications
+GET    /api/v1/admin/rider-notifications/{riderNotification}
+POST   /api/v1/admin/rider-notifications
+PUT    /api/v1/admin/rider-notifications/{riderNotification}
+DELETE /api/v1/admin/rider-notifications/{riderNotification}
+```
+
+These endpoints require an admin Sanctum token with `riders.manage`. They manage rider inbox records from the legacy `tbl_rnoti` table. Legacy `rid`, `datetime`, `title`, and notification body columns map to Laravel `rider_id`, `notified_at`, `title`, and `message`.
+
+The list endpoint supports `search` across notification title, message, rider name, rider email, and rider mobile, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete rider notifications.
+
+The admin rider notification module uses:
+
+- `RiderNotificationController`
+- `RiderNotificationRequest` and `UpdateRiderNotificationRequest`
+- `App\Data\Admin\RiderNotificationData` and `App\Data\Admin\ListQueryData`
+- rider notification actions under `App\Actions\Admin\RiderNotifications`
+- `RiderNotificationRepository`
+- `App\Http\Resources\Admin\RiderNotificationResource`
