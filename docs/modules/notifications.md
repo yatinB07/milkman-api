@@ -29,6 +29,27 @@ The admin customer notification module uses:
 - `CustomerNotificationRepository`
 - `App\Http\Resources\Admin\CustomerNotificationResource`
 
+## Customer Notification APIs
+
+```text
+GET /api/v1/customer/notifications
+```
+
+This endpoint requires a customer Sanctum token and returns only the authenticated customer's notification inbox. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `user_api/u_notification_list.php` returned rows from `tbl_notification` for a `uid` and used a special "Notification Not Found" response when empty. The Laravel API returns a normal empty paginated collection instead.
+
+The list endpoint supports `search` across title and description, accepts `per_page`, orders newest notification first, and returns Laravel pagination metadata.
+
+The customer notification module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerNotificationController`
+- `ListCustomerResourcesRequest`
+- `App\Data\Customer\ListCustomerQueryData`
+- `ListCustomerNotificationsAction`
+- `CustomerNotificationRepository`
+- `App\Http\Resources\Customer\CustomerNotificationResource`
+
 ## Admin Store Notification CRUD
 
 ```text
