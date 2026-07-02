@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Exceptions\Catalog\FavoriteNotFoundException;
+use App\Models\Customer;
 use App\Models\Favorite;
+use App\Models\Store;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class FavoriteRepository
@@ -30,6 +32,67 @@ class FavoriteRepository
             })
             ->latest()
             ->paginate($perPage);
+    }
+
+    /** @return LengthAwarePaginator<int, Favorite> */
+    public function paginateForCustomer(Customer $customer, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return Favorite::query()
+            ->with(['store', 'zone'])
+            ->whereBelongsTo($customer)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->whereHas('store', function ($query) use ($search): void {
+                        $query->where('title', 'like', "%{$search}%")
+                            ->orWhere('full_address', 'like', "%{$search}%");
+                    })
+                        ->orWhereHas('zone', function ($query) use ($search): void {
+                            $query->where('title', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->latest()
+            ->paginate($perPage);
+    }
+
+    /** @return array{favorite: Favorite, is_favorite: bool} */
+    public function toggleForCustomer(Customer $customer, int $storeId): array
+    {
+        $favorite = Favorite::query()
+            ->withTrashed()
+            ->whereBelongsTo($customer)
+            ->where('store_id', $storeId)
+            ->first();
+
+        if ($favorite && ! $favorite->trashed()) {
+            $favorite->delete();
+
+            return [
+                'favorite' => $favorite->refresh()->load(['store', 'zone']),
+                'is_favorite' => false,
+            ];
+        }
+
+        $store = Store::query()->findOrFail($storeId);
+
+        if ($favorite) {
+            $favorite->restore();
+            $favorite->update(['zone_id' => $store->getAttribute('zone_id')]);
+
+            return [
+                'favorite' => $favorite->refresh()->load(['store', 'zone']),
+                'is_favorite' => true,
+            ];
+        }
+
+        return [
+            'favorite' => $this->create([
+                'customer_id' => $customer->getKey(),
+                'store_id' => $store->getKey(),
+                'zone_id' => $store->getAttribute('zone_id'),
+            ])->load(['store', 'zone']),
+            'is_favorite' => true,
+        ];
     }
 
     /** @param array<string, mixed> $attributes */

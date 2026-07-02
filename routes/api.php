@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\V1\Admin\ZoneController;
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
 use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Customer\CustomerAddressController as CustomerAddressApiController;
+use App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController;
 use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
 use App\Http\Controllers\Api\V1\HealthController;
 use Illuminate\Http\Request;
@@ -128,6 +129,10 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
         ->group(function (): void {
             Route::apiResource('addresses', CustomerAddressApiController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::get('favorites', [CustomerFavoriteController::class, 'index'])
+                ->name('favorites.index');
+            Route::post('favorites/toggle', [CustomerFavoriteController::class, 'toggle'])
+                ->name('favorites.toggle');
             Route::get('wallet-transactions', [CustomerWalletController::class, 'index'])
                 ->name('wallet-transactions.index');
             Route::post('wallet/top-ups', [CustomerWalletController::class, 'topUp'])

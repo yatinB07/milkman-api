@@ -123,6 +123,28 @@ The customer address module uses:
 - `CustomerAddressRepository`
 - `App\Http\Resources\Customer\CustomerAddressResource`
 
+## Customer Favorite APIs
+
+```text
+GET  /api/v1/customer/favorites
+POST /api/v1/customer/favorites/toggle
+```
+
+These endpoints require a customer Sanctum token and are scoped to the authenticated customer's favorite stores.
+
+Legacy `u_fav.php` toggled a store favorite: if the customer/store row existed it deleted the row, otherwise it inserted `uid`, `store_id`, and the store's `zone_id`. The Laravel API keeps the same toggle behavior, but uses soft deletes and restores a previous favorite to respect the unique customer/store pair.
+
+The list endpoint supports `search` across store title, store address, and zone title, accepts `per_page`, and returns Laravel pagination metadata.
+
+The customer favorite module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController`
+- `FavoriteToggleRequest`
+- `App\Data\Customer\FavoriteToggleData` and `ListCustomerQueryData`
+- customer favorite actions under `App\Actions\Customer\Favorites`
+- `FavoriteRepository`
+- `App\Http\Resources\Customer\FavoriteResource`
+
 ## Admin Favorite CRUD
 
 ```text

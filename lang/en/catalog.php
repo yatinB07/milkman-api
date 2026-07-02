@@ -26,6 +26,8 @@ return [
     'customer_address_updated_short' => 'Address updated successfully.',
     'customer_created' => 'Customer created successfully.',
     'customer_deleted' => 'Customer deleted successfully.',
+    'customer_favorite_removed' => 'Store successfully removed from favourite list.',
+    'customer_favorite_saved' => 'Store successfully saved in favourite list.',
     'customer_notification_created' => 'Customer notification created successfully.',
     'customer_notification_deleted' => 'Customer notification deleted successfully.',
     'customer_notification_not_found' => 'Customer notification was not found.',
