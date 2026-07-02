@@ -60,6 +60,7 @@ Current implemented workflow repositories:
 - `ZoneRepository`
 - `RiderRepository`
 - `WalletTransactionRepository`
+- `PayoutRequestRepository`
 
 The architecture layering test prevents Controllers and Actions from building Eloquent queries directly.
 

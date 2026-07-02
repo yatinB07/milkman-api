@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\Admin\FaqController;
 use App\Http\Controllers\Api\V1\Admin\FavoriteController;
 use App\Http\Controllers\Api\V1\Admin\PageController;
 use App\Http\Controllers\Api\V1\Admin\PaymentMethodController;
+use App\Http\Controllers\Api\V1\Admin\PayoutRequestController;
 use App\Http\Controllers\Api\V1\Admin\ProductController;
 use App\Http\Controllers\Api\V1\Admin\ProductImageController;
 use App\Http\Controllers\Api\V1\Admin\ProductVariantController;
@@ -60,6 +61,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('favorites', FavoriteController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('wallet-transactions', WalletTransactionController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('payout-requests', PayoutRequestController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('stores', StoreController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
