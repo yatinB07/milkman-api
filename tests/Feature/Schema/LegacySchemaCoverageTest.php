@@ -131,6 +131,7 @@ class LegacySchemaCoverageTest extends TestCase
             'twilio_auth_token',
             'twilio_number',
             'otp_auth_token',
+            'deleted_at',
         ]);
         $this->assertTableHasColumns('milk_data', ['data']);
     }
