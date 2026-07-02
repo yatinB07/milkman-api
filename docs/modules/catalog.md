@@ -98,6 +98,29 @@ The admin store module uses:
 - `StoreRepository`
 - `App\Http\Resources\Admin\StoreResource`
 
+## Admin Rider CRUD
+
+```text
+GET    /api/v1/admin/riders
+GET    /api/v1/admin/riders/{rider}
+POST   /api/v1/admin/riders
+PUT    /api/v1/admin/riders/{rider}
+DELETE /api/v1/admin/riders/{rider}
+```
+
+These endpoints require an admin Sanctum token with `riders.manage`. They manage delivery rider records from the legacy `tbl_rider` table. Legacy `title`, `img`, `ccode`, `status`, and `rdate` map to Laravel `name`, `image_path`, `country_code`, `is_active`, and `joined_at`.
+
+The list endpoint supports `search` across rider name, email, mobile, and store title, accepts `per_page`, and always returns Laravel pagination metadata. Delete requests soft delete riders. Passwords are accepted only as write input and are hashed by the model cast; API resources never expose the password hash.
+
+The admin rider module uses:
+
+- `RiderController`
+- `RiderRequest` and `UpdateRiderRequest`
+- `App\Data\Admin\RiderData` and `App\Data\Admin\ListQueryData`
+- rider actions under `App\Actions\Admin\Riders`
+- `RiderRepository`
+- `App\Http\Resources\Admin\RiderResource`
+
 ## Admin Store Category CRUD
 
 ```text

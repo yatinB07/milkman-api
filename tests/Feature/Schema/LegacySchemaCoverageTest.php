@@ -36,7 +36,7 @@ class LegacySchemaCoverageTest extends TestCase
             'cancel_policy',
             'deleted_at',
         ]);
-        $this->assertTableHasColumns('riders', ['image_path']);
+        $this->assertTableHasColumns('riders', ['image_path', 'deleted_at']);
     }
 
     public function test_catalog_and_content_tables_cover_legacy_columns(): void
