@@ -26,3 +26,26 @@ The store dashboard module uses:
 - `ShowStoreDashboardAction`
 - `StoreRepository::dashboardMetrics`
 - `App\Http\Resources\Store\StoreDashboardResource`
+
+## Store Product CRUD
+
+```text
+GET    /api/v1/store/products
+GET    /api/v1/store/products/{product}
+POST   /api/v1/store/products
+PUT    /api/v1/store/products/{product}
+DELETE /api/v1/store/products/{product}
+```
+
+These endpoints require a store Sanctum token with `products.manage`. They modernize legacy `store_api/product_list.php`, `store_api/add_product.php`, and `store_api/update_product.php` by using the authenticated store instead of accepting `store_id` from the payload.
+
+The list endpoint supports `search` across product title, description, and category title. It accepts `per_page` and returns Laravel pagination metadata. Create/update requests only accept categories owned by the authenticated store. Show, update, and delete operations are store-scoped, so a store cannot read or change another store's product. Delete requests soft delete products.
+
+The store product module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreProductController`
+- `ListStoreResourcesRequest`, `StoreProductRequest`, and `UpdateStoreProductRequest`
+- `App\Data\Store\ListStoreQueryData` and `StoreProductData`
+- store product actions under `App\Actions\Store\Products`
+- `ProductRepository`
+- `App\Http\Resources\Store\StoreProductResource`

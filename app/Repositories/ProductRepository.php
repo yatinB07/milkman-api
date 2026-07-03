@@ -76,6 +76,47 @@ class ProductRepository
         return $product;
     }
 
+    /** @return LengthAwarePaginator<int, Product> */
+    public function paginateForStore(Store $store, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return Product::query()
+            ->with('storeCategory')
+            ->whereBelongsTo($store)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhereHas('storeCategory', function ($query) use ($search): void {
+                            $query->where('title', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->orderBy('title')
+            ->paginate($perPage);
+    }
+
+    /** @param array<string, mixed> $attributes */
+    public function createForStore(Store $store, array $attributes): Product
+    {
+        return Product::query()
+            ->create(array_merge($attributes, ['store_id' => $store->getKey()]))
+            ->load('storeCategory');
+    }
+
+    public function findForStore(Store $store, int $id): Product
+    {
+        $product = Product::query()
+            ->with('storeCategory')
+            ->whereBelongsTo($store)
+            ->find($id);
+
+        if (! $product) {
+            throw new ProductNotFoundException;
+        }
+
+        return $product;
+    }
+
     /** @param array<string, mixed> $attributes */
     public function create(array $attributes): Product
     {

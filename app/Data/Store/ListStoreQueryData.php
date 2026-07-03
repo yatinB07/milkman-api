@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Data\Store;
+
+final readonly class ListStoreQueryData
+{
+    public const DEFAULT_PER_PAGE = 15;
+
+    public const MAX_PER_PAGE = 100;
+
+    public function __construct(
+        public ?string $search,
+        public int $perPage = self::DEFAULT_PER_PAGE,
+    ) {}
+
+    /** @param array<string, mixed> $data */
+    public static function fromArray(array $data): self
+    {
+        $search = $data['search'] ?? null;
+
+        return new self(
+            search: is_string($search) && $search !== '' ? $search : null,
+            perPage: (int) ($data['per_page'] ?? self::DEFAULT_PER_PAGE),
+        );
+    }
+}
