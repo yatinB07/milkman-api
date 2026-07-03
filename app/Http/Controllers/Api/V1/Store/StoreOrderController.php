@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Store;
 
+use App\Actions\Store\Orders\AssignStoreOrderRiderAction;
 use App\Actions\Store\Orders\DecideStoreOrderAction;
 use App\Actions\Store\Orders\ListStoreOrdersAction;
 use App\Actions\Store\Orders\ShowStoreOrderAction;
@@ -9,6 +10,7 @@ use App\Exceptions\Auth\MissingPermissionException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreOrderDecisionRequest;
 use App\Http\Requests\Store\StoreOrderHistoryRequest;
+use App\Http\Requests\Store\StoreOrderRiderAssignmentRequest;
 use App\Http\Resources\Store\StoreOrderResource;
 use App\Models\Store;
 use App\Services\IdentityAuthService;
@@ -44,6 +46,18 @@ class StoreOrderController extends Controller
         return response()->json([
             'message' => __('catalog.order_decision_updated'),
             'data' => new StoreOrderResource($decide->execute($this->storeIdentity($request, $auth, 'orders.update-status'), $order, $request->toData())),
+        ]);
+    }
+
+    public function assignRider(
+        StoreOrderRiderAssignmentRequest $request,
+        IdentityAuthService $auth,
+        AssignStoreOrderRiderAction $assign,
+        int $order,
+    ): JsonResponse {
+        return response()->json([
+            'message' => __('catalog.rider_assigned'),
+            'data' => new StoreOrderResource($assign->execute($this->storeIdentity($request, $auth, 'orders.assign'), $order, $request->toData())),
         ]);
     }
 

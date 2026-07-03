@@ -367,6 +367,31 @@ The store normal order decision module uses:
 - `CustomerNotificationRepository`
 - `App\Http\Resources\Store\StoreOrderResource`
 
+## Store Normal Order Rider Assignment API
+
+```text
+POST /api/v1/store/orders/{order}/rider
+```
+
+This endpoint requires a store Sanctum token with `orders.assign`. It modernizes legacy `store_api/ass_rider.php` by using the authenticated store and validating that the selected rider belongs to the same store.
+
+Payload:
+
+- `rider_id`: rider owned by the authenticated store
+
+Assigning a rider sets `rider_id` and moves `internal_status` to `3`, matching the legacy `order_status=3` assignment state. The action records a rider notification using language-file messages. Push delivery remains a future integration concern.
+
+The store normal order rider assignment module uses:
+
+- `StoreOrderController::assignRider`
+- `StoreOrderRiderAssignmentRequest`
+- `App\Data\Store\StoreOrderRiderAssignmentData`
+- `AssignStoreOrderRiderAction`
+- `OrderRepository`
+- `RiderRepository`
+- `RiderNotificationRepository`
+- `App\Http\Resources\Store\StoreOrderResource`
+
 ## Store Subscription Order Read API
 
 ```text

@@ -15802,6 +15802,65 @@
                 }
             }
         },
+        "/store/orders/{order}/rider": {
+            "post": {
+                "operationId": "v1.store.orders.rider",
+                "tags": [
+                    "StoreOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "order",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreOrderRiderAssignmentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Rider assigned successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/StoreOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/store/orders": {
             "get": {
                 "operationId": "v1.store.orders.index",
@@ -25439,6 +25498,18 @@
                     "updated_at"
                 ],
                 "title": "StoreOrderResource"
+            },
+            "StoreOrderRiderAssignmentRequest": {
+                "type": "object",
+                "properties": {
+                    "rider_id": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "rider_id"
+                ],
+                "title": "StoreOrderRiderAssignmentRequest"
             },
             "StorePageResource": {
                 "type": "object",
