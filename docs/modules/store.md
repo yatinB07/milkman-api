@@ -341,3 +341,25 @@ The store normal order module uses:
 - store order actions under `App\Actions\Store\Orders`
 - `OrderRepository`
 - `App\Http\Resources\Store\StoreOrderResource`
+
+## Store Subscription Order Read API
+
+```text
+GET /api/v1/store/subscription-orders
+GET /api/v1/store/subscription-orders/{subscriptionOrder}
+```
+
+These endpoints require a store Sanctum token with `orders.view`. They modernize legacy `store_api/u_subscription_history.php` and `store_api/d_sub_order_product_list.php` by using the authenticated store instead of accepting `store_id` from the payload.
+
+The list endpoint accepts `status=current|past`, `search`, and `per_page`. `current` excludes `Completed` and `Cancelled`; `past` includes only `Completed` and `Cancelled`, matching the legacy current/history split. Search covers transaction id, customer name, customer mobile, status, order type, and rider fields. Show operations are store-scoped and include subscription item schedule data derived from total/completed dates.
+
+This module is read-only. Store subscription order status decisions, rider assignment, completion, skip, and extension flows remain separate workflows.
+
+The store subscription order module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreSubscriptionOrderController`
+- `StoreOrderHistoryRequest`
+- `App\Data\Store\StoreOrderHistoryQueryData`
+- store subscription order actions under `App\Actions\Store\SubscriptionOrders`
+- `SubscriptionOrderRepository`
+- `App\Http\Resources\Store\StoreSubscriptionOrderResource`

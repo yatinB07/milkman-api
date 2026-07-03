@@ -62,6 +62,7 @@ use App\Http\Controllers\Api\V1\Store\StoreProductController;
 use App\Http\Controllers\Api\V1\Store\StoreProductImageController;
 use App\Http\Controllers\Api\V1\Store\StoreProductVariantController;
 use App\Http\Controllers\Api\V1\Store\StoreRiderController;
+use App\Http\Controllers\Api\V1\Store\StoreSubscriptionOrderController;
 use App\Http\Controllers\Api\V1\Store\StoreTimeSlotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -255,6 +256,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('notifications', StoreStoreNotificationController::class)
                 ->only(['index', 'show']);
             Route::apiResource('orders', StoreOrderController::class)
+                ->only(['index', 'show']);
+            Route::apiResource('subscription-orders', StoreSubscriptionOrderController::class)
                 ->only(['index', 'show']);
             Route::apiResource('pages', StorePageController::class)
                 ->only(['index', 'show']);
