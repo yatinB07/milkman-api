@@ -388,3 +388,28 @@ The store subscription order module uses:
 - store subscription order actions under `App\Actions\Store\SubscriptionOrders`
 - `SubscriptionOrderRepository`
 - `App\Http\Resources\Store\StoreSubscriptionOrderResource`
+
+## Store Subscription Order Decision API
+
+```text
+POST /api/v1/store/subscription-orders/{subscriptionOrder}/decision
+```
+
+This endpoint requires a store Sanctum token with `orders.update-status`. It modernizes legacy `store_api/pre_decision.php` by using the authenticated store and a named `decision` value instead of the legacy numeric `status` flag.
+
+Payload:
+
+- `decision`: `accepted` or `rejected`
+- `rejection_comment`: required when `decision` is `rejected`
+
+Accepted subscription orders are moved to `Processing` with `admin_status=1` and `internal_status=1`. Rejected subscription orders are moved to `Cancelled` with `admin_status=2`, `internal_status=2`, and the rejection comment. The action records a customer notification using language-file messages. Push delivery remains a future integration concern.
+
+The store subscription order decision module uses:
+
+- `StoreSubscriptionOrderController::decide`
+- `StoreOrderDecisionRequest`
+- `App\Data\Store\StoreOrderDecisionData`
+- `DecideStoreSubscriptionOrderAction`
+- `SubscriptionOrderRepository`
+- `CustomerNotificationRepository`
+- `App\Http\Resources\Store\StoreSubscriptionOrderResource`

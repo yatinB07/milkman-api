@@ -160,6 +160,30 @@ class SubscriptionOrderRepository
         return $order;
     }
 
+    public function markStoreAccepted(SubscriptionOrder $order): SubscriptionOrder
+    {
+        $order->update([
+            'admin_status' => 1,
+            'internal_status' => 1,
+            'status' => 'Processing',
+            'rejection_comment' => null,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'rider', 'items']);
+    }
+
+    public function markStoreRejected(SubscriptionOrder $order, string $comment): SubscriptionOrder
+    {
+        $order->update([
+            'admin_status' => 2,
+            'internal_status' => 2,
+            'status' => 'Cancelled',
+            'rejection_comment' => $comment,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'rider', 'items']);
+    }
+
     public function rate(SubscriptionOrder $order, CustomerOrderRatingData $data): SubscriptionOrder
     {
         $order->update([

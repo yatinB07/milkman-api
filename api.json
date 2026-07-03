@@ -17982,6 +17982,65 @@
                 }
             }
         },
+        "/store/subscription-orders/{subscriptionOrder}/decision": {
+            "post": {
+                "operationId": "v1.store.subscription-orders.decision",
+                "tags": [
+                    "StoreSubscriptionOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "subscriptionOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreOrderDecisionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Subscription order decision updated successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/StoreSubscriptionOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/store/subscription-orders": {
             "get": {
                 "operationId": "v1.store.subscription-orders.index",
@@ -26334,6 +26393,9 @@
                     "transaction_id": {
                         "type": "string"
                     },
+                    "admin_status": {
+                        "type": "string"
+                    },
                     "rider_id": {
                         "type": "string"
                     },
@@ -26435,6 +26497,7 @@
                     "total",
                     "subtotal",
                     "transaction_id",
+                    "admin_status",
                     "rider_id",
                     "wallet_amount",
                     "customer_name",

@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1\Store;
 
+use App\Actions\Store\SubscriptionOrders\DecideStoreSubscriptionOrderAction;
 use App\Actions\Store\SubscriptionOrders\ListStoreSubscriptionOrdersAction;
 use App\Actions\Store\SubscriptionOrders\ShowStoreSubscriptionOrderAction;
 use App\Exceptions\Auth\MissingPermissionException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Store\StoreOrderDecisionRequest;
 use App\Http\Requests\Store\StoreOrderHistoryRequest;
 use App\Http\Resources\Store\StoreSubscriptionOrderResource;
 use App\Models\Store;
 use App\Services\IdentityAuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -32,12 +35,24 @@ class StoreSubscriptionOrderController extends Controller
         return new StoreSubscriptionOrderResource($show->execute($this->storeIdentity($request, $auth), $subscriptionOrder));
     }
 
-    private function storeIdentity(Request $request, IdentityAuthService $auth): Store
+    public function decide(
+        StoreOrderDecisionRequest $request,
+        IdentityAuthService $auth,
+        DecideStoreSubscriptionOrderAction $decide,
+        int $subscriptionOrder,
+    ): JsonResponse {
+        return response()->json([
+            'message' => __('catalog.subscription_order_decision_updated'),
+            'data' => new StoreSubscriptionOrderResource($decide->execute($this->storeIdentity($request, $auth, 'orders.update-status'), $subscriptionOrder, $request->toData())),
+        ]);
+    }
+
+    private function storeIdentity(Request $request, IdentityAuthService $auth, string $permission = 'orders.view'): Store
     {
         $identity = $request->user();
         $auth->assertTokenMatchesIdentityType($identity, 'store');
 
-        if (! $identity->can('orders.view')) {
+        if (! $identity->can($permission)) {
             throw new MissingPermissionException;
         }
 
