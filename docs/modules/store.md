@@ -73,6 +73,29 @@ The store delivery option module uses:
 - `DeliveryOptionRepository`
 - `App\Http\Resources\Store\StoreDeliveryOptionResource`
 
+## Store Time Slot CRUD
+
+```text
+GET    /api/v1/store/time-slots
+GET    /api/v1/store/time-slots/{timeSlot}
+POST   /api/v1/store/time-slots
+PUT    /api/v1/store/time-slots/{timeSlot}
+DELETE /api/v1/store/time-slots/{timeSlot}
+```
+
+These endpoints require a store Sanctum token with `stores.update`. They modernize legacy `store_api/list_timeslot.php`, `store_api/add_timeslot.php`, and `store_api/update_timeslot.php`.
+
+The list endpoint supports `search` across start and end times. It accepts `per_page` and returns Laravel pagination metadata. Show, update, and delete operations are store-scoped, so a store cannot read or change another store's time slot. Delete requests soft delete time slots.
+
+The store time slot module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreTimeSlotController`
+- `ListStoreResourcesRequest`, `StoreTimeSlotRequest`, and `UpdateStoreTimeSlotRequest`
+- `App\Data\Store\ListStoreQueryData` and `StoreTimeSlotData`
+- store time slot actions under `App\Actions\Store\TimeSlots`
+- `TimeSlotRepository`
+- `App\Http\Resources\Store\StoreTimeSlotResource`
+
 ## Store Product CRUD
 
 ```text

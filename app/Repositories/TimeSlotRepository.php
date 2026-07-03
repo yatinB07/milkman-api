@@ -59,6 +59,41 @@ class TimeSlotRepository
             ->get();
     }
 
+    /** @return LengthAwarePaginator<int, TimeSlot> */
+    public function paginateForStore(Store $store, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return TimeSlot::query()
+            ->whereBelongsTo($store)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('starts_at', 'like', "%{$search}%")
+                        ->orWhere('ends_at', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('starts_at')
+            ->paginate($perPage);
+    }
+
+    /** @param array<string, mixed> $attributes */
+    public function createForStore(Store $store, array $attributes): TimeSlot
+    {
+        return TimeSlot::query()
+            ->create(array_merge($attributes, ['store_id' => $store->getKey()]));
+    }
+
+    public function findForStore(Store $store, int $id): TimeSlot
+    {
+        $slot = TimeSlot::query()
+            ->whereBelongsTo($store)
+            ->find($id);
+
+        if (! $slot) {
+            throw new TimeSlotNotFoundException;
+        }
+
+        return $slot;
+    }
+
     /** @param array<string, mixed> $attributes */
     public function create(array $attributes): TimeSlot
     {
