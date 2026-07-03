@@ -276,3 +276,23 @@ The store notification module uses:
 - store notification actions under `App\Actions\Store\Notifications`
 - `StoreNotificationRepository`
 - `App\Http\Resources\Store\StoreNotificationResource`
+
+## Store Page Read API
+
+```text
+GET /api/v1/store/pages
+GET /api/v1/store/pages/{page}
+```
+
+These endpoints require a store Sanctum token with `stores.view`. They modernize legacy `store_api/u_pagelist.php` by returning active pages only.
+
+The list endpoint supports `search` across page title and description. It accepts `per_page` and returns Laravel pagination metadata. Show operations only return active pages. Page creation and maintenance remain admin-side workflows.
+
+The store page module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StorePageController`
+- `ListStoreResourcesRequest`
+- `App\Data\Store\ListStoreQueryData`
+- store page actions under `App\Actions\Store\Pages`
+- `PageRepository`
+- `App\Http\Resources\Store\StorePageResource`

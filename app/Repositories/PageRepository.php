@@ -40,6 +40,35 @@ class PageRepository
         return $page;
     }
 
+    /** @return LengthAwarePaginator<int, Page> */
+    public function paginateActive(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return Page::query()
+            ->where('is_active', true)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query
+                        ->where('title', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('title')
+            ->paginate($perPage);
+    }
+
+    public function findActive(int $id): Page
+    {
+        $page = Page::query()
+            ->where('is_active', true)
+            ->find($id);
+
+        if (! $page) {
+            throw new PageNotFoundException;
+        }
+
+        return $page;
+    }
+
     /** @param array<string, mixed> $attributes */
     public function update(Page $page, array $attributes): Page
     {
