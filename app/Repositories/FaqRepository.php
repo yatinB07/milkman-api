@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Exceptions\Catalog\FaqNotFoundException;
 use App\Models\Faq;
+use App\Models\Store;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class FaqRepository
@@ -36,6 +37,41 @@ class FaqRepository
     {
         $faq = Faq::query()
             ->with('store')
+            ->find($id);
+
+        if (! $faq) {
+            throw new FaqNotFoundException;
+        }
+
+        return $faq;
+    }
+
+    /** @return LengthAwarePaginator<int, Faq> */
+    public function paginateForStore(Store $store, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return Faq::query()
+            ->whereBelongsTo($store)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('question', 'like', "%{$search}%")
+                        ->orWhere('answer', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('question')
+            ->paginate($perPage);
+    }
+
+    /** @param array<string, mixed> $attributes */
+    public function createForStore(Store $store, array $attributes): Faq
+    {
+        return Faq::query()
+            ->create(array_merge($attributes, ['store_id' => $store->getKey()]));
+    }
+
+    public function findForStore(Store $store, int $id): Faq
+    {
+        $faq = Faq::query()
+            ->whereBelongsTo($store)
             ->find($id);
 
         if (! $faq) {

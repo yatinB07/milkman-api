@@ -96,6 +96,29 @@ The store coupon module uses:
 - `CouponRepository`
 - `App\Http\Resources\Store\StoreCouponResource`
 
+## Store FAQ CRUD
+
+```text
+GET    /api/v1/store/faqs
+GET    /api/v1/store/faqs/{faq}
+POST   /api/v1/store/faqs
+PUT    /api/v1/store/faqs/{faq}
+DELETE /api/v1/store/faqs/{faq}
+```
+
+These endpoints require a store Sanctum token with `stores.update`. They modernize legacy `store_api/list_faq.php`, `store_api/add_faq.php`, and `store_api/update_faq.php` by using the authenticated store instead of accepting `store_id` from the payload.
+
+The list endpoint supports `search` across FAQ question and answer text. It accepts `per_page` and returns Laravel pagination metadata. Show, update, and delete operations are store-scoped, so a store cannot read or change another store's FAQ. Delete requests soft delete FAQs.
+
+The store FAQ module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreFaqController`
+- `ListStoreResourcesRequest`, `StoreFaqRequest`, and `UpdateStoreFaqRequest`
+- `App\Data\Store\ListStoreQueryData` and `StoreFaqData`
+- store FAQ actions under `App\Actions\Store\Faqs`
+- `FaqRepository`
+- `App\Http\Resources\Store\StoreFaqResource`
+
 ## Store Time Slot CRUD
 
 ```text

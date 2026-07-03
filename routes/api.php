@@ -52,6 +52,7 @@ use App\Http\Controllers\Api\V1\Store\StoreCategoryController as StoreStoreCateg
 use App\Http\Controllers\Api\V1\Store\StoreCouponController;
 use App\Http\Controllers\Api\V1\Store\StoreDashboardController;
 use App\Http\Controllers\Api\V1\Store\StoreDeliveryOptionController;
+use App\Http\Controllers\Api\V1\Store\StoreFaqController;
 use App\Http\Controllers\Api\V1\Store\StoreProductController;
 use App\Http\Controllers\Api\V1\Store\StoreProductVariantController;
 use App\Http\Controllers\Api\V1\Store\StoreTimeSlotController;
@@ -229,6 +230,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('coupons', StoreCouponController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('delivery-options', StoreDeliveryOptionController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('faqs', StoreFaqController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('time-slots', StoreTimeSlotController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
