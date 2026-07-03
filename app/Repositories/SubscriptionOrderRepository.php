@@ -128,6 +128,16 @@ class SubscriptionOrderRepository
         return $order->refresh()->load(['store', 'paymentMethod', 'rider', 'items']);
     }
 
+    public function updateFinancialTotals(SubscriptionOrder $order, float $subtotal, float $total): SubscriptionOrder
+    {
+        $order->update([
+            'subtotal' => $subtotal,
+            'total' => $total,
+        ]);
+
+        return $order->refresh()->load(['store', 'paymentMethod', 'rider', 'items']);
+    }
+
     /** @param array<string, mixed> $attributes */
     public function update(SubscriptionOrder $order, array $attributes): SubscriptionOrder
     {

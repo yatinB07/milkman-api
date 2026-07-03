@@ -5531,6 +5531,142 @@
                 }
             }
         },
+        "/customer/subscription-orders/{subscriptionOrder}/items/{item}/skip": {
+            "post": {
+                "operationId": "v1.customer.subscription-orders.items.skip",
+                "tags": [
+                    "CustomerSubscriptionOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "subscriptionOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "item",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SubscriptionScheduleChangeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Subscription dates skipped successfully."
+                                        },
+                                        "wallet_balance": {},
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerSubscriptionOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "wallet_balance",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/customer/subscription-orders/{subscriptionOrder}/items/{item}/extend": {
+            "post": {
+                "operationId": "v1.customer.subscription-orders.items.extend",
+                "tags": [
+                    "CustomerSubscriptionOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "subscriptionOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "item",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SubscriptionScheduleChangeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Subscription dates extended successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerSubscriptionOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/customer/subscription-orders/{subscriptionOrder}": {
             "get": {
                 "operationId": "v1.customer.subscription-orders.show",
@@ -20725,6 +20861,23 @@
                     "updated_at"
                 ],
                 "title": "SubscriptionOrderResource"
+            },
+            "SubscriptionScheduleChangeRequest": {
+                "type": "object",
+                "properties": {
+                    "dates": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "minItems": 1
+                    }
+                },
+                "required": [
+                    "dates"
+                ],
+                "title": "SubscriptionScheduleChangeRequest"
             },
             "TimeSlotRequest": {
                 "type": "object",

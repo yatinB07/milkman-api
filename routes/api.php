@@ -200,6 +200,12 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::post('subscription-orders/{subscriptionOrder}/rating', [CustomerSubscriptionOrderController::class, 'rate'])
                 ->whereNumber('subscriptionOrder')
                 ->name('subscription-orders.rating.store');
+            Route::post('subscription-orders/{subscriptionOrder}/items/{item}/skip', [CustomerSubscriptionOrderController::class, 'skip'])
+                ->whereNumber(['subscriptionOrder', 'item'])
+                ->name('subscription-orders.items.skip');
+            Route::post('subscription-orders/{subscriptionOrder}/items/{item}/extend', [CustomerSubscriptionOrderController::class, 'extend'])
+                ->whereNumber(['subscriptionOrder', 'item'])
+                ->name('subscription-orders.items.extend');
             Route::get('subscription-orders/{subscriptionOrder}', [CustomerSubscriptionOrderController::class, 'show'])
                 ->whereNumber('subscriptionOrder')
                 ->name('subscription-orders.show');

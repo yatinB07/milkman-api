@@ -88,6 +88,29 @@ The customer subscription rating module uses:
 - `SubscriptionOrderRepository::rate`
 - `App\Http\Resources\Customer\CustomerSubscriptionOrderResource`
 
+## Customer Subscription Schedule APIs
+
+```text
+POST /api/v1/customer/subscription-orders/{subscriptionOrder}/items/{item}/skip
+POST /api/v1/customer/subscription-orders/{subscriptionOrder}/items/{item}/extend
+```
+
+These endpoints require a customer Sanctum token. They modernize legacy `user_api/skip_extend.php` by replacing its `status=skip|extended` switch with two explicit endpoints and a simple `dates` array payload.
+
+Skip removes selected dates from the subscription item schedule, reduces the item delivery count, recalculates the subscription subtotal/total, credits the customer wallet for the skipped item amount, and writes a credit wallet transaction. Extend removes selected dates and appends the same number of future dates using the item `selected_days` weekday pattern.
+
+Both endpoints enforce customer ownership through the subscription order item repository and reject dates that are not currently present in the item schedule.
+
+The customer subscription schedule module uses:
+
+- `SubscriptionScheduleChangeRequest`
+- `App\Data\Customer\SubscriptionScheduleChangeData`
+- `SkipCustomerSubscriptionScheduleAction` and `ExtendCustomerSubscriptionScheduleAction`
+- `SubscriptionScheduleService`
+- `SubscriptionOrderItemRepository` and `SubscriptionOrderRepository`
+- `WalletService` for skip refunds
+- `App\Http\Resources\Customer\CustomerSubscriptionOrderResource`
+
 ## Admin Subscription Order Item CRUD
 
 ```text

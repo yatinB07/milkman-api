@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Exceptions\Catalog\SubscriptionOrderItemNotFoundException;
+use App\Models\Customer;
 use App\Models\SubscriptionOrderItem;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -38,6 +39,24 @@ class SubscriptionOrderItemRepository
     public function find(int $id): SubscriptionOrderItem
     {
         $item = SubscriptionOrderItem::query()->with('subscriptionOrder')->find($id);
+
+        if (! $item) {
+            throw new SubscriptionOrderItemNotFoundException;
+        }
+
+        return $item;
+    }
+
+    public function findForCustomerSubscriptionOrder(Customer $customer, int $orderId, int $itemId): SubscriptionOrderItem
+    {
+        $item = SubscriptionOrderItem::query()
+            ->with('subscriptionOrder')
+            ->whereKey($itemId)
+            ->where('subscription_order_id', $orderId)
+            ->whereHas('subscriptionOrder', function ($query) use ($customer): void {
+                $query->whereBelongsTo($customer);
+            })
+            ->first();
 
         if (! $item) {
             throw new SubscriptionOrderItemNotFoundException;
