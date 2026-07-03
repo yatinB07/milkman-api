@@ -233,3 +233,26 @@ The store product variant module uses:
 - store product variant actions under `App\Actions\Store\ProductVariants`
 - `ProductVariantRepository`
 - `App\Http\Resources\Store\StoreProductVariantResource`
+
+## Store Rider CRUD
+
+```text
+GET    /api/v1/store/riders
+GET    /api/v1/store/riders/{rider}
+POST   /api/v1/store/riders
+PUT    /api/v1/store/riders/{rider}
+DELETE /api/v1/store/riders/{rider}
+```
+
+These endpoints require a store Sanctum token with `riders.manage`. They modernize legacy `store_api/list_rider.php`, `store_api/add_rider.php`, and `store_api/update_rider.php` by using the authenticated store instead of accepting `store_id` from the payload.
+
+The list endpoint supports `search` across rider name, email, and mobile. It accepts `per_page` and returns Laravel pagination metadata. Create requests assign the `rider` role and rely on Laravel's password hashing cast. Show, update, and delete operations are store-scoped, so a store cannot read or change another store's rider. Delete requests soft delete riders.
+
+The store rider module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreRiderController`
+- `ListStoreResourcesRequest`, `StoreRiderRequest`, and `UpdateStoreRiderRequest`
+- `App\Data\Store\ListStoreQueryData` and `StoreRiderData`
+- store rider actions under `App\Actions\Store\Riders`
+- `RiderRepository`
+- `App\Http\Resources\Store\StoreRiderResource`
