@@ -47,6 +47,7 @@ class OpenApiDocumentationTest extends TestCase
         $this->assertContains('/customer/subscription-orders/{subscriptionOrder}/rating', $paths);
         $this->assertContains('/customer/subscription-orders/{subscriptionOrder}/items/{item}/skip', $paths);
         $this->assertContains('/customer/subscription-orders/{subscriptionOrder}/items/{item}/extend', $paths);
+        $this->assertContains('/store/dashboard', $paths);
         $this->assertContains('/admin/banners', $paths);
         $this->assertContains('/admin/banners/{banner}', $paths);
         $this->assertContains('/admin/categories', $paths);

@@ -48,6 +48,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerStoreController;
 use App\Http\Controllers\Api\V1\Customer\CustomerSubscriptionOrderController;
 use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\Store\StoreDashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -209,6 +210,14 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::get('subscription-orders/{subscriptionOrder}', [CustomerSubscriptionOrderController::class, 'show'])
                 ->whereNumber('subscriptionOrder')
                 ->name('subscription-orders.show');
+        });
+
+    Route::prefix('store')
+        ->middleware('auth:sanctum')
+        ->name('store.')
+        ->group(function (): void {
+            Route::get('dashboard', [StoreDashboardController::class, 'show'])
+                ->name('dashboard.show');
         });
 
     Route::prefix('{identityType}/auth')

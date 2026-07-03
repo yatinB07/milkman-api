@@ -12943,6 +12943,37 @@
                 }
             }
         },
+        "/store/dashboard": {
+            "get": {
+                "operationId": "v1.store.dashboard.show",
+                "tags": [
+                    "StoreDashboard"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`StoreDashboardResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/StoreDashboardResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
         "/admin/store-gallery-images": {
             "get": {
                 "operationId": "v1.admin.store-gallery-images.index",
@@ -19630,6 +19661,30 @@
                     "updated_at"
                 ],
                 "title": "StoreCategoryResource"
+            },
+            "StoreDashboardResource": {
+                "type": "object",
+                "properties": {
+                    "counts": {
+                        "type": "string"
+                    },
+                    "financials": {
+                        "type": "string"
+                    },
+                    "cards": {
+                        "type": "string"
+                    },
+                    "withdraw_limit": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "counts",
+                    "financials",
+                    "cards",
+                    "withdraw_limit"
+                ],
+                "title": "StoreDashboardResource"
             },
             "StoreDetailResource": {
                 "type": "object",
