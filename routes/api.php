@@ -45,6 +45,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerProductController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProfileController;
 use App\Http\Controllers\Api\V1\Customer\CustomerStoreAvailabilityController;
 use App\Http\Controllers\Api\V1\Customer\CustomerStoreController;
+use App\Http\Controllers\Api\V1\Customer\CustomerSubscriptionOrderController;
 use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
 use App\Http\Controllers\Api\V1\HealthController;
 use Illuminate\Http\Request;
@@ -184,6 +185,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('wallet.top-ups.store');
             Route::post('orders', [CustomerOrderController::class, 'store'])
                 ->name('orders.store');
+            Route::post('subscription-orders', [CustomerSubscriptionOrderController::class, 'store'])
+                ->name('subscription-orders.store');
         });
 
     Route::prefix('{identityType}/auth')

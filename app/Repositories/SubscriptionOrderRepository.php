@@ -47,6 +47,18 @@ class SubscriptionOrderRepository
         return SubscriptionOrder::query()->create($attributes)->load(['store', 'customer', 'paymentMethod', 'coupon', 'rider', 'items']);
     }
 
+    /** @param array<int, array<string, mixed>> $items */
+    public function createWithItems(array $attributes, array $items): SubscriptionOrder
+    {
+        $order = SubscriptionOrder::query()->create($attributes);
+
+        foreach ($items as $item) {
+            $order->items()->create($item);
+        }
+
+        return $order->refresh()->load(['store', 'customer', 'paymentMethod', 'coupon', 'items']);
+    }
+
     public function find(int $id): SubscriptionOrder
     {
         $order = SubscriptionOrder::query()

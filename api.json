@@ -4937,6 +4937,57 @@
                 }
             }
         },
+        "/customer/subscription-orders": {
+            "post": {
+                "operationId": "v1.customer.subscription-orders.store",
+                "tags": [
+                    "CustomerSubscriptionOrder"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerSubscriptionOrderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Subscription order placed successfully."
+                                        },
+                                        "wallet_balance": {},
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerSubscriptionOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "wallet_balance",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/customer/wallet-transactions": {
             "get": {
                 "operationId": "v1.customer.wallet-transactions.index",
@@ -16590,6 +16641,291 @@
                     "coupon"
                 ],
                 "title": "CustomerStoreResource"
+            },
+            "CustomerSubscriptionOrderRequest": {
+                "type": "object",
+                "properties": {
+                    "store_id": {
+                        "type": "integer"
+                    },
+                    "payment_method_id": {
+                        "type": "integer"
+                    },
+                    "address": {
+                        "type": "string",
+                        "maxLength": 1000
+                    },
+                    "landmark": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 255
+                    },
+                    "delivery_charge": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "coupon_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "coupon_amount": {
+                        "type": [
+                            "number",
+                            "null"
+                        ],
+                        "minimum": 0
+                    },
+                    "total": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "subtotal": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "transaction_id": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "admin_note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 1000
+                    },
+                    "wallet_amount": {
+                        "type": [
+                            "number",
+                            "null"
+                        ],
+                        "minimum": 0
+                    },
+                    "customer_name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "customer_mobile": {
+                        "type": "string",
+                        "maxLength": 32
+                    },
+                    "order_type": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 255
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "quantity": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "product_title": {
+                                    "type": "string",
+                                    "maxLength": 255
+                                },
+                                "discount": {
+                                    "type": [
+                                        "number",
+                                        "null"
+                                    ],
+                                    "minimum": 0
+                                },
+                                "image_path": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "maxLength": 255
+                                },
+                                "price": {
+                                    "type": "number",
+                                    "minimum": 0
+                                },
+                                "variant_title": {
+                                    "type": "string",
+                                    "maxLength": 255
+                                },
+                                "starts_at": {
+                                    "type": "string",
+                                    "format": "date-time"
+                                },
+                                "total_deliveries": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 366
+                                },
+                                "selected_days": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "maximum": 6
+                                    },
+                                    "minItems": 1
+                                },
+                                "time_slot": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "maxLength": 255
+                                }
+                            },
+                            "required": [
+                                "quantity",
+                                "product_title",
+                                "price",
+                                "variant_title",
+                                "starts_at",
+                                "total_deliveries",
+                                "selected_days"
+                            ]
+                        },
+                        "minItems": 1
+                    }
+                },
+                "required": [
+                    "store_id",
+                    "payment_method_id",
+                    "address",
+                    "delivery_charge",
+                    "total",
+                    "subtotal",
+                    "transaction_id",
+                    "customer_name",
+                    "customer_mobile",
+                    "items"
+                ],
+                "title": "CustomerSubscriptionOrderRequest"
+            },
+            "CustomerSubscriptionOrderResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "store_id": {
+                        "type": "string"
+                    },
+                    "customer_id": {
+                        "type": "string"
+                    },
+                    "ordered_at": {
+                        "type": "string"
+                    },
+                    "payment_method_id": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "landmark": {
+                        "type": "string"
+                    },
+                    "delivery_charge": {
+                        "type": "string"
+                    },
+                    "coupon_id": {
+                        "type": "string"
+                    },
+                    "coupon_amount": {
+                        "type": "string"
+                    },
+                    "total": {
+                        "type": "string"
+                    },
+                    "subtotal": {
+                        "type": "string"
+                    },
+                    "transaction_id": {
+                        "type": "string"
+                    },
+                    "wallet_amount": {
+                        "type": "string"
+                    },
+                    "customer_name": {
+                        "type": "string"
+                    },
+                    "customer_mobile": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "order_type": {
+                        "type": "string"
+                    },
+                    "store": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "title"
+                        ]
+                    },
+                    "payment_method": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "title"
+                        ]
+                    },
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "store_id",
+                    "customer_id",
+                    "ordered_at",
+                    "payment_method_id",
+                    "address",
+                    "landmark",
+                    "delivery_charge",
+                    "coupon_id",
+                    "coupon_amount",
+                    "total",
+                    "subtotal",
+                    "transaction_id",
+                    "wallet_amount",
+                    "customer_name",
+                    "customer_mobile",
+                    "status",
+                    "order_type"
+                ],
+                "title": "CustomerSubscriptionOrderResource"
             },
             "DeliveryOptionRequest": {
                 "type": "object",

@@ -27,6 +27,27 @@ The admin subscription order module uses:
 - `SubscriptionOrderRepository`
 - `App\Http\Resources\Admin\SubscriptionOrderResource`
 
+## Customer Subscription Order Placement
+
+```text
+POST /api/v1/customer/subscription-orders
+```
+
+This endpoint requires a customer Sanctum token. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `d_order_now.php` placed subscription orders when `type` was not `Normal`, created rows in `tbl_subscribe_order` and `tbl_subscribe_order_product`, generated delivery dates from `startdate`, `select_days`, and `total_deliveries`, debited wallet balance when `wall_amt` was used, and wrote a `wallet_report` debit row. The Laravel endpoint covers that placement flow with a modern request shape, authenticated customer ownership, transactional subscription order/item creation, generated `total_dates`, wallet balance validation, wallet debit, and wallet transaction logging.
+
+OneSignal notifications, customer/store notification rows, skip/extend behavior, and delivery completion workflows are intentionally deferred to later focused slices so those side effects can use explicit Actions, Events, Jobs, and tests.
+
+The customer subscription order module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerSubscriptionOrderController`
+- `CustomerSubscriptionOrderRequest`
+- `App\Data\Customer\CustomerSubscriptionOrderData` and `CustomerSubscriptionOrderItemData`
+- `PlaceCustomerSubscriptionOrderAction`
+- `SubscriptionOrderRepository`, `CustomerRepository`, `StoreRepository`, and `WalletTransactionRepository`
+- `App\Http\Resources\Customer\CustomerSubscriptionOrderResource`
+
 ## Admin Subscription Order Item CRUD
 
 ```text

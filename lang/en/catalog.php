@@ -113,6 +113,7 @@ return [
     'store_notification_updated' => 'Store notification updated successfully.',
     'subscription_order_created' => 'Subscription order created successfully.',
     'subscription_order_deleted' => 'Subscription order deleted successfully.',
+    'customer_subscription_order_placed' => 'Subscription order placed successfully.',
     'subscription_order_item_created' => 'Subscription order item created successfully.',
     'subscription_order_item_deleted' => 'Subscription order item deleted successfully.',
     'subscription_order_item_not_found' => 'Subscription order item was not found.',
