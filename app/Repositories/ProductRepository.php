@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Exceptions\Catalog\ProductNotFoundException;
+use App\Exceptions\Catalog\StoreNotFoundException;
 use App\Models\Product;
+use App\Models\Store;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProductRepository
@@ -27,6 +29,51 @@ class ProductRepository
             })
             ->orderBy('title')
             ->paginate($perPage);
+    }
+
+    /** @return LengthAwarePaginator<int, Product> */
+    public function paginateActiveForStore(int $storeId, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        $this->activeStore($storeId);
+
+        return Product::query()
+            ->with([
+                'storeCategory',
+                'variants' => fn ($query) => $query->orderBy('id'),
+                'images' => fn ($query) => $query->where('is_active', true)->orderBy('id'),
+            ])
+            ->where('store_id', $storeId)
+            ->where('is_active', true)
+            ->whereHas('variants')
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('title')
+            ->paginate($perPage);
+    }
+
+    public function findActiveForCustomer(int $id): Product
+    {
+        $product = Product::query()
+            ->with([
+                'store',
+                'storeCategory',
+                'variants' => fn ($query) => $query->orderBy('id'),
+                'images' => fn ($query) => $query->where('is_active', true)->orderBy('id'),
+            ])
+            ->where('is_active', true)
+            ->whereHas('store', fn ($query) => $query->where('is_active', true))
+            ->whereHas('variants')
+            ->find($id);
+
+        if (! $product) {
+            throw new ProductNotFoundException;
+        }
+
+        return $product;
     }
 
     /** @param array<string, mixed> $attributes */
@@ -59,5 +106,18 @@ class ProductRepository
     public function delete(Product $product): void
     {
         $product->delete();
+    }
+
+    private function activeStore(int $storeId): Store
+    {
+        $store = Store::query()
+            ->where('is_active', true)
+            ->find($storeId);
+
+        if (! $store) {
+            throw new StoreNotFoundException;
+        }
+
+        return $store;
     }
 }

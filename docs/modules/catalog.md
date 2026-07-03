@@ -142,6 +142,28 @@ The customer store search module uses:
 - `StoreRepository`
 - `App\Http\Resources\Customer\CustomerStoreResource` and `CustomerStoreDetailResource`
 
+## Customer Product APIs
+
+```text
+GET /api/v1/customer/stores/{store}/products?search={term}&per_page={size}
+GET /api/v1/customer/products/{product}
+```
+
+These endpoints require a customer Sanctum token. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `u_product_search.php` searched active products by keyword for a store and returned only products that had attributes. The Laravel list endpoint keeps that behavior with active products, variant-required filtering, `search`, `per_page`, and Laravel pagination metadata.
+
+Legacy `u_product_data.php` returned one product, its base image, extra images, and all product attributes. The Laravel detail endpoint returns active products from active stores, includes active gallery images, keeps the base product image first, and returns variant pricing and stock/subscription flags.
+
+The customer product module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerProductController`
+- `ListCustomerResourcesRequest`
+- `App\Data\Customer\ListCustomerQueryData`
+- product actions under `App\Actions\Customer\Products`
+- `ProductRepository`
+- `App\Http\Resources\Customer\CustomerProductResource`
+
 ## Admin Customer Address CRUD
 
 ```text

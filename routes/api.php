@@ -39,6 +39,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController;
 use App\Http\Controllers\Api\V1\Customer\CustomerHomeController;
 use App\Http\Controllers\Api\V1\Customer\CustomerNotificationController as CustomerNotificationApiController;
 use App\Http\Controllers\Api\V1\Customer\CustomerPaymentMethodController;
+use App\Http\Controllers\Api\V1\Customer\CustomerProductController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProfileController;
 use App\Http\Controllers\Api\V1\Customer\CustomerStoreController;
 use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
@@ -146,6 +147,12 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::get('stores/{store}', [CustomerStoreController::class, 'show'])
                 ->whereNumber('store')
                 ->name('stores.show');
+            Route::get('stores/{store}/products', [CustomerProductController::class, 'index'])
+                ->whereNumber('store')
+                ->name('stores.products.index');
+            Route::get('products/{product}', [CustomerProductController::class, 'show'])
+                ->whereNumber('product')
+                ->name('products.show');
             Route::get('stores/{store}/coupons', [CustomerCouponController::class, 'index'])
                 ->whereNumber('store')
                 ->name('stores.coupons.index');
