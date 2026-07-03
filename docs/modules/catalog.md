@@ -164,6 +164,28 @@ The customer product module uses:
 - `ProductRepository`
 - `App\Http\Resources\Customer\CustomerProductResource`
 
+## Customer Store Availability APIs
+
+```text
+GET /api/v1/customer/stores/{store}/delivery-options?search={term}&per_page={size}
+GET /api/v1/customer/stores/{store}/time-slots?search={term}&per_page={size}
+```
+
+These endpoints require a customer Sanctum token. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `d_deliverylist.php` returned active delivery rows from `tbl_delivery` for a store. The Laravel delivery options endpoint keeps active-only behavior, scopes rows to an active store, and adds pagination plus search by delivery title.
+
+Legacy `d_timeslot.php` returned time slots from `tbl_time` for a store. The Laravel time-slot endpoint scopes rows to an active store, returns active time slots, and supports pagination plus search across start/end times.
+
+The customer store availability module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerStoreAvailabilityController`
+- `ListCustomerResourcesRequest`
+- `App\Data\Customer\ListCustomerQueryData`
+- availability actions under `App\Actions\Customer\Availability`
+- `DeliveryOptionRepository` and `TimeSlotRepository`
+- `App\Http\Resources\Customer\DeliveryOptionResource` and `TimeSlotResource`
+
 ## Admin Customer Address CRUD
 
 ```text

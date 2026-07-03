@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\Catalog\StoreNotFoundException;
 use App\Exceptions\Catalog\TimeSlotNotFoundException;
+use App\Models\Store;
 use App\Models\TimeSlot;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -20,6 +22,24 @@ class TimeSlotRepository
                         ->orWhereHas('store', function ($query) use ($search): void {
                             $query->where('title', 'like', "%{$search}%");
                         });
+                });
+            })
+            ->orderBy('starts_at')
+            ->paginate($perPage);
+    }
+
+    /** @return LengthAwarePaginator<int, TimeSlot> */
+    public function paginateActiveForStore(int $storeId, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        $this->activeStore($storeId);
+
+        return TimeSlot::query()
+            ->where('store_id', $storeId)
+            ->where('is_active', true)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('starts_at', 'like', "%{$search}%")
+                        ->orWhere('ends_at', 'like', "%{$search}%");
                 });
             })
             ->orderBy('starts_at')
@@ -56,5 +76,18 @@ class TimeSlotRepository
     public function delete(TimeSlot $slot): void
     {
         $slot->delete();
+    }
+
+    private function activeStore(int $storeId): Store
+    {
+        $store = Store::query()
+            ->where('is_active', true)
+            ->find($storeId);
+
+        if (! $store) {
+            throw new StoreNotFoundException;
+        }
+
+        return $store;
     }
 }

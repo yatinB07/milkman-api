@@ -41,6 +41,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerNotificationController as Custo
 use App\Http\Controllers\Api\V1\Customer\CustomerPaymentMethodController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProductController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProfileController;
+use App\Http\Controllers\Api\V1\Customer\CustomerStoreAvailabilityController;
 use App\Http\Controllers\Api\V1\Customer\CustomerStoreController;
 use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
 use App\Http\Controllers\Api\V1\HealthController;
@@ -153,6 +154,12 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::get('products/{product}', [CustomerProductController::class, 'show'])
                 ->whereNumber('product')
                 ->name('products.show');
+            Route::get('stores/{store}/delivery-options', [CustomerStoreAvailabilityController::class, 'deliveryOptions'])
+                ->whereNumber('store')
+                ->name('stores.delivery-options.index');
+            Route::get('stores/{store}/time-slots', [CustomerStoreAvailabilityController::class, 'timeSlots'])
+                ->whereNumber('store')
+                ->name('stores.time-slots.index');
             Route::get('stores/{store}/coupons', [CustomerCouponController::class, 'index'])
                 ->whereNumber('store')
                 ->name('stores.coupons.index');
