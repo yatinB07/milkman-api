@@ -183,8 +183,13 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('wallet-transactions.index');
             Route::post('wallet/top-ups', [CustomerWalletController::class, 'topUp'])
                 ->name('wallet.top-ups.store');
+            Route::get('orders', [CustomerOrderController::class, 'index'])
+                ->name('orders.index');
             Route::post('orders', [CustomerOrderController::class, 'store'])
                 ->name('orders.store');
+            Route::get('orders/{order}', [CustomerOrderController::class, 'show'])
+                ->whereNumber('order')
+                ->name('orders.show');
             Route::post('subscription-orders', [CustomerSubscriptionOrderController::class, 'store'])
                 ->name('subscription-orders.store');
         });

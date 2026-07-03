@@ -48,6 +48,28 @@ The customer normal order module uses:
 - `OrderRepository`, `CustomerRepository`, `StoreRepository`, and `WalletTransactionRepository`
 - `App\Http\Resources\Customer\CustomerOrderResource`
 
+## Customer Order History APIs
+
+```text
+GET /api/v1/customer/orders?status=current|past&search={term}&per_page={size}
+GET /api/v1/customer/orders/{order}
+```
+
+These endpoints require a customer Sanctum token. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `d_order_history.php` split normal orders into `Current` and past groups. The Laravel list endpoint maps that to `status=current` for orders not `Completed` or `Cancelled`, and `status=past` for completed/cancelled orders. It also adds pagination and search across transaction id, customer snapshot fields, order status, and store data.
+
+Legacy `d_order_product_list.php` returned a customer-owned order detail with payment method, store, rider, totals, notes, and item snapshots. The Laravel detail endpoint keeps that ownership boundary and returns related store, payment method, rider, and item data through `CustomerOrderResource`.
+
+The customer order history module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerOrderController`
+- `CustomerOrderHistoryRequest`
+- `App\Data\Customer\CustomerOrderHistoryQueryData`
+- `ListCustomerOrdersAction` and `ShowCustomerOrderAction`
+- `OrderRepository`
+- `App\Http\Resources\Customer\CustomerOrderResource`
+
 ## Admin Order Item CRUD
 
 ```text

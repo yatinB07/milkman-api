@@ -38,6 +38,13 @@ class CustomerOrderResource extends JsonResource
                 'id' => $this->resource->getRelation('paymentMethod')->getKey(),
                 'title' => $this->resource->getRelation('paymentMethod')->getAttribute('title'),
             ] : null),
+            'rider' => $this->whenLoaded('rider', fn (): ?array => $this->resource->getRelation('rider') ? [
+                'id' => $this->resource->getRelation('rider')->getKey(),
+                'name' => $this->resource->getRelation('rider')->getAttribute('name'),
+                'image_path' => $this->resource->getRelation('rider')->getAttribute('image_path'),
+                'country_code' => $this->resource->getRelation('rider')->getAttribute('country_code'),
+                'mobile' => $this->resource->getRelation('rider')->getAttribute('mobile'),
+            ] : null),
             'items' => $this->whenLoaded('items', fn (): array => $this->resource->getRelation('items')->map(fn ($item): array => [
                 'id' => $item->getKey(),
                 'quantity' => $item->getAttribute('quantity'),
