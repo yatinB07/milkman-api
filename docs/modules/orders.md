@@ -27,6 +27,27 @@ The admin order module uses:
 - `OrderRepository`
 - `App\Http\Resources\Admin\OrderResource`
 
+## Customer Normal Order Placement
+
+```text
+POST /api/v1/customer/orders
+```
+
+This endpoint requires a customer Sanctum token. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `d_order_now.php` placed normal orders when `type = Normal`, created rows in `tbl_normal_order` and `tbl_normal_order_product`, debited wallet balance when `wall_amt` was used, and wrote a `wallet_report` debit row. The Laravel endpoint covers the normal-order part of that flow with a modern request shape, authenticated customer ownership, transactional order/item creation, wallet balance validation, wallet debit, and wallet transaction logging.
+
+Subscription order placement, OneSignal notifications, customer/store notification rows, and advanced scheduling are intentionally left for later focused slices so those side effects can be implemented with explicit Actions, Events, Jobs, and tests.
+
+The customer normal order module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerOrderController`
+- `CustomerOrderRequest`
+- `App\Data\Customer\CustomerOrderData` and `CustomerOrderItemData`
+- `PlaceCustomerOrderAction`
+- `OrderRepository`, `CustomerRepository`, `StoreRepository`, and `WalletTransactionRepository`
+- `App\Http\Resources\Customer\CustomerOrderResource`
+
 ## Admin Order Item CRUD
 
 ```text

@@ -39,6 +39,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerCouponController;
 use App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController;
 use App\Http\Controllers\Api\V1\Customer\CustomerHomeController;
 use App\Http\Controllers\Api\V1\Customer\CustomerNotificationController as CustomerNotificationApiController;
+use App\Http\Controllers\Api\V1\Customer\CustomerOrderController;
 use App\Http\Controllers\Api\V1\Customer\CustomerPaymentMethodController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProductController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProfileController;
@@ -181,6 +182,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('wallet-transactions.index');
             Route::post('wallet/top-ups', [CustomerWalletController::class, 'topUp'])
                 ->name('wallet.top-ups.store');
+            Route::post('orders', [CustomerOrderController::class, 'store'])
+                ->name('orders.store');
         });
 
     Route::prefix('{identityType}/auth')

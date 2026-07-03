@@ -50,6 +50,15 @@ class CustomerRepository
         return $customer->refresh();
     }
 
+    public function debitWallet(Customer $customer, float $amount): Customer
+    {
+        $customer->forceFill([
+            'wallet_balance' => (float) $customer->getAttribute('wallet_balance') - $amount,
+        ])->save();
+
+        return $customer->refresh();
+    }
+
     public function delete(Customer $customer): void
     {
         $customer->delete();
