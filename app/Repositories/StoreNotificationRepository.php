@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Exceptions\Catalog\StoreNotificationNotFoundException;
+use App\Models\Store;
 use App\Models\StoreNotification;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -38,6 +39,34 @@ class StoreNotificationRepository
     {
         $notification = StoreNotification::query()
             ->with('store')
+            ->find($id);
+
+        if (! $notification) {
+            throw new StoreNotificationNotFoundException;
+        }
+
+        return $notification;
+    }
+
+    /** @return LengthAwarePaginator<int, StoreNotification> */
+    public function paginateForStore(Store $store, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return StoreNotification::query()
+            ->whereBelongsTo($store)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->latest('notified_at')
+            ->paginate($perPage);
+    }
+
+    public function findForStore(Store $store, int $id): StoreNotification
+    {
+        $notification = StoreNotification::query()
+            ->whereBelongsTo($store)
             ->find($id);
 
         if (! $notification) {

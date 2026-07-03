@@ -256,3 +256,23 @@ The store rider module uses:
 - store rider actions under `App\Actions\Store\Riders`
 - `RiderRepository`
 - `App\Http\Resources\Store\StoreRiderResource`
+
+## Store Notification Read API
+
+```text
+GET /api/v1/store/notifications
+GET /api/v1/store/notifications/{notification}
+```
+
+These endpoints require a store Sanctum token with `stores.view`. They modernize legacy `store_api/u_notification_list.php` by using the authenticated store instead of accepting `store_id` from the payload.
+
+The list endpoint supports `search` across notification title and description. It accepts `per_page` and returns Laravel pagination metadata. Show operations are store-scoped, so a store cannot read another store's notification. Notification creation and maintenance remain admin-side workflows.
+
+The store notification module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreNotificationController`
+- `ListStoreResourcesRequest`
+- `App\Data\Store\ListStoreQueryData`
+- store notification actions under `App\Actions\Store\Notifications`
+- `StoreNotificationRepository`
+- `App\Http\Resources\Store\StoreNotificationResource`
