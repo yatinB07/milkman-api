@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Exceptions\Catalog\CouponNotFoundException;
 use App\Models\Coupon;
+use App\Models\Store;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -38,6 +39,43 @@ class CouponRepository
     {
         $coupon = Coupon::query()
             ->with('store')
+            ->find($id);
+
+        if (! $coupon) {
+            throw new CouponNotFoundException;
+        }
+
+        return $coupon;
+    }
+
+    /** @return LengthAwarePaginator<int, Coupon> */
+    public function paginateForStore(Store $store, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return Coupon::query()
+            ->whereBelongsTo($store)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('subtitle', 'like', "%{$search}%")
+                        ->orWhere('code', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('title')
+            ->paginate($perPage);
+    }
+
+    /** @param array<string, mixed> $attributes */
+    public function createForStore(Store $store, array $attributes): Coupon
+    {
+        return Coupon::query()
+            ->create(array_merge($attributes, ['store_id' => $store->getKey()]));
+    }
+
+    public function findForStore(Store $store, int $id): Coupon
+    {
+        $coupon = Coupon::query()
+            ->whereBelongsTo($store)
             ->find($id);
 
         if (! $coupon) {

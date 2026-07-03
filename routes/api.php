@@ -49,6 +49,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerSubscriptionOrderController;
 use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\Store\StoreCategoryController as StoreStoreCategoryController;
+use App\Http\Controllers\Api\V1\Store\StoreCouponController;
 use App\Http\Controllers\Api\V1\Store\StoreDashboardController;
 use App\Http\Controllers\Api\V1\Store\StoreDeliveryOptionController;
 use App\Http\Controllers\Api\V1\Store\StoreProductController;
@@ -224,6 +225,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::get('dashboard', [StoreDashboardController::class, 'show'])
                 ->name('dashboard.show');
             Route::apiResource('categories', StoreStoreCategoryController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('coupons', StoreCouponController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('delivery-options', StoreDeliveryOptionController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);

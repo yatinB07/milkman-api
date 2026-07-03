@@ -73,6 +73,29 @@ The store delivery option module uses:
 - `DeliveryOptionRepository`
 - `App\Http\Resources\Store\StoreDeliveryOptionResource`
 
+## Store Coupon CRUD
+
+```text
+GET    /api/v1/store/coupons
+GET    /api/v1/store/coupons/{coupon}
+POST   /api/v1/store/coupons
+PUT    /api/v1/store/coupons/{coupon}
+DELETE /api/v1/store/coupons/{coupon}
+```
+
+These endpoints require a store Sanctum token with `stores.update`. They modernize legacy `store_api/coupon_list.php`, `store_api/add_coupon.php`, and `store_api/update_coupon.php`.
+
+The list endpoint supports `search` across title, subtitle, coupon code, and description. It accepts `per_page` and returns Laravel pagination metadata. Show, update, and delete operations are store-scoped, so a store cannot read or change another store's coupon. Delete requests soft delete coupons.
+
+The store coupon module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreCouponController`
+- `ListStoreResourcesRequest`, `StoreCouponRequest`, and `UpdateStoreCouponRequest`
+- `App\Data\Store\ListStoreQueryData` and `StoreCouponData`
+- store coupon actions under `App\Actions\Store\Coupons`
+- `CouponRepository`
+- `App\Http\Resources\Store\StoreCouponResource`
+
 ## Store Time Slot CRUD
 
 ```text
