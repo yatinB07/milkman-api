@@ -27,6 +27,29 @@ The store dashboard module uses:
 - `StoreRepository::dashboardMetrics`
 - `App\Http\Resources\Store\StoreDashboardResource`
 
+## Store Category CRUD
+
+```text
+GET    /api/v1/store/categories
+GET    /api/v1/store/categories/{category}
+POST   /api/v1/store/categories
+PUT    /api/v1/store/categories/{category}
+DELETE /api/v1/store/categories/{category}
+```
+
+These endpoints require a store Sanctum token with `products.manage`. They modernize legacy `store_api/list_category.php`, `store_api/add_category.php`, and `store_api/update_category.php` by using the authenticated store instead of accepting `store_id` from the payload.
+
+The list endpoint supports `search` across category title. It accepts `per_page` and returns Laravel pagination metadata. Show, update, and delete operations are store-scoped, so a store cannot read or change another store's category. Delete requests soft delete categories.
+
+The store category module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreCategoryController`
+- `ListStoreResourcesRequest`, `StoreCategoryRequest`, and `UpdateStoreCategoryRequest`
+- `App\Data\Store\ListStoreQueryData` and `StoreCategoryData`
+- store category actions under `App\Actions\Store\Categories`
+- `StoreCategoryRepository`
+- `App\Http\Resources\Store\StoreCategoryResource`
+
 ## Store Product CRUD
 
 ```text

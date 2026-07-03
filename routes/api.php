@@ -48,6 +48,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerStoreController;
 use App\Http\Controllers\Api\V1\Customer\CustomerSubscriptionOrderController;
 use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\Store\StoreCategoryController as StoreStoreCategoryController;
 use App\Http\Controllers\Api\V1\Store\StoreDashboardController;
 use App\Http\Controllers\Api\V1\Store\StoreProductController;
 use App\Http\Controllers\Api\V1\Store\StoreProductVariantController;
@@ -220,6 +221,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
         ->group(function (): void {
             Route::get('dashboard', [StoreDashboardController::class, 'show'])
                 ->name('dashboard.show');
+            Route::apiResource('categories', StoreStoreCategoryController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('products', StoreProductController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('product-variants', StoreProductVariantController::class)
