@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\V1\Customer;
 
 use App\Actions\Customer\Orders\ListCustomerOrdersAction;
 use App\Actions\Customer\Orders\PlaceCustomerOrderAction;
+use App\Actions\Customer\Orders\RateCustomerOrderAction;
 use App\Actions\Customer\Orders\ShowCustomerOrderAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\CustomerOrderHistoryRequest;
+use App\Http\Requests\Customer\CustomerOrderRatingRequest;
 use App\Http\Requests\Customer\CustomerOrderRequest;
 use App\Http\Resources\Customer\CustomerOrderResource;
 use App\Models\Customer;
@@ -47,6 +49,18 @@ class CustomerOrderController extends Controller
         ShowCustomerOrderAction $orderDetail,
     ): CustomerOrderResource {
         return new CustomerOrderResource($orderDetail->execute($this->customer($request, $auth), $order));
+    }
+
+    public function rate(
+        CustomerOrderRatingRequest $request,
+        int $order,
+        IdentityAuthService $auth,
+        RateCustomerOrderAction $rateOrder,
+    ): JsonResponse {
+        return response()->json([
+            'message' => __('catalog.customer_order_rating_saved'),
+            'data' => new CustomerOrderResource($rateOrder->execute($this->customer($request, $auth), $order, $request->toData())),
+        ]);
     }
 
     private function customer(Request $request, IdentityAuthService $auth): Customer

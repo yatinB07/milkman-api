@@ -57,6 +57,7 @@ return [
     'order_created' => 'Order created successfully.',
     'order_deleted' => 'Order deleted successfully.',
     'customer_order_placed' => 'Order placed successfully.',
+    'customer_order_rating_saved' => 'Rating submitted successfully.',
     'order_item_created' => 'Order item created successfully.',
     'order_item_deleted' => 'Order item deleted successfully.',
     'order_item_not_found' => 'Order item was not found.',

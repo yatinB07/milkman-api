@@ -70,6 +70,24 @@ The customer subscription history module uses:
 - `SubscriptionOrderRepository`
 - `App\Http\Resources\Customer\CustomerSubscriptionOrderResource`
 
+## Customer Subscription Rating API
+
+```text
+POST /api/v1/customer/subscription-orders/{subscriptionOrder}/rating
+```
+
+This endpoint requires a customer Sanctum token. It lets the authenticated customer rate their own subscription order, matching the legacy `u_prate_update.php` behavior that wrote `total_rate`, `rate_text`, `is_rate`, and `review_date` onto `tbl_subscribe_order`.
+
+The Laravel endpoint accepts `total_rating` from 1 to 5 and `rating_text`. It keeps the customer ownership check in the action/repository flow, stores user-facing messages in the language file, and returns the refreshed `CustomerSubscriptionOrderResource` with rating fields.
+
+The customer subscription rating module uses:
+
+- `CustomerOrderRatingRequest`
+- `App\Data\Customer\CustomerOrderRatingData`
+- `RateCustomerSubscriptionOrderAction`
+- `SubscriptionOrderRepository::rate`
+- `App\Http\Resources\Customer\CustomerSubscriptionOrderResource`
+
 ## Admin Subscription Order Item CRUD
 
 ```text

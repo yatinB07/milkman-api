@@ -70,6 +70,24 @@ The customer order history module uses:
 - `OrderRepository`
 - `App\Http\Resources\Customer\CustomerOrderResource`
 
+## Customer Order Rating API
+
+```text
+POST /api/v1/customer/orders/{order}/rating
+```
+
+This endpoint requires a customer Sanctum token. It lets the authenticated customer rate their own normal order, matching the legacy `u_rate_update.php` behavior that wrote `total_rate`, `rate_text`, `is_rate`, and `review_date` onto `tbl_normal_order`.
+
+The Laravel endpoint accepts `total_rating` from 1 to 5 and `rating_text`. It keeps the customer ownership check in the action/repository flow, stores user-facing messages in the language file, and returns the refreshed `CustomerOrderResource` with rating fields.
+
+The customer order rating module uses:
+
+- `CustomerOrderRatingRequest`
+- `App\Data\Customer\CustomerOrderRatingData`
+- `RateCustomerOrderAction`
+- `OrderRepository::rate`
+- `App\Http\Resources\Customer\CustomerOrderResource`
+
 ## Admin Order Item CRUD
 
 ```text

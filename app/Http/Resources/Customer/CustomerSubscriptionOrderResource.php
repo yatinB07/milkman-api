@@ -29,6 +29,10 @@ class CustomerSubscriptionOrderResource extends JsonResource
             'customer_mobile' => $this->resource->getAttribute('customer_mobile'),
             'status' => $this->resource->getAttribute('status'),
             'order_type' => $this->resource->getAttribute('order_type'),
+            'is_rated' => $this->resource->getAttribute('is_rated'),
+            'reviewed_at' => $this->resource->getAttribute('reviewed_at')?->toISOString(),
+            'total_rating' => $this->resource->getAttribute('total_rating'),
+            'rating_text' => $this->resource->getAttribute('rating_text'),
             'store' => $this->whenLoaded('store', fn (): ?array => $this->resource->getRelation('store') ? [
                 'id' => $this->resource->getRelation('store')->getKey(),
                 'title' => $this->resource->getRelation('store')->getAttribute('title'),

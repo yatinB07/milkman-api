@@ -3956,6 +3956,65 @@
                 }
             }
         },
+        "/customer/orders/{order}/rating": {
+            "post": {
+                "operationId": "v1.customer.orders.rating.store",
+                "tags": [
+                    "CustomerOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "order",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerOrderRatingRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Rating submitted successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/customer/orders/{order}": {
             "get": {
                 "operationId": "v1.customer.orders.show",
@@ -5398,6 +5457,65 @@
                                     "required": [
                                         "message",
                                         "wallet_balance",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/customer/subscription-orders/{subscriptionOrder}/rating": {
+            "post": {
+                "operationId": "v1.customer.subscription-orders.rating.store",
+                "tags": [
+                    "CustomerSubscriptionOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "subscriptionOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerOrderRatingRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Rating submitted successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerSubscriptionOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
                                         "data"
                                     ]
                                 }
@@ -16299,6 +16417,25 @@
                 ],
                 "title": "CustomerNotificationResource"
             },
+            "CustomerOrderRatingRequest": {
+                "type": "object",
+                "properties": {
+                    "total_rating": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 5
+                    },
+                    "rating_text": {
+                        "type": "string",
+                        "maxLength": 1000
+                    }
+                },
+                "required": [
+                    "total_rating",
+                    "rating_text"
+                ],
+                "title": "CustomerOrderRatingRequest"
+            },
             "CustomerOrderRequest": {
                 "type": "object",
                 "properties": {
@@ -16504,6 +16641,18 @@
                     "order_type": {
                         "type": "string"
                     },
+                    "is_rated": {
+                        "type": "string"
+                    },
+                    "reviewed_at": {
+                        "type": "string"
+                    },
+                    "total_rating": {
+                        "type": "string"
+                    },
+                    "rating_text": {
+                        "type": "string"
+                    },
                     "store": {
                         "type": [
                             "object",
@@ -16593,7 +16742,11 @@
                     "customer_mobile",
                     "status",
                     "time_slot",
-                    "order_type"
+                    "order_type",
+                    "is_rated",
+                    "reviewed_at",
+                    "total_rating",
+                    "rating_text"
                 ],
                 "title": "CustomerOrderResource"
             },
@@ -17361,6 +17514,18 @@
                     "order_type": {
                         "type": "string"
                     },
+                    "is_rated": {
+                        "type": "string"
+                    },
+                    "reviewed_at": {
+                        "type": "string"
+                    },
+                    "total_rating": {
+                        "type": "string"
+                    },
+                    "rating_text": {
+                        "type": "string"
+                    },
                     "store": {
                         "type": [
                             "object",
@@ -17449,7 +17614,11 @@
                     "customer_name",
                     "customer_mobile",
                     "status",
-                    "order_type"
+                    "order_type",
+                    "is_rated",
+                    "reviewed_at",
+                    "total_rating",
+                    "rating_text"
                 ],
                 "title": "CustomerSubscriptionOrderResource"
             },

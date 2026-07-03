@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Data\Customer\CustomerOrderRatingData;
 use App\Exceptions\Catalog\SubscriptionOrderNotFoundException;
 use App\Models\Customer;
 use App\Models\SubscriptionOrder;
@@ -113,6 +114,18 @@ class SubscriptionOrderRepository
         }
 
         return $order;
+    }
+
+    public function rate(SubscriptionOrder $order, CustomerOrderRatingData $data): SubscriptionOrder
+    {
+        $order->update([
+            'is_rated' => true,
+            'reviewed_at' => now(),
+            'total_rating' => $data->totalRating,
+            'rating_text' => $data->ratingText,
+        ]);
+
+        return $order->refresh()->load(['store', 'paymentMethod', 'rider', 'items']);
     }
 
     /** @param array<string, mixed> $attributes */

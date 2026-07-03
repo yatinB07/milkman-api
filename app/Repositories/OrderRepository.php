@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Data\Customer\CustomerOrderRatingData;
 use App\Exceptions\Catalog\OrderNotFoundException;
 use App\Models\Customer;
 use App\Models\Order;
@@ -113,6 +114,18 @@ class OrderRepository
         }
 
         return $order;
+    }
+
+    public function rate(Order $order, CustomerOrderRatingData $data): Order
+    {
+        $order->update([
+            'is_rated' => true,
+            'reviewed_at' => now(),
+            'total_rating' => $data->totalRating,
+            'rating_text' => $data->ratingText,
+        ]);
+
+        return $order->refresh()->load(['store', 'paymentMethod', 'rider', 'items']);
     }
 
     /** @param array<string, mixed> $attributes */
