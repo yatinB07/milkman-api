@@ -49,3 +49,26 @@ The store product module uses:
 - store product actions under `App\Actions\Store\Products`
 - `ProductRepository`
 - `App\Http\Resources\Store\StoreProductResource`
+
+## Store Product Variant CRUD
+
+```text
+GET    /api/v1/store/product-variants
+GET    /api/v1/store/product-variants/{productVariant}
+POST   /api/v1/store/product-variants
+PUT    /api/v1/store/product-variants/{productVariant}
+DELETE /api/v1/store/product-variants/{productVariant}
+```
+
+These endpoints require a store Sanctum token with `products.manage`. They modernize legacy `store_api/list_product_attr.php`, `store_api/add_product_attr.php`, and `store_api/update_product_attr.php`.
+
+The list endpoint supports `search` across variant title and product title. It accepts `per_page` and returns Laravel pagination metadata. Create/update requests only accept products owned by the authenticated store. Show, update, and delete operations are store-scoped, so a store cannot read or change another store's variant. Delete requests soft delete variants.
+
+The store product variant module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreProductVariantController`
+- `ListStoreResourcesRequest`, `StoreProductVariantRequest`, and `UpdateStoreProductVariantRequest`
+- `App\Data\Store\ListStoreQueryData` and `StoreProductVariantData`
+- store product variant actions under `App\Actions\Store\ProductVariants`
+- `ProductVariantRepository`
+- `App\Http\Resources\Store\StoreProductVariantResource`
