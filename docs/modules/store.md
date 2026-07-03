@@ -165,6 +165,29 @@ The store product module uses:
 - `ProductRepository`
 - `App\Http\Resources\Store\StoreProductResource`
 
+## Store Product Image CRUD
+
+```text
+GET    /api/v1/store/product-images
+GET    /api/v1/store/product-images/{productImage}
+POST   /api/v1/store/product-images
+PUT    /api/v1/store/product-images/{productImage}
+DELETE /api/v1/store/product-images/{productImage}
+```
+
+These endpoints require a store Sanctum token with `products.manage`. They modernize legacy `store_api/u_extra_list.php`, `store_api/u_add_exra.php`, and `store_api/u_extra_edit.php`.
+
+The list endpoint supports `search` across image path and product title. It accepts `per_page` and returns Laravel pagination metadata. Create and update requests only accept products owned by the authenticated store. Show, update, and delete operations are store-scoped, so a store cannot read or change another store's product image. Delete requests soft delete product images.
+
+The store product image module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreProductImageController`
+- `ListStoreResourcesRequest`, `StoreProductImageRequest`, and `UpdateStoreProductImageRequest`
+- `App\Data\Store\ListStoreQueryData` and `StoreProductImageData`
+- store product image actions under `App\Actions\Store\ProductImages`
+- `ProductImageRepository`
+- `App\Http\Resources\Store\StoreProductImageResource`
+
 ## Store Product Variant CRUD
 
 ```text

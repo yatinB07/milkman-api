@@ -60,6 +60,8 @@ class OpenApiDocumentationTest extends TestCase
         $this->assertContains('/store/time-slots/{timeSlot}', $paths);
         $this->assertContains('/store/products', $paths);
         $this->assertContains('/store/products/{product}', $paths);
+        $this->assertContains('/store/product-images', $paths);
+        $this->assertContains('/store/product-images/{productImage}', $paths);
         $this->assertContains('/store/product-variants', $paths);
         $this->assertContains('/store/product-variants/{productVariant}', $paths);
         $this->assertContains('/admin/banners', $paths);
