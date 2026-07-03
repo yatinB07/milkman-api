@@ -296,3 +296,26 @@ The store page module uses:
 - store page actions under `App\Actions\Store\Pages`
 - `PageRepository`
 - `App\Http\Resources\Store\StorePageResource`
+
+## Store Payout Request API
+
+```text
+GET  /api/v1/store/payout-requests
+GET  /api/v1/store/payout-requests/{payoutRequest}
+POST /api/v1/store/payout-requests
+```
+
+These endpoints require a store Sanctum token with `payouts.request`. They modernize legacy `store_api/payout_list.php` and `store_api/request_withdraw.php` by using the authenticated store instead of accepting `owner_id` from the payload.
+
+The list endpoint supports `search` across payout status, request type, and payment-account fields. It accepts `per_page` and returns Laravel pagination metadata. Create requests always create a `pending` payout request and set `requested_at` server-side. Show operations are store-scoped, so a store cannot read another store's payout request.
+
+Legacy `request_withdraw.php` also checked available earning and a configured store withdrawal limit. The normalized dashboard already calculates current earnings, but the legacy withdrawal-limit setting is still documented as unavailable and currently returns `0.00`; limit enforcement should be added when that setting is modeled.
+
+The store payout request module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StorePayoutRequestController`
+- `ListStoreResourcesRequest` and `StorePayoutRequestRequest`
+- `App\Data\Store\ListStoreQueryData` and `StorePayoutRequestData`
+- store payout request actions under `App\Actions\Store\PayoutRequests`
+- `PayoutRequestRepository`
+- `App\Http\Resources\Store\StorePayoutRequestResource`

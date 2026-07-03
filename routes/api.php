@@ -56,6 +56,7 @@ use App\Http\Controllers\Api\V1\Store\StoreFaqController;
 use App\Http\Controllers\Api\V1\Store\StoreGalleryImageController as StoreStoreGalleryImageController;
 use App\Http\Controllers\Api\V1\Store\StoreNotificationController as StoreStoreNotificationController;
 use App\Http\Controllers\Api\V1\Store\StorePageController;
+use App\Http\Controllers\Api\V1\Store\StorePayoutRequestController;
 use App\Http\Controllers\Api\V1\Store\StoreProductController;
 use App\Http\Controllers\Api\V1\Store\StoreProductImageController;
 use App\Http\Controllers\Api\V1\Store\StoreProductVariantController;
@@ -254,6 +255,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->only(['index', 'show']);
             Route::apiResource('pages', StorePageController::class)
                 ->only(['index', 'show']);
+            Route::apiResource('payout-requests', StorePayoutRequestController::class)
+                ->only(['index', 'show', 'store']);
         });
 
     Route::prefix('{identityType}/auth')
