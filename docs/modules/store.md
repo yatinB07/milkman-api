@@ -319,3 +319,25 @@ The store payout request module uses:
 - store payout request actions under `App\Actions\Store\PayoutRequests`
 - `PayoutRequestRepository`
 - `App\Http\Resources\Store\StorePayoutRequestResource`
+
+## Store Normal Order Read API
+
+```text
+GET /api/v1/store/orders
+GET /api/v1/store/orders/{order}
+```
+
+These endpoints require a store Sanctum token with `orders.view`. They modernize legacy `store_api/u_order_history.php` and `store_api/u_order_information.php` by using the authenticated store instead of accepting `store_id` from the payload.
+
+The list endpoint accepts `status=current|past`, `search`, and `per_page`. `current` excludes `Completed` and `Cancelled`; `past` includes only `Completed` and `Cancelled`, matching the legacy current/history split. Search covers transaction id, customer name, customer mobile, status, order type, and rider fields. Show operations are store-scoped, so a store cannot read another store's order.
+
+This module is read-only. Store order status decisions, rider assignment, and completion flows remain separate workflows from legacy `make_decision.php`, `ass_rider.php`, and `complete_order.php`.
+
+The store normal order module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreOrderController`
+- `StoreOrderHistoryRequest`
+- `App\Data\Store\StoreOrderHistoryQueryData`
+- store order actions under `App\Actions\Store\Orders`
+- `OrderRepository`
+- `App\Http\Resources\Store\StoreOrderResource`

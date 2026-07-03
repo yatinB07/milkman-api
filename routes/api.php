@@ -55,6 +55,7 @@ use App\Http\Controllers\Api\V1\Store\StoreDeliveryOptionController;
 use App\Http\Controllers\Api\V1\Store\StoreFaqController;
 use App\Http\Controllers\Api\V1\Store\StoreGalleryImageController as StoreStoreGalleryImageController;
 use App\Http\Controllers\Api\V1\Store\StoreNotificationController as StoreStoreNotificationController;
+use App\Http\Controllers\Api\V1\Store\StoreOrderController;
 use App\Http\Controllers\Api\V1\Store\StorePageController;
 use App\Http\Controllers\Api\V1\Store\StorePayoutRequestController;
 use App\Http\Controllers\Api\V1\Store\StoreProductController;
@@ -252,6 +253,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('riders', StoreRiderController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('notifications', StoreStoreNotificationController::class)
+                ->only(['index', 'show']);
+            Route::apiResource('orders', StoreOrderController::class)
                 ->only(['index', 'show']);
             Route::apiResource('pages', StorePageController::class)
                 ->only(['index', 'show']);
