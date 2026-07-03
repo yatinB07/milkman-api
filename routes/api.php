@@ -53,6 +53,7 @@ use App\Http\Controllers\Api\V1\Store\StoreCouponController;
 use App\Http\Controllers\Api\V1\Store\StoreDashboardController;
 use App\Http\Controllers\Api\V1\Store\StoreDeliveryOptionController;
 use App\Http\Controllers\Api\V1\Store\StoreFaqController;
+use App\Http\Controllers\Api\V1\Store\StoreGalleryImageController as StoreStoreGalleryImageController;
 use App\Http\Controllers\Api\V1\Store\StoreProductController;
 use App\Http\Controllers\Api\V1\Store\StoreProductImageController;
 use App\Http\Controllers\Api\V1\Store\StoreProductVariantController;
@@ -233,6 +234,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::apiResource('delivery-options', StoreDeliveryOptionController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('faqs', StoreFaqController::class)
+                ->only(['index', 'show', 'store', 'update', 'destroy']);
+            Route::apiResource('gallery-images', StoreStoreGalleryImageController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('time-slots', StoreTimeSlotController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);

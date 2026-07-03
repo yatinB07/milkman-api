@@ -119,6 +119,29 @@ The store FAQ module uses:
 - `FaqRepository`
 - `App\Http\Resources\Store\StoreFaqResource`
 
+## Store Gallery Image CRUD
+
+```text
+GET    /api/v1/store/gallery-images
+GET    /api/v1/store/gallery-images/{galleryImage}
+POST   /api/v1/store/gallery-images
+PUT    /api/v1/store/gallery-images/{galleryImage}
+DELETE /api/v1/store/gallery-images/{galleryImage}
+```
+
+These endpoints require a store Sanctum token with `stores.update`. They modernize legacy `store_api/view_gallery.php`, `store_api/add_gallery.php`, and `store_api/update_gallery.php` by using the authenticated store instead of accepting `store_id` from the payload.
+
+The list endpoint supports `search` across image path. It accepts `per_page` and returns Laravel pagination metadata. Show, update, and delete operations are store-scoped, so a store cannot read or change another store's gallery image. Delete requests soft delete gallery images.
+
+The store gallery image module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreGalleryImageController`
+- `ListStoreResourcesRequest`, `StoreGalleryImageRequest`, and `UpdateStoreGalleryImageRequest`
+- `App\Data\Store\ListStoreQueryData` and `StoreGalleryImageData`
+- store gallery image actions under `App\Actions\Store\GalleryImages`
+- `StoreGalleryImageRepository`
+- `App\Http\Resources\Store\StoreGalleryImageResource`
+
 ## Store Time Slot CRUD
 
 ```text
