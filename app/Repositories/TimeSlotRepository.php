@@ -7,6 +7,7 @@ use App\Exceptions\Catalog\TimeSlotNotFoundException;
 use App\Models\Store;
 use App\Models\TimeSlot;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 class TimeSlotRepository
 {
@@ -44,6 +45,18 @@ class TimeSlotRepository
             })
             ->orderBy('starts_at')
             ->paginate($perPage);
+    }
+
+    /** @return Collection<int, TimeSlot> */
+    public function activeForStore(int $storeId): Collection
+    {
+        $this->activeStore($storeId);
+
+        return TimeSlot::query()
+            ->where('store_id', $storeId)
+            ->where('is_active', true)
+            ->orderBy('starts_at')
+            ->get();
     }
 
     /** @param array<string, mixed> $attributes */

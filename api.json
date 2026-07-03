@@ -2564,6 +2564,70 @@
                 }
             }
         },
+        "/customer/stores/{store}/cart-data": {
+            "get": {
+                "operationId": "v1.customer.stores.cart-data.show",
+                "tags": [
+                    "CustomerCart"
+                ],
+                "parameters": [
+                    {
+                        "name": "store",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "minimum": -90,
+                            "maximum": 90
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "minimum": -180,
+                            "maximum": 180
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`CustomerCartDataResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerCartDataResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/customer/stores/{store}/coupons": {
             "get": {
                 "operationId": "v1.customer.stores.coupons.index",
@@ -15450,6 +15514,97 @@
                     "updated_at"
                 ],
                 "title": "CustomerAddressResource"
+            },
+            "CustomerCartDataResource": {
+                "type": "object",
+                "properties": {
+                    "store": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            },
+                            "image_path": {
+                                "type": "string"
+                            },
+                            "tags": {
+                                "type": "array",
+                                "items": {}
+                            },
+                            "full_address": {
+                                "type": "string"
+                            },
+                            "store_charge": {
+                                "type": "string"
+                            },
+                            "minimum_order_amount": {
+                                "type": "string"
+                            },
+                            "is_open": {
+                                "type": "string"
+                            },
+                            "is_pickup_enabled": {
+                                "type": "string"
+                            },
+                            "delivery_charge": {
+                                "type": "string"
+                            },
+                            "zone": {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "title"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "title",
+                            "image_path",
+                            "tags",
+                            "full_address",
+                            "store_charge",
+                            "minimum_order_amount",
+                            "is_open",
+                            "is_pickup_enabled",
+                            "delivery_charge",
+                            "zone"
+                        ]
+                    },
+                    "coupons": {
+                        "type": "array",
+                        "items": {}
+                    },
+                    "payment_methods": {
+                        "type": "array",
+                        "items": {}
+                    },
+                    "time_slots": {
+                        "type": "array",
+                        "items": {}
+                    }
+                },
+                "required": [
+                    "store",
+                    "coupons",
+                    "payment_methods",
+                    "time_slots"
+                ],
+                "title": "CustomerCartDataResource"
             },
             "CustomerHomeResource": {
                 "type": "object",

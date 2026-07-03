@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\Catalog\CouponNotFoundException;
 use App\Models\Coupon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 class CouponRepository
 {
@@ -79,6 +80,17 @@ class CouponRepository
         }
 
         return $coupon;
+    }
+
+    /** @return Collection<int, Coupon> */
+    public function activeForStore(int $storeId): Collection
+    {
+        return Coupon::query()
+            ->where('store_id', $storeId)
+            ->where('is_active', true)
+            ->whereDate('expires_at', '>=', now()->toDateString())
+            ->latest()
+            ->get();
     }
 
     /** @param array<string, mixed> $attributes */

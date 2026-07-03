@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\V1\Admin\ZoneController;
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
 use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Customer\CustomerAddressController as CustomerAddressApiController;
+use App\Http\Controllers\Api\V1\Customer\CustomerCartController;
 use App\Http\Controllers\Api\V1\Customer\CustomerCouponController;
 use App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController;
 use App\Http\Controllers\Api\V1\Customer\CustomerHomeController;
@@ -160,6 +161,9 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::get('stores/{store}/time-slots', [CustomerStoreAvailabilityController::class, 'timeSlots'])
                 ->whereNumber('store')
                 ->name('stores.time-slots.index');
+            Route::get('stores/{store}/cart-data', [CustomerCartController::class, 'show'])
+                ->whereNumber('store')
+                ->name('stores.cart-data.show');
             Route::get('stores/{store}/coupons', [CustomerCouponController::class, 'index'])
                 ->whereNumber('store')
                 ->name('stores.coupons.index');

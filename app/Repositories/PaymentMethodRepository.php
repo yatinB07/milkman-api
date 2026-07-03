@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\Catalog\PaymentMethodNotFoundException;
 use App\Models\PaymentMethod;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 class PaymentMethodRepository
 {
@@ -57,6 +58,16 @@ class PaymentMethodRepository
             })
             ->orderBy('title')
             ->paginate($perPage);
+    }
+
+    /** @return Collection<int, PaymentMethod> */
+    public function visibleActive(): Collection
+    {
+        return PaymentMethod::query()
+            ->where('is_visible', true)
+            ->where('is_active', true)
+            ->orderBy('title')
+            ->get();
     }
 
     /** @param array<string, mixed> $attributes */

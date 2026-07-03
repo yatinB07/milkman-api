@@ -186,6 +186,25 @@ The customer store availability module uses:
 - `DeliveryOptionRepository` and `TimeSlotRepository`
 - `App\Http\Resources\Customer\DeliveryOptionResource` and `TimeSlotResource`
 
+## Customer Cart Data API
+
+```text
+GET /api/v1/customer/stores/{store}/cart-data?latitude={lat}&longitude={lng}
+```
+
+This endpoint requires a customer Sanctum token. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `u_cart_data.php` prepared checkout by returning store checkout data, active coupons, active payment methods, and active time slots. The Laravel API keeps that aggregate behavior with authenticated customer ownership, active store validation, valid non-expired coupons, visible active payment methods, active time slots, and the legacy delivery-charge modes.
+
+The customer cart data module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerCartController`
+- `CustomerCartDataRequest`
+- `App\Data\Customer\CustomerCartDataQueryData`
+- `ShowCustomerCartDataAction`
+- `StoreRepository`, `CouponRepository`, `PaymentMethodRepository`, and `TimeSlotRepository`
+- `App\Http\Resources\Customer\CustomerCartDataResource`
+
 ## Admin Customer Address CRUD
 
 ```text

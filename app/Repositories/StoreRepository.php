@@ -151,6 +151,20 @@ class StoreRepository
         return $store;
     }
 
+    public function findActiveForCart(int $storeId): Store
+    {
+        $store = Store::query()
+            ->with('zone')
+            ->where('is_active', true)
+            ->find($storeId);
+
+        if (! $store) {
+            throw new StoreNotFoundException;
+        }
+
+        return $store;
+    }
+
     /** @param array<string, mixed> $attributes */
     public function create(array $attributes): Store
     {
