@@ -190,8 +190,13 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::get('orders/{order}', [CustomerOrderController::class, 'show'])
                 ->whereNumber('order')
                 ->name('orders.show');
+            Route::get('subscription-orders', [CustomerSubscriptionOrderController::class, 'index'])
+                ->name('subscription-orders.index');
             Route::post('subscription-orders', [CustomerSubscriptionOrderController::class, 'store'])
                 ->name('subscription-orders.store');
+            Route::get('subscription-orders/{subscriptionOrder}', [CustomerSubscriptionOrderController::class, 'show'])
+                ->whereNumber('subscriptionOrder')
+                ->name('subscription-orders.show');
         });
 
     Route::prefix('{identityType}/auth')

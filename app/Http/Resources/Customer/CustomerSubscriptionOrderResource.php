@@ -37,6 +37,13 @@ class CustomerSubscriptionOrderResource extends JsonResource
                 'id' => $this->resource->getRelation('paymentMethod')->getKey(),
                 'title' => $this->resource->getRelation('paymentMethod')->getAttribute('title'),
             ] : null),
+            'rider' => $this->whenLoaded('rider', fn (): ?array => $this->resource->getRelation('rider') ? [
+                'id' => $this->resource->getRelation('rider')->getKey(),
+                'name' => $this->resource->getRelation('rider')->getAttribute('name'),
+                'image_path' => $this->resource->getRelation('rider')->getAttribute('image_path'),
+                'country_code' => $this->resource->getRelation('rider')->getAttribute('country_code'),
+                'mobile' => $this->resource->getRelation('rider')->getAttribute('mobile'),
+            ] : null),
             'items' => $this->whenLoaded('items', fn (): array => $this->resource->getRelation('items')->map(fn ($item): array => [
                 'id' => $item->getKey(),
                 'quantity' => $item->getAttribute('quantity'),
@@ -51,7 +58,27 @@ class CustomerSubscriptionOrderResource extends JsonResource
                 'completed_dates' => $item->getAttribute('completed_dates'),
                 'selected_days' => $item->getAttribute('selected_days'),
                 'time_slot' => $item->getAttribute('time_slot'),
+                'schedule' => $this->schedule($item->getAttribute('total_dates'), $item->getAttribute('completed_dates')),
             ])->values()->all()),
         ];
+    }
+
+    /** @return array<int, array<string, mixed>> */
+    private function schedule(?string $totalDates, ?string $completedDates): array
+    {
+        $completed = collect(explode(',', (string) $completedDates))
+            ->filter()
+            ->values()
+            ->all();
+
+        return collect(explode(',', (string) $totalDates))
+            ->filter()
+            ->map(fn (string $date): array => [
+                'date' => $date,
+                'is_complete' => in_array($date, $completed, true),
+                'format_date' => date('D d', strtotime($date)),
+            ])
+            ->values()
+            ->all();
     }
 }

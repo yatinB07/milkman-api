@@ -48,6 +48,28 @@ The customer subscription order module uses:
 - `SubscriptionOrderRepository`, `CustomerRepository`, `StoreRepository`, and `WalletTransactionRepository`
 - `App\Http\Resources\Customer\CustomerSubscriptionOrderResource`
 
+## Customer Subscription History APIs
+
+```text
+GET /api/v1/customer/subscription-orders?status=current|past&search={term}&per_page={size}
+GET /api/v1/customer/subscription-orders/{subscriptionOrder}
+```
+
+These endpoints require a customer Sanctum token. Admin, store, and rider tokens are rejected by identity boundary checks.
+
+Legacy `d_subscribe_order_history.php` split subscription orders into `Current` and past groups. The Laravel list endpoint maps that to `status=current` for subscriptions not `Completed` or `Cancelled`, and `status=past` for completed/cancelled subscriptions. It adds pagination and search across transaction id, customer snapshot fields, order status, and store data.
+
+Legacy `d_sub_order_product_list.php` returned subscription detail with payment method, rider, totals, item snapshots, and generated delivery dates marked complete or pending. The Laravel detail endpoint keeps the authenticated customer ownership boundary and exposes item `schedule` entries with `date`, `is_complete`, and `format_date`.
+
+The customer subscription history module uses:
+
+- `App\Http\Controllers\Api\V1\Customer\CustomerSubscriptionOrderController`
+- `CustomerOrderHistoryRequest`
+- `App\Data\Customer\CustomerOrderHistoryQueryData`
+- `ListCustomerSubscriptionOrdersAction` and `ShowCustomerSubscriptionOrderAction`
+- `SubscriptionOrderRepository`
+- `App\Http\Resources\Customer\CustomerSubscriptionOrderResource`
+
 ## Admin Subscription Order Item CRUD
 
 ```text
