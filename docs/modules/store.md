@@ -50,6 +50,29 @@ The store category module uses:
 - `StoreCategoryRepository`
 - `App\Http\Resources\Store\StoreCategoryResource`
 
+## Store Delivery Option CRUD
+
+```text
+GET    /api/v1/store/delivery-options
+GET    /api/v1/store/delivery-options/{deliveryOption}
+POST   /api/v1/store/delivery-options
+PUT    /api/v1/store/delivery-options/{deliveryOption}
+DELETE /api/v1/store/delivery-options/{deliveryOption}
+```
+
+These endpoints require a store Sanctum token with `stores.update`. They modernize legacy `store_api/list_deliveries.php`, `store_api/add_deliveries.php`, and `store_api/update_deliveries.php`.
+
+The list endpoint supports `search` across delivery option title. It accepts `per_page` and returns Laravel pagination metadata. Show, update, and delete operations are store-scoped, so a store cannot read or change another store's delivery option. Delete requests soft delete delivery options.
+
+The store delivery option module uses:
+
+- `App\Http\Controllers\Api\V1\Store\StoreDeliveryOptionController`
+- `ListStoreResourcesRequest`, `StoreDeliveryOptionRequest`, and `UpdateStoreDeliveryOptionRequest`
+- `App\Data\Store\ListStoreQueryData` and `StoreDeliveryOptionData`
+- store delivery option actions under `App\Actions\Store\DeliveryOptions`
+- `DeliveryOptionRepository`
+- `App\Http\Resources\Store\StoreDeliveryOptionResource`
+
 ## Store Product CRUD
 
 ```text

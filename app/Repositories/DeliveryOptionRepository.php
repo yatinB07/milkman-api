@@ -42,6 +42,38 @@ class DeliveryOptionRepository
             ->paginate($perPage);
     }
 
+    /** @return LengthAwarePaginator<int, DeliveryOption> */
+    public function paginateForStore(Store $store, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return DeliveryOption::query()
+            ->whereBelongsTo($store)
+            ->when($search, function ($query, string $search): void {
+                $query->where('title', 'like', "%{$search}%");
+            })
+            ->orderBy('title')
+            ->paginate($perPage);
+    }
+
+    /** @param array<string, mixed> $attributes */
+    public function createForStore(Store $store, array $attributes): DeliveryOption
+    {
+        return DeliveryOption::query()
+            ->create(array_merge($attributes, ['store_id' => $store->getKey()]));
+    }
+
+    public function findForStore(Store $store, int $id): DeliveryOption
+    {
+        $option = DeliveryOption::query()
+            ->whereBelongsTo($store)
+            ->find($id);
+
+        if (! $option) {
+            throw new DeliveryOptionNotFoundException;
+        }
+
+        return $option;
+    }
+
     /** @param array<string, mixed> $attributes */
     public function create(array $attributes): DeliveryOption
     {
