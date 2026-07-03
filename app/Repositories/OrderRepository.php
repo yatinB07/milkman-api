@@ -160,6 +160,30 @@ class OrderRepository
         return $order;
     }
 
+    public function markStoreAccepted(Order $order): Order
+    {
+        $order->update([
+            'admin_status' => 1,
+            'internal_status' => 1,
+            'status' => 'Processing',
+            'rejection_comment' => null,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'rider', 'items']);
+    }
+
+    public function markStoreRejected(Order $order, string $comment): Order
+    {
+        $order->update([
+            'admin_status' => 2,
+            'internal_status' => 2,
+            'status' => 'Cancelled',
+            'rejection_comment' => $comment,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'rider', 'items']);
+    }
+
     public function rate(Order $order, CustomerOrderRatingData $data): Order
     {
         $order->update([

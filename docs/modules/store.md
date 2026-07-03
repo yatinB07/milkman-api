@@ -342,6 +342,31 @@ The store normal order module uses:
 - `OrderRepository`
 - `App\Http\Resources\Store\StoreOrderResource`
 
+## Store Normal Order Decision API
+
+```text
+POST /api/v1/store/orders/{order}/decision
+```
+
+This endpoint requires a store Sanctum token with `orders.update-status`. It modernizes legacy `store_api/make_decision.php` by using the authenticated store and a named `decision` value instead of the legacy numeric `status` flag.
+
+Payload:
+
+- `decision`: `accepted` or `rejected`
+- `rejection_comment`: required when `decision` is `rejected`
+
+Accepted orders are moved to `Processing` with `admin_status=1` and `internal_status=1`. Rejected orders are moved to `Cancelled` with `admin_status=2`, `internal_status=2`, and the rejection comment. The action records a customer notification using language-file messages. Push delivery remains a future integration concern.
+
+The store normal order decision module uses:
+
+- `StoreOrderController::decide`
+- `StoreOrderDecisionRequest`
+- `App\Data\Store\StoreOrderDecisionData`
+- `DecideStoreOrderAction`
+- `OrderRepository`
+- `CustomerNotificationRepository`
+- `App\Http\Resources\Store\StoreOrderResource`
+
 ## Store Subscription Order Read API
 
 ```text

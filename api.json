@@ -15743,6 +15743,65 @@
                 }
             }
         },
+        "/store/orders/{order}/decision": {
+            "post": {
+                "operationId": "v1.store.orders.decision",
+                "tags": [
+                    "StoreOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "order",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreOrderDecisionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Order decision updated successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/StoreOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/store/orders": {
             "get": {
                 "operationId": "v1.store.orders.index",
@@ -25140,6 +25199,29 @@
                 ],
                 "title": "StoreNotificationResource"
             },
+            "StoreOrderDecisionRequest": {
+                "type": "object",
+                "properties": {
+                    "decision": {
+                        "type": "string",
+                        "enum": [
+                            "accepted",
+                            "rejected"
+                        ]
+                    },
+                    "rejection_comment": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 1000
+                    }
+                },
+                "required": [
+                    "decision"
+                ],
+                "title": "StoreOrderDecisionRequest"
+            },
             "StoreOrderResource": {
                 "type": "object",
                 "properties": {
@@ -25177,6 +25259,9 @@
                         "type": "string"
                     },
                     "transaction_id": {
+                        "type": "string"
+                    },
+                    "admin_status": {
                         "type": "string"
                     },
                     "rider_id": {
@@ -25280,6 +25365,7 @@
                     "total",
                     "subtotal",
                     "transaction_id",
+                    "admin_status",
                     "rider_id",
                     "wallet_amount",
                     "customer_name",

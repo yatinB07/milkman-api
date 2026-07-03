@@ -23,6 +23,7 @@ class StoreOrderResource extends JsonResource
             'total' => $this->resource->getAttribute('total'),
             'subtotal' => $this->resource->getAttribute('subtotal'),
             'transaction_id' => $this->resource->getAttribute('transaction_id'),
+            'admin_status' => $this->resource->getAttribute('admin_status'),
             'rider_id' => $this->resource->getAttribute('rider_id'),
             'wallet_amount' => $this->resource->getAttribute('wallet_amount'),
             'customer_name' => $this->resource->getAttribute('customer_name'),

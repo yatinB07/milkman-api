@@ -255,6 +255,9 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('notifications', StoreStoreNotificationController::class)
                 ->only(['index', 'show']);
+            Route::post('orders/{order}/decision', [StoreOrderController::class, 'decide'])
+                ->whereNumber('order')
+                ->name('orders.decision');
             Route::apiResource('orders', StoreOrderController::class)
                 ->only(['index', 'show']);
             Route::apiResource('subscription-orders', StoreSubscriptionOrderController::class)
