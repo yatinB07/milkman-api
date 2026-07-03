@@ -438,3 +438,28 @@ The store subscription order decision module uses:
 - `SubscriptionOrderRepository`
 - `CustomerNotificationRepository`
 - `App\Http\Resources\Store\StoreSubscriptionOrderResource`
+
+## Store Subscription Order Rider Assignment API
+
+```text
+POST /api/v1/store/subscription-orders/{subscriptionOrder}/rider
+```
+
+This endpoint requires a store Sanctum token with `orders.assign`. It modernizes legacy `store_api/pre_assign.php` by using the authenticated store and validating that the selected rider belongs to the same store.
+
+Payload:
+
+- `rider_id`: rider owned by the authenticated store
+
+Assigning a rider sets `rider_id` and moves `internal_status` to `3`, matching the legacy `order_status=3` assignment state. The action records a rider notification using language-file messages. Push delivery remains a future integration concern.
+
+The store subscription order rider assignment module uses:
+
+- `StoreSubscriptionOrderController::assignRider`
+- `StoreOrderRiderAssignmentRequest`
+- `App\Data\Store\StoreOrderRiderAssignmentData`
+- `AssignStoreSubscriptionOrderRiderAction`
+- `SubscriptionOrderRepository`
+- `RiderRepository`
+- `RiderNotificationRepository`
+- `App\Http\Resources\Store\StoreSubscriptionOrderResource`

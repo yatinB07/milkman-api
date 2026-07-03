@@ -184,6 +184,16 @@ class SubscriptionOrderRepository
         return $order->refresh()->load(['paymentMethod', 'rider', 'items']);
     }
 
+    public function assignRider(SubscriptionOrder $order, int $riderId): SubscriptionOrder
+    {
+        $order->update([
+            'rider_id' => $riderId,
+            'internal_status' => 3,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'rider', 'items']);
+    }
+
     public function rate(SubscriptionOrder $order, CustomerOrderRatingData $data): SubscriptionOrder
     {
         $order->update([

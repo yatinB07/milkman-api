@@ -103,6 +103,8 @@ return [
     'rider_assigned' => 'Rider assigned successfully.',
     'rider_order_assigned_title' => 'Order #:order Assigned.',
     'rider_order_assigned_message' => 'You have an order assigned to you.',
+    'rider_subscription_order_assigned_title' => 'Subscription order #:order assigned.',
+    'rider_subscription_order_assigned_message' => 'You have a subscription order assigned to you.',
     'rider_updated' => 'Rider updated successfully.',
     'setting_created' => 'Setting created successfully.',
     'setting_deleted' => 'Setting deleted successfully.',
