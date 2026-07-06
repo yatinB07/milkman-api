@@ -201,6 +201,27 @@ class SubscriptionOrderRepository
         return $order;
     }
 
+    public function markRiderAccepted(SubscriptionOrder $order): SubscriptionOrder
+    {
+        $order->update([
+            'internal_status' => 4,
+            'rejection_comment' => null,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'items']);
+    }
+
+    public function markRiderRejected(SubscriptionOrder $order, string $comment): SubscriptionOrder
+    {
+        $order->update([
+            'rider_id' => null,
+            'internal_status' => 5,
+            'rejection_comment' => $comment,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'items']);
+    }
+
     public function markStoreAccepted(SubscriptionOrder $order): SubscriptionOrder
     {
         $order->update([

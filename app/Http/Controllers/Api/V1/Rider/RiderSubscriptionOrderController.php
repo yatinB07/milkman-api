@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1\Rider;
 
+use App\Actions\Rider\SubscriptionOrders\DecideRiderSubscriptionOrderAction;
 use App\Actions\Rider\SubscriptionOrders\ListRiderSubscriptionOrdersAction;
 use App\Actions\Rider\SubscriptionOrders\ShowRiderSubscriptionOrderAction;
 use App\Exceptions\Auth\MissingPermissionException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Rider\RiderOrderDecisionRequest;
 use App\Http\Requests\Rider\RiderOrderHistoryRequest;
 use App\Http\Resources\Rider\RiderSubscriptionOrderResource;
 use App\Models\Rider;
 use App\Services\IdentityAuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -32,12 +35,24 @@ class RiderSubscriptionOrderController extends Controller
         return new RiderSubscriptionOrderResource($show->execute($this->riderIdentity($request, $auth), $subscriptionOrder));
     }
 
-    private function riderIdentity(Request $request, IdentityAuthService $auth): Rider
+    public function decide(
+        RiderOrderDecisionRequest $request,
+        IdentityAuthService $auth,
+        DecideRiderSubscriptionOrderAction $decide,
+        int $subscriptionOrder,
+    ): JsonResponse {
+        return response()->json([
+            'message' => __('catalog.subscription_order_decision_updated'),
+            'data' => new RiderSubscriptionOrderResource($decide->execute($this->riderIdentity($request, $auth, 'orders.update-status'), $subscriptionOrder, $request->toData())),
+        ]);
+    }
+
+    private function riderIdentity(Request $request, IdentityAuthService $auth, string $permission = 'orders.view'): Rider
     {
         $identity = $request->user();
         $auth->assertTokenMatchesIdentityType($identity, 'rider');
 
-        if (! $identity->can('orders.view')) {
+        if (! $identity->can($permission)) {
             throw new MissingPermissionException;
         }
 

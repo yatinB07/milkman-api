@@ -155,3 +155,29 @@ The rider subscription order module uses:
 - rider subscription order actions under `App\Actions\Rider\SubscriptionOrders`
 - `SubscriptionOrderRepository`
 - `App\Http\Resources\Rider\RiderSubscriptionOrderResource`
+
+## Rider Subscription Order Decision API
+
+```text
+POST /api/v1/rider/subscription-orders/{subscriptionOrder}/decision
+```
+
+This endpoint requires a rider Sanctum token with `orders.update-status`. It modernizes legacy `rider_api/sub_decision.php` by using the authenticated rider and a named `decision` value instead of the legacy numeric `status` flag.
+
+Payload:
+
+- `decision`: `accepted` or `rejected`
+- `rejection_comment`: required when `decision` is `rejected`
+
+Accepted subscription orders move to `internal_status=4`. Rejected subscription orders clear `rider_id`, move `internal_status` to `5`, and store the rejection comment so the store can assign another rider. The action records customer/store notifications using language-file messages. Push delivery remains a future integration concern.
+
+The rider subscription order decision module uses:
+
+- `RiderSubscriptionOrderController::decide`
+- `RiderOrderDecisionRequest`
+- `App\Data\Rider\RiderOrderDecisionData`
+- `DecideRiderSubscriptionOrderAction`
+- `SubscriptionOrderRepository`
+- `CustomerNotificationRepository`
+- `StoreNotificationRepository`
+- `App\Http\Resources\Rider\RiderSubscriptionOrderResource`
