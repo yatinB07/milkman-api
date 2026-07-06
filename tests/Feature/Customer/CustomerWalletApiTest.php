@@ -48,6 +48,37 @@ class CustomerWalletApiTest extends TestCase
             ->assertJsonPath('meta.total', 1);
     }
 
+    public function test_customer_wallet_transactions_cover_legacy_wallet_report_order_and_balance(): void
+    {
+        $token = $this->customerToken(['wallet_balance' => 75]);
+        $customer = Customer::query()->where('email', 'customer@example.test')->firstOrFail();
+
+        WalletTransaction::factory()->for($customer)->create([
+            'message' => 'Opening credit',
+            'type' => 'Credit',
+            'amount' => 100,
+            'transacted_at' => now()->subDay(),
+        ]);
+        WalletTransaction::factory()->for($customer)->create([
+            'message' => 'Order debit',
+            'type' => 'Debit',
+            'amount' => 25,
+            'transacted_at' => now(),
+        ]);
+
+        $this->withToken($token)
+            ->getJson('/api/v1/customer/wallet-transactions')
+            ->assertOk()
+            ->assertJsonPath('data.0.message', 'Order debit')
+            ->assertJsonPath('data.0.type', 'Debit')
+            ->assertJsonPath('data.0.amount', '25.00')
+            ->assertJsonPath('data.1.message', 'Opening credit')
+            ->assertJsonPath('data.1.type', 'Credit')
+            ->assertJsonPath('data.1.amount', '100.00')
+            ->assertJsonPath('wallet_balance', '75.00')
+            ->assertJsonPath('meta.total', 2);
+    }
+
     public function test_customer_can_credit_wallet_balance(): void
     {
         $token = $this->customerToken();
@@ -107,13 +138,16 @@ class CustomerWalletApiTest extends TestCase
             ->assertJsonPath('message', 'This token cannot access the requested identity area.');
     }
 
-    private function customerToken(): string
+    /**
+     * @param  array<string, mixed>  $attributes
+     */
+    private function customerToken(array $attributes = []): string
     {
         $this->seed(RoleAndPermissionSeeder::class);
-        $customer = Customer::factory()->create([
+        $customer = Customer::factory()->create(array_merge([
             'email' => 'customer@example.test',
             'password' => 'secret-password',
-        ]);
+        ], $attributes));
         $customer->assignRole('customer');
 
         return $this->postJson('/api/v1/customer/auth/login', [
