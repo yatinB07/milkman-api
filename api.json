@@ -4377,6 +4377,49 @@
                 }
             }
         },
+        "/customer/auth/password/reset": {
+            "post": {
+                "operationId": "v1.customer.auth.password.reset",
+                "tags": [
+                    "CustomerPasswordReset"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerPasswordResetRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Password changed successfully."
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                },
+                "security": []
+            }
+        },
         "/customer/payment-methods": {
             "get": {
                 "operationId": "v1.customer.payment-methods.index",
@@ -23899,6 +23942,29 @@
                     "updated_at"
                 ],
                 "title": "CustomerPageResource"
+            },
+            "CustomerPasswordResetRequest": {
+                "type": "object",
+                "properties": {
+                    "country_code": {
+                        "type": "string",
+                        "maxLength": 8
+                    },
+                    "mobile": {
+                        "type": "string",
+                        "maxLength": 32
+                    },
+                    "password": {
+                        "type": "string",
+                        "minLength": 8
+                    }
+                },
+                "required": [
+                    "country_code",
+                    "mobile",
+                    "password"
+                ],
+                "title": "CustomerPasswordResetRequest"
             },
             "CustomerProductResource": {
                 "type": "object",

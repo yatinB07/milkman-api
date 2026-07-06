@@ -23,6 +23,7 @@ class OpenApiDocumentationTest extends TestCase
         $this->assertContains('/customer/home', $paths);
         $this->assertContains('/customer/auth/email-availability', $paths);
         $this->assertContains('/customer/auth/mobile-availability', $paths);
+        $this->assertContains('/customer/auth/password/reset', $paths);
         $this->assertContains('/customer/profile', $paths);
         $this->assertContains('/customer/addresses', $paths);
         $this->assertContains('/customer/addresses/{address}', $paths);

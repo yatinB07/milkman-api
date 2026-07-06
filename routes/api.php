@@ -42,6 +42,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerHomeController;
 use App\Http\Controllers\Api\V1\Customer\CustomerNotificationController as CustomerNotificationApiController;
 use App\Http\Controllers\Api\V1\Customer\CustomerOrderController;
 use App\Http\Controllers\Api\V1\Customer\CustomerPageController;
+use App\Http\Controllers\Api\V1\Customer\CustomerPasswordResetController;
 use App\Http\Controllers\Api\V1\Customer\CustomerPaymentMethodController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProductController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProfileController;
@@ -336,6 +337,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('email-availability');
             Route::post('mobile-availability', [CustomerAvailabilityController::class, 'mobile'])
                 ->name('mobile-availability');
+            Route::post('password/reset', [CustomerPasswordResetController::class, 'store'])
+                ->name('password.reset');
         });
 
     Route::prefix('{identityType}/auth')

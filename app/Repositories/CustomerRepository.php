@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\Auth\CustomerPasswordResetIdentityNotFoundException;
 use App\Exceptions\Catalog\CustomerNotFoundException;
 use App\Models\Customer;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -55,6 +56,27 @@ class CustomerRepository
             ->where('country_code', $countryCode)
             ->where('mobile', $mobile)
             ->exists();
+    }
+
+    public function findByCountryCodeAndMobile(string $countryCode, string $mobile): Customer
+    {
+        $customer = Customer::query()
+            ->where('country_code', $countryCode)
+            ->where('mobile', $mobile)
+            ->first();
+
+        if (! $customer) {
+            throw new CustomerPasswordResetIdentityNotFoundException;
+        }
+
+        return $customer;
+    }
+
+    public function updatePassword(Customer $customer, string $password): Customer
+    {
+        $customer->update(['password' => $password]);
+
+        return $customer->refresh();
     }
 
     /** @param array<string, mixed> $attributes */
