@@ -91,6 +91,28 @@ class StoreRiderCrudTest extends TestCase
             ->assertJsonPath('meta.total', 2);
     }
 
+    public function test_store_rider_list_covers_legacy_rider_assignment_dropdown(): void
+    {
+        [$store, $token] = $this->storeToken();
+
+        $rider = Rider::factory()->create([
+            'store_id' => $store->getKey(),
+            'name' => 'Assignment Rider',
+        ]);
+        Rider::factory()->create([
+            'store_id' => Store::factory(),
+            'name' => 'Other Store Rider',
+        ]);
+
+        $this->withToken($token)
+            ->getJson('/api/v1/store/riders?search=assignment')
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.id', $rider->getKey())
+            ->assertJsonPath('data.0.name', 'Assignment Rider')
+            ->assertJsonPath('data.0.store_id', $store->getKey());
+    }
+
     public function test_store_cannot_manage_another_stores_rider(): void
     {
         [, $token] = $this->storeToken();
