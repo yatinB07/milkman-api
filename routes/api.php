@@ -40,6 +40,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController;
 use App\Http\Controllers\Api\V1\Customer\CustomerHomeController;
 use App\Http\Controllers\Api\V1\Customer\CustomerNotificationController as CustomerNotificationApiController;
 use App\Http\Controllers\Api\V1\Customer\CustomerOrderController;
+use App\Http\Controllers\Api\V1\Customer\CustomerPageController;
 use App\Http\Controllers\Api\V1\Customer\CustomerPaymentMethodController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProductController;
 use App\Http\Controllers\Api\V1\Customer\CustomerProfileController;
@@ -200,6 +201,11 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('favorites.toggle');
             Route::get('notifications', [CustomerNotificationApiController::class, 'index'])
                 ->name('notifications.index');
+            Route::get('pages', [CustomerPageController::class, 'index'])
+                ->name('pages.index');
+            Route::get('pages/{page}', [CustomerPageController::class, 'show'])
+                ->whereNumber('page')
+                ->name('pages.show');
             Route::get('payment-methods', [CustomerPaymentMethodController::class, 'index'])
                 ->name('payment-methods.index');
             Route::get('wallet-transactions', [CustomerWalletController::class, 'index'])
