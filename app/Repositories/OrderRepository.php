@@ -194,6 +194,16 @@ class OrderRepository
         return $order->refresh()->load(['paymentMethod', 'rider', 'items']);
     }
 
+    public function markSelfPickupCompleted(Order $order): Order
+    {
+        $order->update([
+            'status' => 'Completed',
+            'internal_status' => 7,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'rider', 'items']);
+    }
+
     public function rate(Order $order, CustomerOrderRatingData $data): Order
     {
         $order->update([

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Store;
 
 use App\Actions\Store\Orders\AssignStoreOrderRiderAction;
+use App\Actions\Store\Orders\CompleteStoreSelfPickupOrderAction;
 use App\Actions\Store\Orders\DecideStoreOrderAction;
 use App\Actions\Store\Orders\ListStoreOrdersAction;
 use App\Actions\Store\Orders\ShowStoreOrderAction;
@@ -58,6 +59,18 @@ class StoreOrderController extends Controller
         return response()->json([
             'message' => __('catalog.rider_assigned'),
             'data' => new StoreOrderResource($assign->execute($this->storeIdentity($request, $auth, 'orders.assign'), $order, $request->toData())),
+        ]);
+    }
+
+    public function complete(
+        Request $request,
+        IdentityAuthService $auth,
+        CompleteStoreSelfPickupOrderAction $complete,
+        int $order,
+    ): JsonResponse {
+        return response()->json([
+            'message' => __('catalog.order_completed'),
+            'data' => new StoreOrderResource($complete->execute($this->storeIdentity($request, $auth, 'orders.update-status'), $order)),
         ]);
     }
 

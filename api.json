@@ -15861,6 +15861,52 @@
                 }
             }
         },
+        "/store/orders/{order}/complete": {
+            "post": {
+                "operationId": "v1.store.orders.complete",
+                "tags": [
+                    "StoreOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "order",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Order completed successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/StoreOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
         "/store/orders": {
             "get": {
                 "operationId": "v1.store.orders.index",

@@ -392,6 +392,24 @@ The store normal order rider assignment module uses:
 - `RiderNotificationRepository`
 - `App\Http\Resources\Store\StoreOrderResource`
 
+## Store Self Pickup Order Completion API
+
+```text
+POST /api/v1/store/orders/{order}/complete
+```
+
+This endpoint requires a store Sanctum token with `orders.update-status`. It modernizes legacy `store_api/complete_order.php` by using the authenticated store instead of accepting `store_id` from the payload.
+
+Only normal orders with `order_type=Self Pickup` can be completed through this workflow. Completing the order sets `status=Completed` and `internal_status=7`, matching the legacy completed state. The action records a customer notification using language-file messages. Push delivery remains a future integration concern.
+
+The store self pickup order completion module uses:
+
+- `StoreOrderController::complete`
+- `CompleteStoreSelfPickupOrderAction`
+- `OrderRepository`
+- `CustomerNotificationRepository`
+- `App\Http\Resources\Store\StoreOrderResource`
+
 ## Store Subscription Order Read API
 
 ```text
