@@ -40,3 +40,23 @@ The rider notification module uses:
 - rider notification actions under `App\Actions\Rider\Notifications`
 - `RiderNotificationRepository`
 - `App\Http\Resources\Rider\RiderNotificationResource`
+
+## Rider Page Read API
+
+```text
+GET /api/v1/rider/pages
+GET /api/v1/rider/pages/{page}
+```
+
+These endpoints require a rider Sanctum token with `orders.view`. They modernize legacy `rider_api/u_pagelist.php` by returning active pages only.
+
+The list endpoint supports `search` across page title and description. It accepts `per_page` and returns Laravel pagination metadata. Show operations only return active pages. Page creation and maintenance remain admin-side workflows.
+
+The rider page module uses:
+
+- `App\Http\Controllers\Api\V1\Rider\RiderPageController`
+- `ListRiderResourcesRequest`
+- `App\Data\Rider\ListRiderQueryData`
+- rider page actions under `App\Actions\Rider\Pages`
+- `PageRepository`
+- `App\Http\Resources\Rider\RiderPageResource`
