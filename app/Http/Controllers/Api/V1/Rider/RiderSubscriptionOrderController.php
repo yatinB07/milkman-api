@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1\Rider;
 
+use App\Actions\Rider\SubscriptionOrders\CompleteRiderSubscriptionOrderAction;
 use App\Actions\Rider\SubscriptionOrders\DecideRiderSubscriptionOrderAction;
 use App\Actions\Rider\SubscriptionOrders\ListRiderSubscriptionOrdersAction;
 use App\Actions\Rider\SubscriptionOrders\ShowRiderSubscriptionOrderAction;
 use App\Exceptions\Auth\MissingPermissionException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Rider\RiderOrderCompletionRequest;
 use App\Http\Requests\Rider\RiderOrderDecisionRequest;
 use App\Http\Requests\Rider\RiderOrderHistoryRequest;
 use App\Http\Resources\Rider\RiderSubscriptionOrderResource;
@@ -44,6 +46,18 @@ class RiderSubscriptionOrderController extends Controller
         return response()->json([
             'message' => __('catalog.subscription_order_decision_updated'),
             'data' => new RiderSubscriptionOrderResource($decide->execute($this->riderIdentity($request, $auth, 'orders.update-status'), $subscriptionOrder, $request->toData())),
+        ]);
+    }
+
+    public function complete(
+        RiderOrderCompletionRequest $request,
+        IdentityAuthService $auth,
+        CompleteRiderSubscriptionOrderAction $complete,
+        int $subscriptionOrder,
+    ): JsonResponse {
+        return response()->json([
+            'message' => __('catalog.subscription_order_completed'),
+            'data' => new RiderSubscriptionOrderResource($complete->execute($this->riderIdentity($request, $auth, 'orders.update-status'), $subscriptionOrder, $request->toData())),
         ]);
     }
 

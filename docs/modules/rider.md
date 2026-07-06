@@ -181,3 +181,28 @@ The rider subscription order decision module uses:
 - `CustomerNotificationRepository`
 - `StoreNotificationRepository`
 - `App\Http\Resources\Rider\RiderSubscriptionOrderResource`
+
+## Rider Subscription Order Completion API
+
+```text
+POST /api/v1/rider/subscription-orders/{subscriptionOrder}/complete
+```
+
+This endpoint requires a rider Sanctum token with `orders.update-status`. It modernizes legacy `rider_api/sub_complete.php` by using the authenticated rider instead of accepting `rider_id` from the payload.
+
+Payload:
+
+- `signature_image`: base64 encoded signature image. Data URI prefixes such as `data:image/png;base64,` are accepted.
+
+The workflow only completes an assigned subscription order after every subscription item has all delivery dates marked complete. Completing the order stores the signature on the public disk, sets `status=Completed`, sets `internal_status=10`, and records the `signature_path`. The action records customer/store notifications using language-file messages. Push delivery remains a future integration concern.
+
+The rider subscription order completion module uses:
+
+- `RiderSubscriptionOrderController::complete`
+- `RiderOrderCompletionRequest`
+- `App\Data\Rider\RiderOrderCompletionData`
+- `CompleteRiderSubscriptionOrderAction`
+- `SubscriptionOrderRepository`
+- `CustomerNotificationRepository`
+- `StoreNotificationRepository`
+- `App\Http\Resources\Rider\RiderSubscriptionOrderResource`

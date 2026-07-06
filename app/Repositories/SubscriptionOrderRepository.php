@@ -222,6 +222,17 @@ class SubscriptionOrderRepository
         return $order->refresh()->load(['paymentMethod', 'items']);
     }
 
+    public function markRiderCompleted(SubscriptionOrder $order, string $signaturePath): SubscriptionOrder
+    {
+        $order->update([
+            'status' => 'Completed',
+            'internal_status' => 10,
+            'signature_path' => $signaturePath,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'items']);
+    }
+
     public function markStoreAccepted(SubscriptionOrder $order): SubscriptionOrder
     {
         $order->update([

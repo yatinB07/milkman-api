@@ -12736,6 +12736,65 @@
                 }
             }
         },
+        "/rider/subscription-orders/{subscriptionOrder}/complete": {
+            "post": {
+                "operationId": "v1.rider.subscription-orders.complete",
+                "tags": [
+                    "RiderSubscriptionOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "subscriptionOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RiderOrderCompletionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Subscription order completed successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/RiderSubscriptionOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/rider/subscription-orders": {
             "get": {
                 "operationId": "v1.rider.subscription-orders.index",
@@ -26085,6 +26144,9 @@
                     "internal_status": {
                         "type": "string"
                     },
+                    "signature_path": {
+                        "type": "string"
+                    },
                     "payment_method": {
                         "type": [
                             "object",
@@ -26137,6 +26199,7 @@
                     "order_type",
                     "store_charge",
                     "internal_status",
+                    "signature_path",
                     "created_at",
                     "updated_at"
                 ],

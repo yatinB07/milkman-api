@@ -34,6 +34,7 @@ class RiderSubscriptionOrderResource extends JsonResource
             'order_type' => $this->resource->getAttribute('order_type'),
             'store_charge' => $this->resource->getAttribute('store_charge'),
             'internal_status' => $this->resource->getAttribute('internal_status'),
+            'signature_path' => $this->resource->getAttribute('signature_path'),
             'payment_method' => $this->whenLoaded('paymentMethod', fn (): ?array => $this->resource->getRelation('paymentMethod') ? [
                 'id' => $this->resource->getRelation('paymentMethod')->getKey(),
                 'title' => $this->resource->getRelation('paymentMethod')->getAttribute('title'),
