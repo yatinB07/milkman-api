@@ -109,6 +109,31 @@ The rider normal order decision module uses:
 - `StoreNotificationRepository`
 - `App\Http\Resources\Rider\RiderOrderResource`
 
+## Rider Normal Order Completion API
+
+```text
+POST /api/v1/rider/orders/{order}/complete
+```
+
+This endpoint requires a rider Sanctum token with `orders.update-status`. It modernizes legacy `rider_api/complete_order.php` by using the authenticated rider instead of accepting `rider_id` from the payload.
+
+Payload:
+
+- `signature_image`: base64 encoded signature image. Data URI prefixes such as `data:image/png;base64,` are accepted.
+
+Only assigned normal orders with `order_type=Delivery` can be completed through this workflow. Completing the order stores the signature on the public disk, sets `status=Completed`, sets `internal_status=7`, and records the `signature_path`. The action records customer/store notifications using language-file messages. Push delivery remains a future integration concern.
+
+The rider normal order completion module uses:
+
+- `RiderOrderController::complete`
+- `RiderOrderCompletionRequest`
+- `App\Data\Rider\RiderOrderCompletionData`
+- `CompleteRiderOrderAction`
+- `OrderRepository`
+- `CustomerNotificationRepository`
+- `StoreNotificationRepository`
+- `App\Http\Resources\Rider\RiderOrderResource`
+
 ## Rider Subscription Order Read API
 
 ```text

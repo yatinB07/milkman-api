@@ -12162,6 +12162,65 @@
                 }
             }
         },
+        "/rider/orders/{order}/complete": {
+            "post": {
+                "operationId": "v1.rider.orders.complete",
+                "tags": [
+                    "RiderOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "order",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RiderOrderCompletionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Order completed successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/RiderOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/rider/orders": {
             "get": {
                 "operationId": "v1.rider.orders.index",
@@ -25585,6 +25644,18 @@
                 ],
                 "title": "RiderNotificationResource"
             },
+            "RiderOrderCompletionRequest": {
+                "type": "object",
+                "properties": {
+                    "signature_image": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "signature_image"
+                ],
+                "title": "RiderOrderCompletionRequest"
+            },
             "RiderOrderDecisionRequest": {
                 "type": "object",
                 "properties": {
@@ -25680,6 +25751,9 @@
                     "internal_status": {
                         "type": "string"
                     },
+                    "signature_path": {
+                        "type": "string"
+                    },
                     "payment_method": {
                         "type": [
                             "object",
@@ -25732,6 +25806,7 @@
                     "order_type",
                     "store_charge",
                     "internal_status",
+                    "signature_path",
                     "created_at",
                     "updated_at"
                 ],

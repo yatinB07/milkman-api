@@ -246,6 +246,9 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::post('orders/{order}/decision', [RiderOrderController::class, 'decide'])
                 ->whereNumber('order')
                 ->name('orders.decision');
+            Route::post('orders/{order}/complete', [RiderOrderController::class, 'complete'])
+                ->whereNumber('order')
+                ->name('orders.complete');
             Route::apiResource('orders', RiderOrderController::class)
                 ->only(['index', 'show']);
             Route::apiResource('subscription-orders', RiderSubscriptionOrderController::class)

@@ -223,6 +223,17 @@ class OrderRepository
         return $order->refresh()->load(['paymentMethod', 'items']);
     }
 
+    public function markRiderCompleted(Order $order, string $signaturePath): Order
+    {
+        $order->update([
+            'status' => 'Completed',
+            'internal_status' => 7,
+            'signature_path' => $signaturePath,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'items']);
+    }
+
     public function markStoreAccepted(Order $order): Order
     {
         $order->update([
