@@ -82,3 +82,25 @@ The rider normal order module uses:
 - rider order actions under `App\Actions\Rider\Orders`
 - `OrderRepository`
 - `App\Http\Resources\Rider\RiderOrderResource`
+
+## Rider Subscription Order Read API
+
+```text
+GET /api/v1/rider/subscription-orders
+GET /api/v1/rider/subscription-orders/{subscriptionOrder}
+```
+
+These endpoints require a rider Sanctum token with `orders.view`. They modernize legacy `rider_api/u_subscription_history.php` and `rider_api/d_sub_order_product_list.php` by using the authenticated rider instead of accepting `rider_id` from the payload.
+
+The list endpoint accepts `status=current|past`, `search`, and `per_page`. `current` excludes `Completed` and `Cancelled`; `past` includes only `Completed` and `Cancelled`, matching the legacy current/history split. Search covers transaction id, customer name, customer mobile, address, status, and order type. Show operations are rider-scoped and include subscription item schedule data derived from total/completed dates.
+
+This module is read-only. Rider subscription order status decisions, completion, and date workflows remain separate workflows from legacy `sub_decision.php`, `sub_complete.php`, and `completedate.php`.
+
+The rider subscription order module uses:
+
+- `App\Http\Controllers\Api\V1\Rider\RiderSubscriptionOrderController`
+- `RiderOrderHistoryRequest`
+- `App\Data\Rider\RiderOrderHistoryQueryData`
+- rider subscription order actions under `App\Actions\Rider\SubscriptionOrders`
+- `SubscriptionOrderRepository`
+- `App\Http\Resources\Rider\RiderSubscriptionOrderResource`
