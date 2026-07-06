@@ -60,3 +60,25 @@ The rider page module uses:
 - rider page actions under `App\Actions\Rider\Pages`
 - `PageRepository`
 - `App\Http\Resources\Rider\RiderPageResource`
+
+## Rider Normal Order Read API
+
+```text
+GET /api/v1/rider/orders
+GET /api/v1/rider/orders/{order}
+```
+
+These endpoints require a rider Sanctum token with `orders.view`. They modernize legacy `rider_api/u_order_history.php` and `rider_api/u_order_information.php` by using the authenticated rider instead of accepting `rider_id` from the payload.
+
+The list endpoint accepts `status=current|past`, `search`, and `per_page`. `current` excludes `Completed` and `Cancelled`; `past` includes only `Completed` and `Cancelled`, matching the legacy current/history split. Search covers transaction id, customer name, customer mobile, address, status, and order type. Show operations are rider-scoped, so a rider cannot read another rider's order.
+
+This module is read-only. Rider order status decisions and completion flows remain separate workflows from legacy `make_decision.php` and `complete_order.php`.
+
+The rider normal order module uses:
+
+- `App\Http\Controllers\Api\V1\Rider\RiderOrderController`
+- `RiderOrderHistoryRequest`
+- `App\Data\Rider\RiderOrderHistoryQueryData`
+- rider order actions under `App\Actions\Rider\Orders`
+- `OrderRepository`
+- `App\Http\Resources\Rider\RiderOrderResource`

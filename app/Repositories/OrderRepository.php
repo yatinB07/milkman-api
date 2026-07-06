@@ -6,6 +6,7 @@ use App\Data\Customer\CustomerOrderRatingData;
 use App\Exceptions\Catalog\OrderNotFoundException;
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Rider;
 use App\Models\Store;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -151,6 +152,46 @@ class OrderRepository
         $order = Order::query()
             ->with(['paymentMethod', 'rider', 'items'])
             ->whereBelongsTo($store)
+            ->find($id);
+
+        if (! $order) {
+            throw new OrderNotFoundException;
+        }
+
+        return $order;
+    }
+
+    /** @return LengthAwarePaginator<int, Order> */
+    public function paginateForRider(Rider $rider, string $status, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return Order::query()
+            ->with(['paymentMethod', 'items'])
+            ->whereBelongsTo($rider)
+            ->when($status === 'current', function ($query): void {
+                $query->whereNotIn('status', ['Completed', 'Cancelled']);
+            })
+            ->when($status === 'past', function ($query): void {
+                $query->whereIn('status', ['Completed', 'Cancelled']);
+            })
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('transaction_id', 'like', "%{$search}%")
+                        ->orWhere('customer_name', 'like', "%{$search}%")
+                        ->orWhere('customer_mobile', 'like', "%{$search}%")
+                        ->orWhere('address', 'like', "%{$search}%")
+                        ->orWhere('status', 'like', "%{$search}%")
+                        ->orWhere('order_type', 'like', "%{$search}%");
+                });
+            })
+            ->latest('id')
+            ->paginate($perPage);
+    }
+
+    public function findForRider(Rider $rider, int $id): Order
+    {
+        $order = Order::query()
+            ->with(['paymentMethod', 'items'])
+            ->whereBelongsTo($rider)
             ->find($id);
 
         if (! $order) {
