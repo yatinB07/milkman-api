@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Exceptions\Catalog\RiderNotificationNotFoundException;
+use App\Models\Rider;
 use App\Models\RiderNotification;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -38,6 +39,34 @@ class RiderNotificationRepository
     {
         $notification = RiderNotification::query()
             ->with('rider')
+            ->find($id);
+
+        if (! $notification) {
+            throw new RiderNotificationNotFoundException;
+        }
+
+        return $notification;
+    }
+
+    /** @return LengthAwarePaginator<int, RiderNotification> */
+    public function paginateForRider(Rider $rider, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return RiderNotification::query()
+            ->whereBelongsTo($rider)
+            ->when($search, function ($query, string $search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('message', 'like', "%{$search}%");
+                });
+            })
+            ->latest('notified_at')
+            ->paginate($perPage);
+    }
+
+    public function findForRider(Rider $rider, int $id): RiderNotification
+    {
+        $notification = RiderNotification::query()
+            ->whereBelongsTo($rider)
             ->find($id);
 
         if (! $notification) {

@@ -20,3 +20,23 @@ The rider dashboard module uses:
 - `ShowRiderDashboardAction`
 - `RiderRepository::dashboardMetrics`
 - `App\Http\Resources\Rider\RiderDashboardResource`
+
+## Rider Notification Read API
+
+```text
+GET /api/v1/rider/notifications
+GET /api/v1/rider/notifications/{notification}
+```
+
+These endpoints require a rider Sanctum token with `orders.view`. They modernize legacy `rider_api/u_notification_list.php` by using the authenticated rider instead of accepting `rider_id` from the payload.
+
+The list endpoint supports `search` across notification title and message. It accepts `per_page` and returns Laravel pagination metadata. Show operations are rider-scoped, so a rider cannot read another rider's notification. Notification creation remains part of order assignment and status workflows.
+
+The rider notification module uses:
+
+- `App\Http\Controllers\Api\V1\Rider\RiderNotificationController`
+- `ListRiderResourcesRequest`
+- `App\Data\Rider\ListRiderQueryData`
+- rider notification actions under `App\Actions\Rider\Notifications`
+- `RiderNotificationRepository`
+- `App\Http\Resources\Rider\RiderNotificationResource`
