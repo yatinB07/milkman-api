@@ -21,6 +21,22 @@ The rider dashboard module uses:
 - `RiderRepository::dashboardMetrics`
 - `App\Http\Resources\Rider\RiderDashboardResource`
 
+## Rider Account Deactivation API
+
+```text
+DELETE /api/v1/rider/account
+```
+
+This endpoint requires a rider Sanctum token with `orders.view`. It modernizes legacy `rider_api/acc_delete.php`, which set `tbl_rider.status=0` for the provided rider id.
+
+The Laravel workflow uses the authenticated rider instead of accepting `rider_id`, sets `is_active=false`, and revokes the rider's active API tokens. The rider row is not physically deleted, so store assignments, orders, notifications, and audit references remain intact.
+
+The rider account deactivation module uses:
+
+- `RiderAccountController::destroy`
+- `DeactivateRiderAccountAction`
+- `RiderRepository::deactivateAccount`
+
 ## Rider Notification Read API
 
 ```text

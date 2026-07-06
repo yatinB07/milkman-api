@@ -11487,6 +11487,38 @@
                 }
             }
         },
+        "/rider/account": {
+            "delete": {
+                "operationId": "v1.rider.account.destroy",
+                "tags": [
+                    "RiderAccount"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Rider account deactivated successfully."
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
         "/rider/dashboard": {
             "get": {
                 "operationId": "v1.rider.dashboard.show",

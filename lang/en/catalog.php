@@ -109,6 +109,7 @@ return [
     'rider_notification_deleted' => 'Rider notification deleted successfully.',
     'rider_notification_not_found' => 'Rider notification was not found.',
     'rider_notification_updated' => 'Rider notification updated successfully.',
+    'rider_account_deactivated' => 'Rider account deactivated successfully.',
     'rider_not_found' => 'Rider was not found.',
     'rider_assigned' => 'Rider assigned successfully.',
     'rider_order_assigned_title' => 'Order #:order Assigned.',

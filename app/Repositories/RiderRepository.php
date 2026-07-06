@@ -141,6 +141,14 @@ class RiderRepository
         return $rider->refresh()->load('store');
     }
 
+    public function deactivateAccount(Rider $rider): Rider
+    {
+        $rider->update(['is_active' => false]);
+        $rider->tokens()->delete();
+
+        return $rider->refresh()->load('store');
+    }
+
     public function delete(Rider $rider): void
     {
         $rider->delete();
