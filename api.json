@@ -11487,6 +11487,37 @@
                 }
             }
         },
+        "/rider/dashboard": {
+            "get": {
+                "operationId": "v1.rider.dashboard.show",
+                "tags": [
+                    "RiderDashboard"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`RiderDashboardResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/RiderDashboardResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
         "/admin/rider-notifications": {
             "get": {
                 "operationId": "v1.admin.rider-notifications.index",
@@ -24454,6 +24485,26 @@
                     "updated_at"
                 ],
                 "title": "ProductVariantResource"
+            },
+            "RiderDashboardResource": {
+                "type": "object",
+                "properties": {
+                    "counts": {
+                        "type": "string"
+                    },
+                    "cards": {
+                        "type": "string"
+                    },
+                    "withdraw_limit": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "counts",
+                    "cards",
+                    "withdraw_limit"
+                ],
+                "title": "RiderDashboardResource"
             },
             "RiderNotificationRequest": {
                 "type": "object",

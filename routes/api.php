@@ -48,6 +48,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerStoreController;
 use App\Http\Controllers\Api\V1\Customer\CustomerSubscriptionOrderController;
 use App\Http\Controllers\Api\V1\Customer\CustomerWalletController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\Rider\RiderDashboardController;
 use App\Http\Controllers\Api\V1\Store\StoreAccountController;
 use App\Http\Controllers\Api\V1\Store\StoreCategoryController as StoreStoreCategoryController;
 use App\Http\Controllers\Api\V1\Store\StoreCouponController;
@@ -226,6 +227,14 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
             Route::get('subscription-orders/{subscriptionOrder}', [CustomerSubscriptionOrderController::class, 'show'])
                 ->whereNumber('subscriptionOrder')
                 ->name('subscription-orders.show');
+        });
+
+    Route::prefix('rider')
+        ->middleware('auth:sanctum')
+        ->name('rider.')
+        ->group(function (): void {
+            Route::get('dashboard', [RiderDashboardController::class, 'show'])
+                ->name('dashboard.show');
         });
 
     Route::prefix('store')

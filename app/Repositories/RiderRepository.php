@@ -3,8 +3,10 @@
 namespace App\Repositories;
 
 use App\Exceptions\Catalog\RiderNotFoundException;
+use App\Models\Order;
 use App\Models\Rider;
 use App\Models\Store;
+use App\Models\SubscriptionOrder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class RiderRepository
@@ -84,6 +86,51 @@ class RiderRepository
         }
 
         return $rider;
+    }
+
+    /** @return array<string, mixed> */
+    public function dashboardMetrics(Rider $rider): array
+    {
+        $riderId = (int) $rider->getKey();
+        $counts = [
+            'normal_orders' => Order::query()->where('rider_id', $riderId)->count(),
+            'completed_normal_orders' => Order::query()
+                ->where('rider_id', $riderId)
+                ->where('status', 'Completed')
+                ->count(),
+            'subscription_orders' => SubscriptionOrder::query()->where('rider_id', $riderId)->count(),
+            'completed_subscription_orders' => SubscriptionOrder::query()
+                ->where('rider_id', $riderId)
+                ->where('status', 'Completed')
+                ->count(),
+        ];
+
+        return [
+            'counts' => $counts,
+            'cards' => [
+                [
+                    'title' => __('catalog.rider_dashboard_normal_orders'),
+                    'report_data' => $counts['normal_orders'],
+                    'url' => 'images/dashboard/myorders.png',
+                ],
+                [
+                    'title' => __('catalog.rider_dashboard_completed_orders'),
+                    'report_data' => $counts['completed_normal_orders'],
+                    'url' => 'images/dashboard/myorders.png',
+                ],
+                [
+                    'title' => __('catalog.rider_dashboard_subscription_orders'),
+                    'report_data' => $counts['subscription_orders'],
+                    'url' => 'images/dashboard/myprescription.png',
+                ],
+                [
+                    'title' => __('catalog.rider_dashboard_completed_orders'),
+                    'report_data' => $counts['completed_subscription_orders'],
+                    'url' => 'images/dashboard/myprescription.png',
+                ],
+            ],
+            'withdraw_limit' => '0.00',
+        ];
     }
 
     /** @param array<string, mixed> $attributes */
