@@ -3269,6 +3269,60 @@
                 }
             }
         },
+        "/customer/auth/mobile-login": {
+            "post": {
+                "operationId": "v1.customer.auth.mobile-login",
+                "tags": [
+                    "CustomerMobileLogin"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerMobileLoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string"
+                                                },
+                                                "user": {
+                                                    "$ref": "#/components/schemas/IdentityProfileResource"
+                                                }
+                                            },
+                                            "required": [
+                                                "token",
+                                                "user"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                },
+                "security": []
+            }
+        },
         "/admin/customer-notifications": {
             "get": {
                 "operationId": "v1.admin.customer-notifications.index",
@@ -23502,6 +23556,28 @@
                 ],
                 "title": "CustomerMobileAvailabilityRequest"
             },
+            "CustomerMobileLoginRequest": {
+                "type": "object",
+                "properties": {
+                    "country_code": {
+                        "type": "string",
+                        "maxLength": 8
+                    },
+                    "mobile": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "country_code",
+                    "mobile",
+                    "password"
+                ],
+                "title": "CustomerMobileLoginRequest"
+            },
             "CustomerNotificationRequest": {
                 "type": "object",
                 "properties": {
@@ -25121,7 +25197,8 @@
                         "type": "string"
                     },
                     "type": {
-                        "type": "string"
+                        "type": "string",
+                        "const": "customer"
                     },
                     "name": {
                         "type": "string"

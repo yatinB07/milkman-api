@@ -72,6 +72,17 @@ class CustomerRepository
         return $customer;
     }
 
+    public function findLoginCandidateByCountryCodeAndIdentifier(string $countryCode, string $identifier): ?Customer
+    {
+        return Customer::query()
+            ->where('country_code', $countryCode)
+            ->where(function ($query) use ($identifier): void {
+                $query->where('mobile', $identifier)
+                    ->orWhere('email', $identifier);
+            })
+            ->first();
+    }
+
     public function updatePassword(Customer $customer, string $password): Customer
     {
         $customer->update(['password' => $password]);

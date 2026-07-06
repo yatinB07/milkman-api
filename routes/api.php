@@ -39,6 +39,7 @@ use App\Http\Controllers\Api\V1\Customer\CustomerCartController;
 use App\Http\Controllers\Api\V1\Customer\CustomerCouponController;
 use App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController;
 use App\Http\Controllers\Api\V1\Customer\CustomerHomeController;
+use App\Http\Controllers\Api\V1\Customer\CustomerMobileLoginController;
 use App\Http\Controllers\Api\V1\Customer\CustomerNotificationController as CustomerNotificationApiController;
 use App\Http\Controllers\Api\V1\Customer\CustomerOrderController;
 use App\Http\Controllers\Api\V1\Customer\CustomerPageController;
@@ -337,6 +338,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('email-availability');
             Route::post('mobile-availability', [CustomerAvailabilityController::class, 'mobile'])
                 ->name('mobile-availability');
+            Route::post('mobile-login', [CustomerMobileLoginController::class, 'store'])
+                ->name('mobile-login');
             Route::post('password/reset', [CustomerPasswordResetController::class, 'store'])
                 ->name('password.reset');
         });

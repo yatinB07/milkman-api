@@ -16,6 +16,7 @@ POST /api/v1/{identity}/auth/logout
 GET  /api/v1/{identity}/auth/permissions/{permission}
 POST /api/v1/customer/auth/email-availability
 POST /api/v1/customer/auth/mobile-availability
+POST /api/v1/customer/auth/mobile-login
 POST /api/v1/customer/auth/password/reset
 ```
 
@@ -31,6 +32,8 @@ Login returns:
 The profile and logout endpoints require `auth:sanctum`. A token issued for one identity type cannot be used against another identity area.
 
 The customer availability endpoints are public registration helpers mapped from the legacy customer `email_check.php` and `mobile_check.php` endpoints. They return a boolean `available` value for a candidate email or country-code/mobile pair. `CustomerRepository` performs the existence checks, including soft-deleted rows, because unique identity values should not be reused accidentally while old customer records remain restorable.
+
+The customer mobile login endpoint maps legacy `u_login_user.php`. It accepts `country_code`, `mobile`, and `password`; the `mobile` field intentionally accepts either a mobile number or email address to preserve the legacy `(mobile OR email)` lookup. The shared `{identity}/auth/login` endpoint remains email-only for admin, store, rider, and customer logins.
 
 The customer password reset endpoint maps the legacy `u_forget_password.php` behavior. The legacy endpoint reset the password by mobile number; the Laravel endpoint requires both `country_code` and `mobile` so two regions can safely share the same local number. Password persistence stays in `CustomerRepository`, and the customer model hashed cast stores the new password securely.
 
