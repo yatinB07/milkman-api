@@ -27,6 +27,22 @@ The store dashboard module uses:
 - `StoreRepository::dashboardMetrics`
 - `App\Http\Resources\Store\StoreDashboardResource`
 
+## Store Account Deactivation API
+
+```text
+DELETE /api/v1/store/account
+```
+
+This endpoint requires a store Sanctum token with `stores.update`. It modernizes legacy `store_api/acc_delete.php`, which set `service_details.status=0` for the provided store id.
+
+The Laravel workflow uses the authenticated store instead of accepting `store_id`, sets `is_active=false`, and revokes the store's active API tokens. The store row is not physically deleted, so admin history, orders, payouts, and audit references remain intact.
+
+The store account deactivation module uses:
+
+- `StoreAccountController::destroy`
+- `DeactivateStoreAccountAction`
+- `StoreRepository::deactivateAccount`
+
 ## Store Category CRUD
 
 ```text

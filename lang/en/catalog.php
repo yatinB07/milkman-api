@@ -118,6 +118,7 @@ return [
     'store_category_deleted' => 'Store category deleted successfully.',
     'store_category_not_found' => 'Store category was not found.',
     'store_category_updated' => 'Store category updated successfully.',
+    'store_account_deactivated' => 'Store account deactivated successfully.',
     'store_gallery_image_created' => 'Store gallery image created successfully.',
     'store_gallery_image_deleted' => 'Store gallery image deleted successfully.',
     'store_gallery_image_not_found' => 'Store gallery image was not found.',

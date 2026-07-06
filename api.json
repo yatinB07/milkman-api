@@ -12579,6 +12579,38 @@
                 }
             }
         },
+        "/store/account": {
+            "delete": {
+                "operationId": "v1.store.account.destroy",
+                "tags": [
+                    "StoreAccount"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Store account deactivated successfully."
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
         "/admin/store-categories": {
             "get": {
                 "operationId": "v1.admin.store-categories.index",

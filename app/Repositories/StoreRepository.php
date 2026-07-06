@@ -245,6 +245,14 @@ class StoreRepository
         return $store->refresh()->load('zone');
     }
 
+    public function deactivateAccount(Store $store): Store
+    {
+        $store->update(['is_active' => false]);
+        $store->tokens()->delete();
+
+        return $store->refresh()->load('zone');
+    }
+
     public function delete(Store $store): void
     {
         $store->delete();
