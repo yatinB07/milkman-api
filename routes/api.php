@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\AdminProfileController;
 use App\Http\Controllers\Api\V1\Admin\BannerController;
 use App\Http\Controllers\Api\V1\Admin\CashCollectionController;
 use App\Http\Controllers\Api\V1\Admin\CategoryController;
@@ -96,6 +97,10 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
         ->middleware('auth:sanctum')
         ->name('admin.')
         ->group(function (): void {
+            Route::get('profile', [AdminProfileController::class, 'show'])
+                ->name('profile.show');
+            Route::put('profile', [AdminProfileController::class, 'update'])
+                ->name('profile.update');
             Route::apiResource('banners', BannerController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('categories', CategoryController::class)

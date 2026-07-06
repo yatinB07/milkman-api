@@ -16,6 +16,84 @@
         }
     ],
     "paths": {
+        "/admin/profile": {
+            "get": {
+                "operationId": "v1.admin.profile.show",
+                "tags": [
+                    "AdminProfile"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`AdminProfileResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/AdminProfileResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "put": {
+                "operationId": "v1.admin.profile.update",
+                "tags": [
+                    "AdminProfile"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AdminProfileRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Admin profile updated successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/AdminProfileResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/admin/banners": {
             "get": {
                 "operationId": "v1.admin.banners.index",
@@ -22361,6 +22439,65 @@
             }
         },
         "schemas": {
+            "AdminProfileRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "username": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "password": {
+                        "type": "string",
+                        "minLength": 8
+                    }
+                },
+                "required": [
+                    "name",
+                    "username",
+                    "password"
+                ],
+                "title": "AdminProfileRequest"
+            },
+            "AdminProfileResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "is_active": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "username",
+                    "email",
+                    "is_active",
+                    "created_at",
+                    "updated_at"
+                ],
+                "title": "AdminProfileResource"
+            },
             "App.Http.Requests.Customer.CustomerAddressRequest": {
                 "type": "object",
                 "properties": {

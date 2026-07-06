@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'admin_profile_updated' => 'Admin profile updated successfully.',
     'inactive_account' => 'This account is inactive.',
     'customer_email_available' => 'New email address.',
     'customer_email_unavailable' => 'Email address already exists.',
