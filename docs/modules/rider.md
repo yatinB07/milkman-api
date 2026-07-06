@@ -206,3 +206,26 @@ The rider subscription order completion module uses:
 - `CustomerNotificationRepository`
 - `StoreNotificationRepository`
 - `App\Http\Resources\Rider\RiderSubscriptionOrderResource`
+
+## Rider Subscription Delivery Date Completion API
+
+```text
+POST /api/v1/rider/subscription-orders/{subscriptionOrder}/items/{item}/complete-date
+```
+
+This endpoint requires a rider Sanctum token with `orders.update-status`. It modernizes legacy `rider_api/completedate.php` by using the authenticated rider and route model ids instead of accepting unscoped payload identifiers.
+
+Payload:
+
+- `selected_date`: delivery date in `YYYY-MM-DD` format
+
+The selected date must be part of the subscription item's `total_dates`, must not already be present in `completed_dates`, and must be today or a past date. Completing the date appends it to `completed_dates` and returns the refreshed subscription order with schedule data.
+
+The rider subscription delivery date completion module uses:
+
+- `RiderSubscriptionOrderController::completeDate`
+- `RiderSubscriptionDeliveryDateRequest`
+- `App\Data\Rider\RiderSubscriptionDeliveryDateData`
+- `CompleteRiderSubscriptionDeliveryDateAction`
+- `SubscriptionOrderItemRepository`
+- `App\Http\Resources\Rider\RiderSubscriptionOrderResource`

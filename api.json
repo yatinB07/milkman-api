@@ -12795,6 +12795,73 @@
                 }
             }
         },
+        "/rider/subscription-orders/{subscriptionOrder}/items/{item}/complete-date": {
+            "post": {
+                "operationId": "v1.rider.subscription-orders.items.complete-date",
+                "tags": [
+                    "RiderSubscriptionOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "subscriptionOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "item",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RiderSubscriptionDeliveryDateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Subscription delivery date completed successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/RiderSubscriptionOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/rider/subscription-orders": {
             "get": {
                 "operationId": "v1.rider.subscription-orders.index",
@@ -26071,6 +26138,19 @@
                     "updated_at"
                 ],
                 "title": "RiderResource"
+            },
+            "RiderSubscriptionDeliveryDateRequest": {
+                "type": "object",
+                "properties": {
+                    "selected_date": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                },
+                "required": [
+                    "selected_date"
+                ],
+                "title": "RiderSubscriptionDeliveryDateRequest"
             },
             "RiderSubscriptionOrderResource": {
                 "type": "object",

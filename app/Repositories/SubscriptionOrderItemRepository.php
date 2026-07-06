@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Exceptions\Catalog\SubscriptionOrderItemNotFoundException;
 use App\Models\Customer;
+use App\Models\Rider;
 use App\Models\SubscriptionOrderItem;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -63,6 +64,34 @@ class SubscriptionOrderItemRepository
         }
 
         return $item;
+    }
+
+    public function findForRiderSubscriptionOrder(Rider $rider, int $orderId, int $itemId): SubscriptionOrderItem
+    {
+        $item = SubscriptionOrderItem::query()
+            ->with('subscriptionOrder')
+            ->whereKey($itemId)
+            ->where('subscription_order_id', $orderId)
+            ->whereHas('subscriptionOrder', function ($query) use ($rider): void {
+                $query->whereBelongsTo($rider);
+            })
+            ->first();
+
+        if (! $item) {
+            throw new SubscriptionOrderItemNotFoundException;
+        }
+
+        return $item;
+    }
+
+    /** @param list<string> $completedDates */
+    public function markDeliveryDateCompleted(SubscriptionOrderItem $item, string $selectedDate, array $completedDates): SubscriptionOrderItem
+    {
+        $item->update([
+            'completed_dates' => implode(',', array_values(array_unique([...$completedDates, $selectedDate]))),
+        ]);
+
+        return $item->refresh()->load('subscriptionOrder');
     }
 
     /** @param array<string, mixed> $attributes */

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Rider;
 
+use App\Actions\Rider\SubscriptionOrders\CompleteRiderSubscriptionDeliveryDateAction;
 use App\Actions\Rider\SubscriptionOrders\CompleteRiderSubscriptionOrderAction;
 use App\Actions\Rider\SubscriptionOrders\DecideRiderSubscriptionOrderAction;
 use App\Actions\Rider\SubscriptionOrders\ListRiderSubscriptionOrdersAction;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Rider\RiderOrderCompletionRequest;
 use App\Http\Requests\Rider\RiderOrderDecisionRequest;
 use App\Http\Requests\Rider\RiderOrderHistoryRequest;
+use App\Http\Requests\Rider\RiderSubscriptionDeliveryDateRequest;
 use App\Http\Resources\Rider\RiderSubscriptionOrderResource;
 use App\Models\Rider;
 use App\Services\IdentityAuthService;
@@ -58,6 +60,19 @@ class RiderSubscriptionOrderController extends Controller
         return response()->json([
             'message' => __('catalog.subscription_order_completed'),
             'data' => new RiderSubscriptionOrderResource($complete->execute($this->riderIdentity($request, $auth, 'orders.update-status'), $subscriptionOrder, $request->toData())),
+        ]);
+    }
+
+    public function completeDate(
+        RiderSubscriptionDeliveryDateRequest $request,
+        IdentityAuthService $auth,
+        CompleteRiderSubscriptionDeliveryDateAction $completeDate,
+        int $subscriptionOrder,
+        int $item,
+    ): JsonResponse {
+        return response()->json([
+            'message' => __('catalog.subscription_delivery_date_completed'),
+            'data' => new RiderSubscriptionOrderResource($completeDate->execute($this->riderIdentity($request, $auth, 'orders.update-status'), $subscriptionOrder, $item, $request->toData())),
         ]);
     }
 
