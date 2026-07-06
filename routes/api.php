@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\V1\Admin\ZoneController;
 use App\Http\Controllers\Api\V1\Auth\IdentityAuthController;
 use App\Http\Controllers\Api\V1\Catalog\PublicCatalogController;
 use App\Http\Controllers\Api\V1\Customer\CustomerAddressController as CustomerAddressApiController;
+use App\Http\Controllers\Api\V1\Customer\CustomerAvailabilityController;
 use App\Http\Controllers\Api\V1\Customer\CustomerCartController;
 use App\Http\Controllers\Api\V1\Customer\CustomerCouponController;
 use App\Http\Controllers\Api\V1\Customer\CustomerFavoriteController;
@@ -326,6 +327,15 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->only(['index', 'show']);
             Route::apiResource('payout-requests', StorePayoutRequestController::class)
                 ->only(['index', 'show', 'store']);
+        });
+
+    Route::prefix('customer/auth')
+        ->name('customer.auth.')
+        ->group(function (): void {
+            Route::post('email-availability', [CustomerAvailabilityController::class, 'email'])
+                ->name('email-availability');
+            Route::post('mobile-availability', [CustomerAvailabilityController::class, 'mobile'])
+                ->name('mobile-availability');
         });
 
     Route::prefix('{identityType}/auth')

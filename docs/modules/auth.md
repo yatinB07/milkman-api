@@ -14,6 +14,8 @@ POST /api/v1/{identity}/auth/login
 GET  /api/v1/{identity}/auth/me
 POST /api/v1/{identity}/auth/logout
 GET  /api/v1/{identity}/auth/permissions/{permission}
+POST /api/v1/customer/auth/email-availability
+POST /api/v1/customer/auth/mobile-availability
 ```
 
 `identity` must be one of `admin`, `customer`, `store`, or `rider`.
@@ -26,6 +28,8 @@ Login returns:
 - Spatie permissions
 
 The profile and logout endpoints require `auth:sanctum`. A token issued for one identity type cannot be used against another identity area.
+
+The customer availability endpoints are public registration helpers mapped from the legacy customer `email_check.php` and `mobile_check.php` endpoints. They return a boolean `available` value for a candidate email or country-code/mobile pair. `CustomerRepository` performs the existence checks, including soft-deleted rows, because unique identity values should not be reused accidentally while old customer records remain restorable.
 
 The permission endpoint verifies a Spatie permission for the authenticated identity and returns:
 

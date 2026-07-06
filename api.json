@@ -2564,6 +2564,106 @@
                 }
             }
         },
+        "/customer/auth/email-availability": {
+            "post": {
+                "operationId": "v1.customer.auth.email-availability",
+                "tags": [
+                    "CustomerAvailability"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerEmailAvailabilityRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerAvailabilityResource"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "New email address.",
+                                                "Email address already exists."
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/customer/auth/mobile-availability": {
+            "post": {
+                "operationId": "v1.customer.auth.mobile-availability",
+                "tags": [
+                    "CustomerAvailability"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerMobileAvailabilityRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/CustomerAvailabilityResource"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "enum": [
+                                                "New mobile number.",
+                                                "Mobile number already exists."
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                },
+                "security": []
+            }
+        },
         "/customer/stores/{store}/cart-data": {
             "get": {
                 "operationId": "v1.customer.stores.cart-data.show",
@@ -23175,6 +23275,22 @@
                 ],
                 "title": "CustomerAddressResource"
             },
+            "CustomerAvailabilityResource": {
+                "type": "object",
+                "properties": {
+                    "field": {
+                        "type": "string"
+                    },
+                    "available": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "field",
+                    "available"
+                ],
+                "title": "CustomerAvailabilityResource"
+            },
             "CustomerCartDataResource": {
                 "type": "object",
                 "properties": {
@@ -23266,6 +23382,20 @@
                 ],
                 "title": "CustomerCartDataResource"
             },
+            "CustomerEmailAvailabilityRequest": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 255
+                    }
+                },
+                "required": [
+                    "email"
+                ],
+                "title": "CustomerEmailAvailabilityRequest"
+            },
             "CustomerHomeResource": {
                 "type": "object",
                 "properties": {
@@ -23310,6 +23440,24 @@
                     "location"
                 ],
                 "title": "CustomerHomeResource"
+            },
+            "CustomerMobileAvailabilityRequest": {
+                "type": "object",
+                "properties": {
+                    "country_code": {
+                        "type": "string",
+                        "maxLength": 8
+                    },
+                    "mobile": {
+                        "type": "string",
+                        "maxLength": 32
+                    }
+                },
+                "required": [
+                    "country_code",
+                    "mobile"
+                ],
+                "title": "CustomerMobileAvailabilityRequest"
             },
             "CustomerNotificationRequest": {
                 "type": "object",

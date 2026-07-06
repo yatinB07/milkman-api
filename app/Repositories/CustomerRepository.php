@@ -42,6 +42,21 @@ class CustomerRepository
         return $customer;
     }
 
+    public function existsByEmail(string $email): bool
+    {
+        return Customer::withTrashed()
+            ->where('email', $email)
+            ->exists();
+    }
+
+    public function existsByCountryCodeAndMobile(string $countryCode, string $mobile): bool
+    {
+        return Customer::withTrashed()
+            ->where('country_code', $countryCode)
+            ->where('mobile', $mobile)
+            ->exists();
+    }
+
     /** @param array<string, mixed> $attributes */
     public function update(Customer $customer, array $attributes): Customer
     {
