@@ -201,6 +201,28 @@ class OrderRepository
         return $order;
     }
 
+    public function markRiderAccepted(Order $order): Order
+    {
+        $order->update([
+            'status' => 'On Route',
+            'internal_status' => 4,
+            'rejection_comment' => null,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'items']);
+    }
+
+    public function markRiderRejected(Order $order, string $comment): Order
+    {
+        $order->update([
+            'rider_id' => null,
+            'internal_status' => 5,
+            'rejection_comment' => $comment,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'items']);
+    }
+
     public function markStoreAccepted(Order $order): Order
     {
         $order->update([

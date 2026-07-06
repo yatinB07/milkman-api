@@ -12103,6 +12103,65 @@
                 }
             }
         },
+        "/rider/orders/{order}/decision": {
+            "post": {
+                "operationId": "v1.rider.orders.decision",
+                "tags": [
+                    "RiderOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "order",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RiderOrderDecisionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Order decision updated successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/RiderOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
         "/rider/orders": {
             "get": {
                 "operationId": "v1.rider.orders.index",
@@ -25525,6 +25584,29 @@
                     "updated_at"
                 ],
                 "title": "RiderNotificationResource"
+            },
+            "RiderOrderDecisionRequest": {
+                "type": "object",
+                "properties": {
+                    "decision": {
+                        "type": "string",
+                        "enum": [
+                            "accepted",
+                            "rejected"
+                        ]
+                    },
+                    "rejection_comment": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 1000
+                    }
+                },
+                "required": [
+                    "decision"
+                ],
+                "title": "RiderOrderDecisionRequest"
             },
             "RiderOrderResource": {
                 "type": "object",

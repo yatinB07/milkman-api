@@ -83,6 +83,32 @@ The rider normal order module uses:
 - `OrderRepository`
 - `App\Http\Resources\Rider\RiderOrderResource`
 
+## Rider Normal Order Decision API
+
+```text
+POST /api/v1/rider/orders/{order}/decision
+```
+
+This endpoint requires a rider Sanctum token with `orders.update-status`. It modernizes legacy `rider_api/make_decision.php` by using the authenticated rider and a named `decision` value instead of the legacy numeric `status` flag.
+
+Payload:
+
+- `decision`: `accepted` or `rejected`
+- `rejection_comment`: required when `decision` is `rejected`
+
+Accepted orders are moved to `On Route` with `internal_status=4`. Rejected orders clear `rider_id`, move `internal_status` to `5`, and store the rejection comment so the store can assign another rider. The action records customer/store notifications using language-file messages. Push delivery remains a future integration concern.
+
+The rider normal order decision module uses:
+
+- `RiderOrderController::decide`
+- `RiderOrderDecisionRequest`
+- `App\Data\Rider\RiderOrderDecisionData`
+- `DecideRiderOrderAction`
+- `OrderRepository`
+- `CustomerNotificationRepository`
+- `StoreNotificationRepository`
+- `App\Http\Resources\Rider\RiderOrderResource`
+
 ## Rider Subscription Order Read API
 
 ```text
