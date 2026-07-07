@@ -5,6 +5,7 @@ namespace App\Actions\Store\PayoutRequests;
 use App\Data\Store\StorePayoutRequestData;
 use App\Enums\PayoutStatus;
 use App\Exceptions\Catalog\StorePayoutExceedsAvailableEarningException;
+use App\Exceptions\Catalog\StorePayoutExceedsWithdrawalLimitException;
 use App\Models\PayoutRequest;
 use App\Models\Store;
 use App\Repositories\PayoutRequestRepository;
@@ -19,6 +20,10 @@ class CreateStorePayoutRequestAction
 
     public function execute(Store $store, StorePayoutRequestData $data): PayoutRequest
     {
+        if ($this->eligibility->exceedsWithdrawalLimit($data->amount())) {
+            throw new StorePayoutExceedsWithdrawalLimitException;
+        }
+
         if (! $this->eligibility->canWithdraw($store, $data->amount())) {
             throw new StorePayoutExceedsAvailableEarningException;
         }

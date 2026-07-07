@@ -21,6 +21,7 @@ class SettingFactory extends Factory
             'primary_store_id' => Store::factory(),
             'signup_credit' => 25,
             'referral_credit' => 15,
+            'store_withdrawal_limit' => 0,
             'show_dark_mode' => false,
             'sms_type' => 'demo',
         ];

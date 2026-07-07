@@ -5,9 +5,12 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\Store;
 use App\Models\SubscriptionOrder;
+use App\Repositories\SettingRepository;
 
 class StorePayoutEligibilityService
 {
+    public function __construct(private readonly SettingRepository $settings) {}
+
     public function availableEarnings(Store $store): float
     {
         return $this->completedNormalOrderNet($store)
@@ -18,6 +21,13 @@ class StorePayoutEligibilityService
     public function canWithdraw(Store $store, float $amount): bool
     {
         return $amount <= $this->availableEarnings($store);
+    }
+
+    public function exceedsWithdrawalLimit(float $amount): bool
+    {
+        $limit = (float) ($this->settings->current()?->getAttribute('store_withdrawal_limit') ?? 0);
+
+        return $limit > 0 && $amount > $limit;
     }
 
     private function completedNormalOrderNet(Store $store): float

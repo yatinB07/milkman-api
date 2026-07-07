@@ -25,6 +25,7 @@ class SettingResource extends JsonResource
             'store_onesignal_hash' => $this->resource->getAttribute('store_onesignal_hash'),
             'signup_credit' => $this->resource->getAttribute('signup_credit'),
             'referral_credit' => $this->resource->getAttribute('referral_credit'),
+            'store_withdrawal_limit' => $this->resource->getAttribute('store_withdrawal_limit'),
             'show_dark_mode' => $this->resource->getAttribute('show_dark_mode'),
             'google_maps_key' => $this->resource->getAttribute('google_maps_key'),
             'sms_type' => $this->resource->getAttribute('sms_type'),

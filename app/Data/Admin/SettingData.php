@@ -18,6 +18,7 @@ final readonly class SettingData
         'store_onesignal_hash',
         'signup_credit',
         'referral_credit',
+        'store_withdrawal_limit',
         'show_dark_mode',
         'google_maps_key',
         'sms_type',

@@ -25,6 +25,7 @@ class Setting extends Model
         'store_onesignal_hash',
         'signup_credit',
         'referral_credit',
+        'store_withdrawal_limit',
         'show_dark_mode',
         'google_maps_key',
         'sms_type',
@@ -42,6 +43,7 @@ class Setting extends Model
             'referral_credit' => 'decimal:2',
             'show_dark_mode' => 'boolean',
             'signup_credit' => 'decimal:2',
+            'store_withdrawal_limit' => 'decimal:2',
         ];
     }
 

@@ -5,6 +5,7 @@ namespace Tests\Feature\Store;
 use App\Models\Admin;
 use App\Models\Order;
 use App\Models\PayoutRequest;
+use App\Models\Setting;
 use App\Models\Store;
 use App\Models\SubscriptionOrder;
 use Database\Seeders\RoleAndPermissionSeeder;
@@ -110,6 +111,37 @@ class StorePayoutRequestTest extends TestCase
         $this->assertDatabaseMissing('payout_requests', [
             'store_id' => $store->getKey(),
             'amount' => 30,
+            'upi_id' => 'store@upi',
+        ]);
+    }
+
+    public function test_store_cannot_request_payout_above_withdrawal_limit(): void
+    {
+        [$store, $token] = $this->storeToken();
+        Setting::factory()->create(['store_withdrawal_limit' => 20]);
+        Order::factory()->create([
+            'store_id' => $store->getKey(),
+            'status' => 'Completed',
+            'subtotal' => 200,
+            'coupon_amount' => 0,
+            'delivery_charge' => 0,
+            'commission_percent' => 0,
+            'rider_id' => null,
+            'coupon_id' => null,
+        ]);
+
+        $this->withToken($token)
+            ->postJson('/api/v1/store/payout-requests', [
+                'amount' => 25,
+                'request_type' => 'upi',
+                'upi_id' => 'store@upi',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonPath('message', 'You cannot withdraw above your withdrawal limit.');
+
+        $this->assertDatabaseMissing('payout_requests', [
+            'store_id' => $store->getKey(),
+            'amount' => 25,
             'upi_id' => 'store@upi',
         ]);
     }

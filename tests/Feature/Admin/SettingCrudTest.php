@@ -54,6 +54,7 @@ class SettingCrudTest extends TestCase
                 'store_onesignal_hash' => 'store-rest-key',
                 'signup_credit' => 25,
                 'referral_credit' => 15,
+                'store_withdrawal_limit' => 500,
                 'show_dark_mode' => true,
                 'google_maps_key' => 'google-key',
                 'sms_type' => 'Twilio',
@@ -67,6 +68,7 @@ class SettingCrudTest extends TestCase
             ->assertCreated()
             ->assertJsonPath('message', 'Setting created successfully.')
             ->assertJsonPath('data.web_name', 'MilkMan Live')
+            ->assertJsonPath('data.store_withdrawal_limit', '500.00')
             ->assertJsonPath('data.primary_store.id', $store->id)
             ->json('data.id');
 
@@ -74,12 +76,14 @@ class SettingCrudTest extends TestCase
             ->putJson("/api/v1/admin/settings/{$createdId}", [
                 'web_name' => 'MilkMan Live Updated',
                 'currency' => 'GBP',
+                'store_withdrawal_limit' => 250,
                 'show_dark_mode' => false,
             ])
             ->assertOk()
             ->assertJsonPath('message', 'Setting updated successfully.')
             ->assertJsonPath('data.web_name', 'MilkMan Live Updated')
             ->assertJsonPath('data.currency', 'GBP')
+            ->assertJsonPath('data.store_withdrawal_limit', '250.00')
             ->assertJsonPath('data.show_dark_mode', false);
 
         $this->withToken($token)
@@ -119,6 +123,7 @@ class SettingCrudTest extends TestCase
                 'primary_store_id' => 999,
                 'signup_credit' => -1,
                 'referral_credit' => -1,
+                'store_withdrawal_limit' => -1,
                 'show_dark_mode' => 'not-boolean',
             ])
             ->assertUnprocessable()
@@ -129,6 +134,7 @@ class SettingCrudTest extends TestCase
                 'primary_store_id',
                 'signup_credit',
                 'referral_credit',
+                'store_withdrawal_limit',
                 'show_dark_mode',
             ]);
     }

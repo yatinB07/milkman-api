@@ -29,6 +29,7 @@ class SettingRequest extends FormRequest
             'store_onesignal_hash' => ['nullable', 'string'],
             'signup_credit' => ['required', 'numeric', 'min:0'],
             'referral_credit' => ['required', 'numeric', 'min:0'],
+            'store_withdrawal_limit' => ['nullable', 'numeric', 'min:0'],
             'show_dark_mode' => ['required', 'boolean'],
             'google_maps_key' => ['nullable', 'string'],
             'sms_type' => ['nullable', 'string', 'max:50'],

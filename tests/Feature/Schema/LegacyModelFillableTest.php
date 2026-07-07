@@ -123,7 +123,7 @@ class LegacyModelFillableTest extends TestCase
             PayoutRequest::class => ['store_id', 'amount', 'status', 'proof_path', 'requested_at', 'request_type', 'account_number', 'bank_name', 'account_name', 'ifsc_code', 'upi_id', 'paypal_id'],
             CashCollection::class => ['store_id', 'amount', 'message', 'collected_at'],
             WalletTransaction::class => ['customer_id', 'message', 'type', 'amount', 'transacted_at'],
-            Setting::class => ['web_name', 'web_logo_path', 'timezone', 'currency', 'primary_store_id', 'customer_onesignal_key', 'customer_onesignal_hash', 'delivery_onesignal_key', 'delivery_onesignal_hash', 'store_onesignal_key', 'store_onesignal_hash', 'signup_credit', 'referral_credit', 'show_dark_mode', 'google_maps_key', 'sms_type', 'message_auth_key', 'otp_template_id', 'twilio_account_sid', 'twilio_auth_token', 'twilio_number', 'otp_auth_token'],
+            Setting::class => ['web_name', 'web_logo_path', 'timezone', 'currency', 'primary_store_id', 'customer_onesignal_key', 'customer_onesignal_hash', 'delivery_onesignal_key', 'delivery_onesignal_hash', 'store_onesignal_key', 'store_onesignal_hash', 'signup_credit', 'referral_credit', 'store_withdrawal_limit', 'show_dark_mode', 'google_maps_key', 'sms_type', 'message_auth_key', 'otp_template_id', 'twilio_account_sid', 'twilio_auth_token', 'twilio_number', 'otp_auth_token'],
             MilkData::class => ['data'],
         ];
     }

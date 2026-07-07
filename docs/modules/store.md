@@ -323,9 +323,9 @@ POST /api/v1/store/payout-requests
 
 These endpoints require a store Sanctum token with `payouts.request`. They modernize legacy `store_api/payout_list.php` and `store_api/request_withdraw.php` by using the authenticated store instead of accepting `owner_id` from the payload.
 
-The list endpoint supports `search` across payout status, request type, and payment-account fields. It accepts `per_page` and returns Laravel pagination metadata. Create requests calculate available earnings from completed normal/subscription orders after commission, subtract existing payouts, create a `pending` payout request, and set `requested_at` server-side. Show operations are store-scoped, so a store cannot read another store's payout request.
+The list endpoint supports `search` across payout status, request type, and payment-account fields. It accepts `per_page` and returns Laravel pagination metadata. Create requests enforce the configured `settings.store_withdrawal_limit` when it is greater than zero, calculate available earnings from completed normal/subscription orders after commission, subtract existing payouts, create a `pending` payout request, and set `requested_at` server-side. Show operations are store-scoped, so a store cannot read another store's payout request.
 
-Legacy `request_withdraw.php` also checked a configured store withdrawal limit. That legacy `pstore` value is not normalized into the Laravel settings table yet, so limit enforcement should be added when that setting is modeled.
+Legacy `request_withdraw.php` used `tbl_setting.pstore` for the store withdrawal cap. Laravel normalizes that value as `settings.store_withdrawal_limit`; a zero value disables the cap for environments that have not configured it yet.
 
 The store payout request module uses:
 
