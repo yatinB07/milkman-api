@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Store;
 
 use App\Actions\Store\SubscriptionOrders\AssignStoreSubscriptionOrderRiderAction;
+use App\Actions\Store\SubscriptionOrders\CompleteStoreSelfPickupSubscriptionOrderAction;
 use App\Actions\Store\SubscriptionOrders\DecideStoreSubscriptionOrderAction;
 use App\Actions\Store\SubscriptionOrders\ListStoreSubscriptionOrdersAction;
 use App\Actions\Store\SubscriptionOrders\ShowStoreSubscriptionOrderAction;
@@ -58,6 +59,18 @@ class StoreSubscriptionOrderController extends Controller
         return response()->json([
             'message' => __('catalog.rider_assigned'),
             'data' => new StoreSubscriptionOrderResource($assign->execute($this->storeIdentity($request, $auth, 'orders.assign'), $subscriptionOrder, $request->toData())),
+        ]);
+    }
+
+    public function complete(
+        Request $request,
+        IdentityAuthService $auth,
+        CompleteStoreSelfPickupSubscriptionOrderAction $complete,
+        int $subscriptionOrder,
+    ): JsonResponse {
+        return response()->json([
+            'message' => __('catalog.subscription_order_completed'),
+            'data' => new StoreSubscriptionOrderResource($complete->execute($this->storeIdentity($request, $auth, 'orders.update-status'), $subscriptionOrder)),
         ]);
     }
 

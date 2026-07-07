@@ -267,6 +267,16 @@ class SubscriptionOrderRepository
         return $order->refresh()->load(['paymentMethod', 'rider', 'items']);
     }
 
+    public function markStoreSelfPickupCompleted(SubscriptionOrder $order): SubscriptionOrder
+    {
+        $order->update([
+            'status' => 'Completed',
+            'internal_status' => 10,
+        ]);
+
+        return $order->refresh()->load(['paymentMethod', 'rider', 'items']);
+    }
+
     public function rate(SubscriptionOrder $order, CustomerOrderRatingData $data): SubscriptionOrder
     {
         $order->update([

@@ -20260,6 +20260,52 @@
                 }
             }
         },
+        "/store/subscription-orders/{subscriptionOrder}/complete": {
+            "post": {
+                "operationId": "v1.store.subscription-orders.complete",
+                "tags": [
+                    "StoreSubscriptionOrder"
+                ],
+                "parameters": [
+                    {
+                        "name": "subscriptionOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Subscription order completed successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/StoreSubscriptionOrderResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
         "/store/subscription-orders": {
             "get": {
                 "operationId": "v1.store.subscription-orders.index",

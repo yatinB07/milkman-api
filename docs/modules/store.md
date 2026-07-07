@@ -497,3 +497,21 @@ The store subscription order rider assignment module uses:
 - `RiderRepository`
 - `RiderNotificationRepository`
 - `App\Http\Resources\Store\StoreSubscriptionOrderResource`
+
+## Store Self Pickup Subscription Order Completion API
+
+```text
+POST /api/v1/store/subscription-orders/{subscriptionOrder}/complete
+```
+
+This endpoint requires a store Sanctum token with `orders.update-status`. It complements the normal self-pickup completion workflow for subscription orders that do not need rider delivery.
+
+Only subscription orders with `order_type=Self Pickup` can be completed through this workflow. Completing the order sets `status=Completed` and `internal_status=10`, matching the completed subscription state used by rider completion. The action records a customer notification using language-file messages. Push delivery remains a future integration concern.
+
+The store self pickup subscription order completion module uses:
+
+- `StoreSubscriptionOrderController::complete`
+- `CompleteStoreSelfPickupSubscriptionOrderAction`
+- `SubscriptionOrderRepository`
+- `CustomerNotificationRepository`
+- `App\Http\Resources\Store\StoreSubscriptionOrderResource`
