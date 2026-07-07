@@ -58,7 +58,9 @@ return [
         'title' => 'MilkMan API',
     ],
 
-    'renderer' => 'elements',
+    // 'renderer' => 'elements',
+    'renderer' => 'scalar',
+
 
     'renderers' => [
         /*
