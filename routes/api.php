@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
+use App\Http\Controllers\Api\V1\Admin\AdminEarningReportController;
 use App\Http\Controllers\Api\V1\Admin\AdminProfileController;
 use App\Http\Controllers\Api\V1\Admin\BannerController;
 use App\Http\Controllers\Api\V1\Admin\CashCollectionController;
@@ -100,6 +101,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
         ->group(function (): void {
             Route::get('dashboard', [AdminDashboardController::class, 'show'])
                 ->name('dashboard.show');
+            Route::get('earning-reports', [AdminEarningReportController::class, 'index'])
+                ->name('earning-reports.index');
             Route::get('profile', [AdminProfileController::class, 'show'])
                 ->name('profile.show');
             Route::put('profile', [AdminProfileController::class, 'update'])
