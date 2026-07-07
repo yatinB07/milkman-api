@@ -30,6 +30,11 @@ final readonly class StorePayoutRequestData
         return $this->attributes;
     }
 
+    public function amount(): float
+    {
+        return (float) $this->attributes['amount'];
+    }
+
     /**
      * @param  array<string, mixed>  $data
      * @return array<string, mixed>

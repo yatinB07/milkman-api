@@ -175,6 +175,7 @@ return [
     'store_created' => 'Store created successfully.',
     'store_deleted' => 'Store deleted successfully.',
     'store_not_found' => 'Store was not found.',
+    'store_payout_exceeds_available_earning' => 'You cannot withdraw above your available earning.',
     'store_updated' => 'Store updated successfully.',
     'time_slot_created' => 'Time slot created successfully.',
     'time_slot_deleted' => 'Time slot deleted successfully.',

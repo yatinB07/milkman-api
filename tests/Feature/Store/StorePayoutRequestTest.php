@@ -3,8 +3,10 @@
 namespace Tests\Feature\Store;
 
 use App\Models\Admin;
+use App\Models\Order;
 use App\Models\PayoutRequest;
 use App\Models\Store;
+use App\Models\SubscriptionOrder;
 use Database\Seeders\RoleAndPermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +19,16 @@ class StorePayoutRequestTest extends TestCase
     public function test_store_can_list_show_and_create_payout_requests(): void
     {
         [$store, $token] = $this->storeToken();
+        Order::factory()->create([
+            'store_id' => $store->getKey(),
+            'status' => 'Completed',
+            'subtotal' => 400,
+            'coupon_amount' => 20,
+            'delivery_charge' => 10,
+            'commission_percent' => 10,
+            'rider_id' => null,
+            'coupon_id' => null,
+        ]);
         $payout = PayoutRequest::factory()->create([
             'store_id' => $store->getKey(),
             'amount' => 125.50,
@@ -55,6 +67,50 @@ class StorePayoutRequestTest extends TestCase
             'store_id' => $store->getKey(),
             'status' => 'pending',
             'request_type' => 'upi',
+        ]);
+    }
+
+    public function test_store_cannot_request_payout_above_available_earnings(): void
+    {
+        [$store, $token] = $this->storeToken();
+        Order::factory()->create([
+            'store_id' => $store->getKey(),
+            'status' => 'Completed',
+            'subtotal' => 100,
+            'coupon_amount' => 10,
+            'delivery_charge' => 0,
+            'commission_percent' => 10,
+            'rider_id' => null,
+            'coupon_id' => null,
+        ]);
+        SubscriptionOrder::factory()->create([
+            'store_id' => $store->getKey(),
+            'status' => 'Completed',
+            'subtotal' => 50,
+            'coupon_amount' => 0,
+            'delivery_charge' => 0,
+            'commission_percent' => 10,
+            'rider_id' => null,
+            'coupon_id' => null,
+        ]);
+        PayoutRequest::factory()->create([
+            'store_id' => $store->getKey(),
+            'amount' => 100,
+        ]);
+
+        $this->withToken($token)
+            ->postJson('/api/v1/store/payout-requests', [
+                'amount' => 30,
+                'request_type' => 'upi',
+                'upi_id' => 'store@upi',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonPath('message', 'You cannot withdraw above your available earning.');
+
+        $this->assertDatabaseMissing('payout_requests', [
+            'store_id' => $store->getKey(),
+            'amount' => 30,
+            'upi_id' => 'store@upi',
         ]);
     }
 
