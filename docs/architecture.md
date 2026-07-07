@@ -35,6 +35,9 @@ Repositories are required when a module has persistence or query workflows. Do n
 
 Current implemented workflow repositories:
 
+- `AdminRepository`
+- `AdminDashboardRepository`
+- `AdminEarningReportRepository`
 - `IdentityRepository`
 - `CatalogRepository`
 - `BannerRepository`
@@ -68,6 +71,13 @@ Current implemented workflow repositories:
 - `OrderItemRepository`
 - `SubscriptionOrderRepository`
 - `SubscriptionOrderItemRepository`
+
+Current implemented workflow services:
+
+- `IdentityAuthService`
+- `SubscriptionScheduleService`
+- `WalletService`
+- `StorePayoutEligibilityService`
 
 The architecture layering test prevents Controllers and Actions from building Eloquent queries directly.
 
