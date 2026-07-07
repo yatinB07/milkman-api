@@ -14,6 +14,7 @@ POST /api/v1/{identity}/auth/login
 GET  /api/v1/{identity}/auth/me
 POST /api/v1/{identity}/auth/logout
 GET  /api/v1/{identity}/auth/permissions/{permission}
+GET  /api/v1/admin/dashboard
 GET  /api/v1/admin/profile
 PUT  /api/v1/admin/profile
 POST /api/v1/customer/auth/email-availability
@@ -34,6 +35,8 @@ Login returns:
 The profile and logout endpoints require `auth:sanctum`. A token issued for one identity type cannot be used against another identity area.
 
 `GET /admin/profile` and `PUT /admin/profile` map the legacy admin `profile.php` and `get_admin.php` behavior to safe authenticated APIs. The Laravel profile response exposes id, name, username, email, and status fields, but never returns the password hash. Updates accept name, username, and password; password hashing is handled by the Admin model cast.
+
+`GET /admin/dashboard` maps the legacy admin branch of `dashboard.php`. It returns count cards for banners, categories, zones, stores, payment methods, pages, and customers, plus financial totals for commission earning, sales, completed/pending payouts, and on-hand cash.
 
 The customer availability endpoints are public registration helpers mapped from the legacy customer `email_check.php` and `mobile_check.php` endpoints. They return a boolean `available` value for a candidate email or country-code/mobile pair. `CustomerRepository` performs the existence checks, including soft-deleted rows, because unique identity values should not be reused accidentally while old customer records remain restorable.
 

@@ -28,7 +28,7 @@ This map prevents root legacy screens from being silently skipped while modules 
 | `complete.php` | Admin order completion reference; operational completion now belongs to store/rider completion APIs. |
 | `coporder.php` | Admin completed normal-order listing reference; covered by Admin Order CRUD/list filters. |
 | `cporder.php` | Admin completed subscription-order listing reference; covered by Admin Subscription Order CRUD/list filters. |
-| `dashboard.php` | Admin dashboard UI reference; API dashboard remains a future focused module if required by the React admin. |
+| `dashboard.php` | `GET /api/v1/admin/dashboard` through Admin Dashboard API. |
 | `earningreport.php` | Admin earnings/report UI reference; reporting API remains a future focused module. |
 | `edit_payment.php` | `PUT /api/v1/admin/payment-methods/{paymentMethod}` through Admin Payment Method CRUD. |
 | `get_admin.php` | `GET /api/v1/admin/profile` through Admin Profile API. |

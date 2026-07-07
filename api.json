@@ -16,6 +16,56 @@
         }
     ],
     "paths": {
+        "/admin/dashboard": {
+            "get": {
+                "operationId": "v1.admin.dashboard.show",
+                "tags": [
+                    "AdminDashboard"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`AdminDashboardResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/AdminDashboardResource"
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Access denied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Error overview."
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
         "/admin/profile": {
             "get": {
                 "operationId": "v1.admin.profile.show",
@@ -22439,6 +22489,26 @@
             }
         },
         "schemas": {
+            "AdminDashboardResource": {
+                "type": "object",
+                "properties": {
+                    "counts": {
+                        "type": "string"
+                    },
+                    "financials": {
+                        "type": "string"
+                    },
+                    "cards": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "counts",
+                    "financials",
+                    "cards"
+                ],
+                "title": "AdminDashboardResource"
+            },
             "AdminProfileRequest": {
                 "type": "object",
                 "properties": {
