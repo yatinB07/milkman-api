@@ -348,7 +348,7 @@ These endpoints require a store Sanctum token with `orders.view`. They modernize
 
 The list endpoint accepts `status=current|past`, `search`, and `per_page`. `current` excludes `Completed` and `Cancelled`; `past` includes only `Completed` and `Cancelled`, matching the legacy current/history split. Search covers transaction id, customer name, customer mobile, status, order type, and rider fields. Show operations are store-scoped, so a store cannot read another store's order.
 
-This module is read-only. Store order status decisions, rider assignment, and completion flows remain separate workflows from legacy `make_decision.php`, `ass_rider.php`, and `complete_order.php`.
+Store order status decisions, rider assignment, and completion are implemented as separate endpoints below so reads stay side-effect free and state changes remain explicit.
 
 The store normal order module uses:
 
@@ -438,7 +438,7 @@ These endpoints require a store Sanctum token with `orders.view`. They modernize
 
 The list endpoint accepts `status=current|past`, `search`, and `per_page`. `current` excludes `Completed` and `Cancelled`; `past` includes only `Completed` and `Cancelled`, matching the legacy current/history split. Search covers transaction id, customer name, customer mobile, status, order type, and rider fields. Show operations are store-scoped and include subscription item schedule data derived from total/completed dates.
 
-This module is read-only. Store subscription order status decisions, rider assignment, completion, skip, and extension flows remain separate workflows.
+Store subscription order status decisions, rider assignment, and self-pickup completion are implemented as separate endpoints below so reads stay side-effect free and state changes remain explicit. Customer-facing skip and extension remain under the customer subscription schedule API because those workflows affect the customer's schedule and wallet.
 
 The store subscription order module uses:
 

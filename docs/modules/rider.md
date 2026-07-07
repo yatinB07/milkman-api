@@ -88,7 +88,7 @@ These endpoints require a rider Sanctum token with `orders.view`. They modernize
 
 The list endpoint accepts `status=current|past`, `search`, and `per_page`. `current` excludes `Completed` and `Cancelled`; `past` includes only `Completed` and `Cancelled`, matching the legacy current/history split. Search covers transaction id, customer name, customer mobile, address, status, and order type. Show operations are rider-scoped, so a rider cannot read another rider's order.
 
-This module is read-only. Rider order status decisions and completion flows remain separate workflows from legacy `make_decision.php` and `complete_order.php`.
+Rider order status decisions and completion are implemented as separate endpoints below so reads stay side-effect free and state changes remain explicit.
 
 The rider normal order module uses:
 
@@ -161,7 +161,7 @@ These endpoints require a rider Sanctum token with `orders.view`. They modernize
 
 The list endpoint accepts `status=current|past`, `search`, and `per_page`. `current` excludes `Completed` and `Cancelled`; `past` includes only `Completed` and `Cancelled`, matching the legacy current/history split. Search covers transaction id, customer name, customer mobile, address, status, and order type. Show operations are rider-scoped and include subscription item schedule data derived from total/completed dates.
 
-This module is read-only. Rider subscription order status decisions, completion, and date workflows remain separate workflows from legacy `sub_decision.php`, `sub_complete.php`, and `completedate.php`.
+Rider subscription order status decisions, completion, and delivery-date completion are implemented as separate endpoints below so reads stay side-effect free and state changes remain explicit.
 
 The rider subscription order module uses:
 

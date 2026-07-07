@@ -16,7 +16,7 @@ These endpoints require an admin Sanctum token with `orders.update-status`. They
 
 The list endpoint supports `search` across transaction id, customer snapshot fields, status, order type, store identity, customer identity, and rider identity. It accepts `per_page` and returns Laravel pagination metadata. Delete requests soft delete subscription orders.
 
-This admin CRUD intentionally handles the subscription order row only. Subscription item schedules, skip/extend, delivery completion dates, wallet effects, notifications, and store/rider/customer subscription APIs should be implemented as separate Actions/Services so side effects stay explicit and testable.
+This admin CRUD intentionally handles the subscription order row only. Subscription item schedules, skip/extend, delivery completion dates, wallet effects, notifications, and store/rider/customer subscription APIs are implemented through separate Actions/Services so side effects stay explicit and testable.
 
 The admin subscription order module uses:
 
@@ -37,7 +37,7 @@ This endpoint requires a customer Sanctum token. Admin, store, and rider tokens 
 
 Legacy `d_order_now.php` placed subscription orders when `type` was not `Normal`, created rows in `tbl_subscribe_order` and `tbl_subscribe_order_product`, generated delivery dates from `startdate`, `select_days`, and `total_deliveries`, debited wallet balance when `wall_amt` was used, and wrote a `wallet_report` debit row. The Laravel endpoint covers that placement flow with a modern request shape, authenticated customer ownership, transactional subscription order/item creation, generated `total_dates`, wallet balance validation, wallet debit, and wallet transaction logging.
 
-OneSignal notifications, customer/store notification rows, skip/extend behavior, and delivery completion workflows are intentionally deferred to later focused slices so those side effects can use explicit Actions, Events, Jobs, and tests.
+Customer skip/extend behavior and rider/store completion workflows are covered by focused APIs below and in the store/rider modules. Push notification delivery remains a future queue/integration slice; persisted notification rows are handled by workflow actions that change subscription state.
 
 The customer subscription order module uses:
 
@@ -45,7 +45,7 @@ The customer subscription order module uses:
 - `CustomerSubscriptionOrderRequest`
 - `App\Data\Customer\CustomerSubscriptionOrderData` and `CustomerSubscriptionOrderItemData`
 - `PlaceCustomerSubscriptionOrderAction`
-- `SubscriptionOrderRepository`, `CustomerRepository`, `StoreRepository`, and `WalletTransactionRepository`
+- `SubscriptionOrderRepository`, `StoreRepository`, and `WalletService`
 - `App\Http\Resources\Customer\CustomerSubscriptionOrderResource`
 
 ## Customer Subscription History APIs
@@ -125,7 +125,7 @@ These endpoints require an admin Sanctum token with `orders.update-status`. They
 
 The list endpoint supports `search` across product title, variation, time slot, and parent subscription order transaction/customer snapshot fields. It accepts `per_page`, returns Laravel pagination metadata, and soft deletes subscription order items.
 
-Skip/extend behavior from `user_api/skip_extend.php`, wallet refunds, total recalculation, and delivery completion workflows are not hidden in this CRUD endpoint. They should be implemented as dedicated subscription schedule Actions/Services so financial side effects stay explicit and testable.
+Skip/extend behavior from `user_api/skip_extend.php`, wallet refunds, and total recalculation are implemented by the customer subscription schedule API. Delivery completion is handled by the rider and store subscription completion workflows. This CRUD endpoint remains side-effect-light and only manages item records directly.
 
 The admin subscription order item module uses:
 

@@ -16,7 +16,7 @@ These endpoints require an admin Sanctum token with `orders.update-status`. They
 
 The list endpoint supports `search` across transaction id, customer snapshot fields, status, order type, store identity, customer identity, and rider identity. It accepts `per_page` and always returns Laravel pagination metadata. Delete requests soft delete orders.
 
-This admin CRUD intentionally handles the order row only. Order item management, assignment workflows, status transitions, wallet effects, stock effects, notifications, and store/rider/customer order APIs should be implemented as separate Actions/Services so business side effects stay explicit and testable.
+This admin CRUD intentionally handles the order row only. Order item management, store/rider/customer workflows, wallet effects, and notifications are implemented through separate Actions/Services so business side effects stay explicit and testable. Stock reservation/release remains a future inventory workflow because the legacy schema does not expose a normalized stock ledger.
 
 The admin order module uses:
 
@@ -37,7 +37,7 @@ This endpoint requires a customer Sanctum token. Admin, store, and rider tokens 
 
 Legacy `d_order_now.php` placed normal orders when `type = Normal`, created rows in `tbl_normal_order` and `tbl_normal_order_product`, debited wallet balance when `wall_amt` was used, and wrote a `wallet_report` debit row. The Laravel endpoint covers the normal-order part of that flow with a modern request shape, authenticated customer ownership, transactional order/item creation, wallet balance validation, wallet debit, and wallet transaction logging.
 
-Subscription order placement, OneSignal notifications, customer/store notification rows, and advanced scheduling are intentionally left for later focused slices so those side effects can be implemented with explicit Actions, Events, Jobs, and tests.
+Subscription order placement is covered by the customer subscription API. Push notification delivery remains a future queue/integration slice; persisted notification rows are handled by the store/rider workflow actions that change order state.
 
 The customer normal order module uses:
 
@@ -45,7 +45,7 @@ The customer normal order module uses:
 - `CustomerOrderRequest`
 - `App\Data\Customer\CustomerOrderData` and `CustomerOrderItemData`
 - `PlaceCustomerOrderAction`
-- `OrderRepository`, `CustomerRepository`, `StoreRepository`, and `WalletTransactionRepository`
+- `OrderRepository`, `StoreRepository`, and `WalletService`
 - `App\Http\Resources\Customer\CustomerOrderResource`
 
 ## Customer Order History APIs
