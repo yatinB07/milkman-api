@@ -27,4 +27,21 @@ class WalletService
             ]);
         });
     }
+
+    public function debit(Customer $customer, string $amount, string $message): WalletTransaction
+    {
+        return DB::transaction(function () use ($customer, $amount, $message): WalletTransaction {
+            $customer->forceFill([
+                'wallet_balance' => number_format(((float) $customer->getAttribute('wallet_balance')) - ((float) $amount), 2, '.', ''),
+            ])->save();
+
+            return $this->transactions->create([
+                'customer_id' => $customer->getKey(),
+                'message' => $message,
+                'type' => 'Debit',
+                'amount' => $amount,
+                'transacted_at' => now(),
+            ]);
+        });
+    }
 }

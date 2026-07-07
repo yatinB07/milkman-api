@@ -9,12 +9,10 @@ use App\Services\WalletService;
 
 class TopUpCustomerWalletAction
 {
-    private const LEGACY_TOP_UP_MESSAGE = 'Wallet Balance Added!!';
-
     public function __construct(private readonly WalletService $wallets) {}
 
     public function execute(Customer $customer, WalletTopUpData $data): WalletTransaction
     {
-        return $this->wallets->credit($customer, $data->amount, self::LEGACY_TOP_UP_MESSAGE);
+        return $this->wallets->credit($customer, $data->amount, __('catalog.wallet_balance_added'));
     }
 }

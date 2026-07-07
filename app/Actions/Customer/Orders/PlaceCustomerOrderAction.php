@@ -6,19 +6,17 @@ use App\Data\Customer\CustomerOrderData;
 use App\Exceptions\Customer\InsufficientWalletBalanceException;
 use App\Models\Customer;
 use App\Models\Order;
-use App\Repositories\CustomerRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\StoreRepository;
-use App\Repositories\WalletTransactionRepository;
+use App\Services\WalletService;
 use Illuminate\Support\Facades\DB;
 
 class PlaceCustomerOrderAction
 {
     public function __construct(
         private readonly OrderRepository $orders,
-        private readonly CustomerRepository $customers,
         private readonly StoreRepository $stores,
-        private readonly WalletTransactionRepository $walletTransactions,
+        private readonly WalletService $wallets,
     ) {}
 
     public function execute(Customer $customer, CustomerOrderData $data): Order
@@ -60,14 +58,11 @@ class PlaceCustomerOrderAction
             ));
 
             if ($data->walletAmount > 0) {
-                $this->customers->debitWallet($customer, $data->walletAmount);
-                $this->walletTransactions->create([
-                    'customer_id' => $customer->getKey(),
-                    'message' => "Wallet used in order #{$order->getKey()}",
-                    'type' => 'Debit',
-                    'amount' => $data->walletAmount,
-                    'transacted_at' => now(),
-                ]);
+                $this->wallets->debit(
+                    $customer,
+                    number_format($data->walletAmount, 2, '.', ''),
+                    __('catalog.wallet_used_in_order', ['order' => $order->getKey()]),
+                );
             }
 
             return $order->refresh()->load(['store', 'customer', 'paymentMethod', 'coupon', 'items']);

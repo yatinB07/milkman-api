@@ -73,6 +73,7 @@ class CustomerOrderPlacementApiTest extends TestCase
         $this->assertTrue(WalletTransaction::query()
             ->where('customer_id', $customer->id)
             ->where('type', 'Debit')
+            ->where('message', 'Wallet used in order #'.$response->json('data.id'))
             ->where('amount', 25)
             ->exists());
     }
