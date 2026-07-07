@@ -98,6 +98,63 @@ class ZoneCrudTest extends TestCase
             ->assertJsonValidationErrors(['title', 'coordinates']);
     }
 
+    public function test_admin_zone_create_requires_at_least_three_coordinate_points(): void
+    {
+        $token = $this->adminTokenWithPermission('settings.update');
+
+        $this->withToken($token)
+            ->postJson('/api/v1/admin/zones', [
+                'title' => 'Ahmedabad Thin Zone',
+                'coordinates' => '(23.04,72.50),(23.05,72.51)',
+                'is_active' => true,
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['coordinates'])
+            ->assertJsonPath('errors.coordinates.0', 'The coordinates field must contain at least 3 coordinate points.');
+    }
+
+    public function test_admin_zone_update_rejects_too_few_coordinate_points(): void
+    {
+        $token = $this->adminTokenWithPermission('settings.update');
+        $zone = Zone::factory()->create();
+
+        $this->withToken($token)
+            ->putJson("/api/v1/admin/zones/{$zone->id}", [
+                'coordinates' => 'POLYGON((23.04 72.50,23.05 72.51))',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['coordinates'])
+            ->assertJsonPath('errors.coordinates.0', 'The coordinates field must contain at least 3 coordinate points.');
+    }
+
+    public function test_admin_zone_create_validates_active_status_values(): void
+    {
+        $token = $this->adminTokenWithPermission('settings.update');
+
+        $this->withToken($token)
+            ->postJson('/api/v1/admin/zones', [
+                'title' => 'Ahmedabad West',
+                'coordinates' => '(23.04,72.50),(23.05,72.51),(23.06,72.50)',
+                'is_active' => 'definitely',
+                'status' => 'published',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['is_active', 'status']);
+    }
+
+    public function test_admin_zone_update_accepts_legacy_status_alias(): void
+    {
+        $token = $this->adminTokenWithPermission('settings.update');
+        $zone = Zone::factory()->create(['is_active' => true]);
+
+        $this->withToken($token)
+            ->putJson("/api/v1/admin/zones/{$zone->id}", [
+                'status' => 0,
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.is_active', false);
+    }
+
     public function test_admin_zone_routes_require_admin_identity(): void
     {
         $this->seed(RoleAndPermissionSeeder::class);

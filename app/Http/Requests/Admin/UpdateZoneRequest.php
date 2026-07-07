@@ -3,13 +3,25 @@
 namespace App\Http\Requests\Admin;
 
 use App\Data\Admin\ZoneData;
+use App\Rules\MinimumCoordinatePoints;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateZoneRequest extends FormRequest
 {
+    private const MINIMUM_COORDINATE_POINTS = 3;
+
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('status') && ! $this->has('is_active')) {
+            $this->merge([
+                'is_active' => $this->input('status'),
+            ]);
+        }
     }
 
     /** @return array<string, array<int, string>> */
@@ -17,9 +29,10 @@ class UpdateZoneRequest extends FormRequest
     {
         return [
             'title' => ['sometimes', 'required', 'string', 'max:255'],
-            'coordinates' => ['sometimes', 'required', 'string'],
+            'coordinates' => ['sometimes', 'required', 'string', new MinimumCoordinatePoints(self::MINIMUM_COORDINATE_POINTS)],
             'alias' => ['sometimes', 'nullable', 'string', 'max:255'],
             'is_active' => ['sometimes', 'boolean'],
+            'status' => ['sometimes', 'boolean'],
         ];
     }
 
