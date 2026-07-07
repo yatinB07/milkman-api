@@ -16,7 +16,7 @@ These endpoints require an admin Sanctum token with `payouts.approve`. They mana
 
 The list endpoint supports `search` across status, request type, transfer details, and store identity fields, accepts `per_page`, and returns Laravel pagination metadata. Delete requests soft delete payout requests.
 
-The legacy store withdrawal endpoint checked available earnings before inserting a pending payout. That calculation belongs in a store-facing payout request Action/Service when store APIs are implemented. The admin CRUD focuses on operational management and completion metadata such as `status` and `proof_path`.
+The legacy store withdrawal endpoint checked available earnings and a configured withdrawal cap before inserting a pending payout. Store-facing payout requests enforce those checks through `StorePayoutEligibilityService`; this admin CRUD focuses on operational management and completion metadata such as `status` and `proof_path`.
 
 The admin payout request module uses:
 
@@ -41,7 +41,7 @@ These endpoints require an admin Sanctum token with `payouts.approve`. They mana
 
 The list endpoint supports `search` across collection message and store identity fields, accepts `per_page`, and returns Laravel pagination metadata. Delete requests soft delete cash collection rows.
 
-The legacy admin panel calculated remaining COD cash before inserting `tbl_cash`. This CRUD preserves the stored settlement log; richer settlement calculations should live in a dedicated payout/cash service when reporting workflows are added.
+The legacy admin panel calculated remaining COD cash before inserting `tbl_cash`. This CRUD preserves the stored settlement log, while dashboard and earning-report endpoints expose aggregate settlement values for admin reporting.
 
 The admin cash collection module uses:
 

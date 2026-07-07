@@ -40,8 +40,8 @@ class LegacySchemaCoverage
             ['legacy' => 'payout_setting', 'destination' => 'payout_requests', 'status' => 'Schema implemented', 'notes' => 'Store payout requests.'],
             ['legacy' => 'tbl_cash', 'destination' => 'cash_collections', 'status' => 'Schema implemented', 'notes' => 'Cash settlement tracking.'],
             ['legacy' => 'wallet_report', 'destination' => 'wallet_transactions', 'status' => 'Schema implemented', 'notes' => 'Customer wallet ledger.'],
-            ['legacy' => 'tbl_setting', 'destination' => 'settings', 'status' => 'Schema implemented', 'notes' => 'Global settings and integration keys.'],
-            ['legacy' => 'tbl_milk', 'destination' => 'milk_data', 'status' => 'Schema implemented, behavior pending review', 'notes' => 'Stored as raw reference payload until the legacy purpose is fully reviewed.'],
+            ['legacy' => 'tbl_setting', 'destination' => 'settings', 'status' => 'Schema implemented', 'notes' => 'Global settings, integration keys, and store withdrawal limit.'],
+            ['legacy' => 'tbl_milk', 'destination' => 'milk_data', 'status' => 'Implemented', 'notes' => 'Stored as an admin-managed raw reference payload because no active legacy source usage remains after the controller/mediconfig.php dependency removal.'],
         ];
     }
 
