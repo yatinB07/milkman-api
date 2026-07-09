@@ -142,6 +142,54 @@ class ZoneCrudTest extends TestCase
             ->assertJsonValidationErrors(['is_active', 'status']);
     }
 
+    public function test_admin_zone_create_normalizes_map_coordinate_alias(): void
+    {
+        $token = $this->adminTokenWithPermission('settings.update');
+        $mapAlias = '(23.0100,72.5100),(23.0200,72.5200),(23.0300,72.5100)';
+
+        $createdId = $this->withToken($token)
+            ->postJson('/api/v1/admin/zones', [
+                'title' => 'Ahmedabad Map Zone',
+                'coordinates' => $mapAlias,
+                'alias' => null,
+                'is_active' => true,
+            ])
+            ->assertCreated()
+            ->assertJsonPath('data.coordinates', 'POLYGON((23.0100 72.5100,23.0200 72.5200,23.0300 72.5100,23.0100 72.5100))')
+            ->assertJsonPath('data.alias', $mapAlias)
+            ->json('data.id');
+
+        $this->assertDatabaseHas('zones', [
+            'id' => $createdId,
+            'coordinates' => 'POLYGON((23.0100 72.5100,23.0200 72.5200,23.0300 72.5100,23.0100 72.5100))',
+            'alias' => $mapAlias,
+        ]);
+    }
+
+    public function test_admin_zone_update_normalizes_map_coordinate_alias(): void
+    {
+        $token = $this->adminTokenWithPermission('settings.update');
+        $zone = Zone::factory()->create([
+            'coordinates' => 'POLYGON((23.0000 72.5000,23.0100 72.5100,23.0200 72.5000,23.0000 72.5000))',
+            'alias' => '(23.0000,72.5000),(23.0100,72.5100),(23.0200,72.5000)',
+        ]);
+        $mapAlias = '(21.2620,72.7920),(21.2700,72.8000),(21.2550,72.8050)';
+
+        $this->withToken($token)
+            ->putJson("/api/v1/admin/zones/{$zone->id}", [
+                'coordinates' => $mapAlias,
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.coordinates', 'POLYGON((21.2620 72.7920,21.2700 72.8000,21.2550 72.8050,21.2620 72.7920))')
+            ->assertJsonPath('data.alias', $mapAlias);
+
+        $this->assertDatabaseHas('zones', [
+            'id' => $zone->id,
+            'coordinates' => 'POLYGON((21.2620 72.7920,21.2700 72.8000,21.2550 72.8050,21.2620 72.7920))',
+            'alias' => $mapAlias,
+        ]);
+    }
+
     public function test_admin_zone_update_accepts_legacy_status_alias(): void
     {
         $token = $this->adminTokenWithPermission('settings.update');
