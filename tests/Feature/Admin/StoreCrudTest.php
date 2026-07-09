@@ -110,6 +110,51 @@ class StoreCrudTest extends TestCase
             ->assertJsonValidationErrors(['title', 'email', 'password', 'zone_id']);
     }
 
+    public function test_admin_store_create_requires_legacy_store_profile_fields(): void
+    {
+        $token = $this->adminTokenWithPermission('stores.manage');
+
+        $this->withToken($token)
+            ->postJson('/api/v1/admin/stores', [
+                'title' => 'Partial Store',
+                'email' => 'partial@example.test',
+                'password' => 'secret-password',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors([
+                'zone_id',
+                'image_path',
+                'cover_image_path',
+                'rating',
+                'slogan',
+                'slogan_title',
+                'category_reference',
+                'mobile',
+                'full_address',
+                'pincode',
+                'landmark',
+                'short_description',
+                'content_description',
+                'latitude',
+                'longitude',
+                'store_charge',
+                'minimum_order_amount',
+                'commission_percent',
+                'opens_at',
+                'closes_at',
+                'is_pickup_enabled',
+                'is_active',
+                'charge_type',
+                'bank_name',
+                'ifsc_code',
+                'receipt_name',
+                'account_number',
+                'paypal_id',
+                'upi_id',
+                'cancel_policy',
+            ]);
+    }
+
     public function test_admin_store_routes_require_admin_identity(): void
     {
         $this->seed(RoleAndPermissionSeeder::class);
