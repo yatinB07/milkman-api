@@ -14,6 +14,6 @@ class ListZonesAction
 
     public function execute(ListQueryData $query): LengthAwarePaginator
     {
-        return $this->zones->paginate($query->search, $query->perPage);
+        return $this->zones->paginate($query->search, $query->perPage, $query->isActive);
     }
 }

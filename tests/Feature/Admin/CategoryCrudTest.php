@@ -68,6 +68,7 @@ class CategoryCrudTest extends TestCase
         Category::factory()->create(['title' => 'Cow Milk']);
         Category::factory()->create(['title' => 'Buffalo Milk']);
         Category::factory()->create(['title' => 'Curd']);
+        Category::factory()->create(['title' => 'Hidden Milk', 'is_active' => false]);
 
         $this->withToken($token)
             ->getJson('/api/v1/admin/categories?search=milk&per_page=1')
@@ -75,7 +76,15 @@ class CategoryCrudTest extends TestCase
             ->assertJsonCount(1, 'data')
             ->assertJsonPath('data.0.title', 'Buffalo Milk')
             ->assertJsonPath('meta.per_page', 1)
-            ->assertJsonPath('meta.total', 2);
+            ->assertJsonPath('meta.total', 3);
+
+        $this->withToken($token)
+            ->getJson('/api/v1/admin/categories?search=milk&is_active=false&per_page=10')
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'Hidden Milk')
+            ->assertJsonPath('data.0.is_active', false)
+            ->assertJsonPath('meta.total', 1);
     }
 
     public function test_admin_category_create_validates_payload(): void

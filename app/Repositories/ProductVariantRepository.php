@@ -10,10 +10,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class ProductVariantRepository
 {
     /** @return LengthAwarePaginator<int, ProductVariant> */
-    public function paginate(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    public function paginate(?string $search = null, int $perPage = 15, ?bool $isOutOfStock = null): LengthAwarePaginator
     {
         return ProductVariant::query()
             ->with(['store', 'product'])
+            ->when($isOutOfStock !== null, fn ($query) => $query->where('is_out_of_stock', $isOutOfStock))
             ->when($search, function ($query, string $search): void {
                 $query->where(function ($query) use ($search): void {
                     $query->where('title', 'like', "%{$search}%")

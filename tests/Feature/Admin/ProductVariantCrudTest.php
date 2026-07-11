@@ -84,6 +84,7 @@ class ProductVariantCrudTest extends TestCase
         ProductVariant::factory()->create(['title' => '500 ml']);
         ProductVariant::factory()->create(['title' => '1 Litre']);
         ProductVariant::factory()->create(['title' => '2 Litres']);
+        ProductVariant::factory()->create(['title' => 'Hidden Litre', 'is_out_of_stock' => true]);
 
         $this->withToken($token)
             ->getJson('/api/v1/admin/product-variants?search=litre&per_page=1')
@@ -91,7 +92,15 @@ class ProductVariantCrudTest extends TestCase
             ->assertJsonCount(1, 'data')
             ->assertJsonPath('data.0.title', '1 Litre')
             ->assertJsonPath('meta.per_page', 1)
-            ->assertJsonPath('meta.total', 2);
+            ->assertJsonPath('meta.total', 3);
+
+        $this->withToken($token)
+            ->getJson('/api/v1/admin/product-variants?search=litre&is_out_of_stock=true&per_page=10')
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.title', 'Hidden Litre')
+            ->assertJsonPath('data.0.is_out_of_stock', true)
+            ->assertJsonPath('meta.total', 1);
     }
 
     public function test_admin_product_variant_create_validates_payload(): void

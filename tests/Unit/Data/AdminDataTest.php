@@ -24,10 +24,14 @@ class AdminDataTest extends TestCase
         $query = ListQueryData::fromArray([
             'search' => 'milk',
             'per_page' => 25,
+            'is_active' => 'false',
+            'is_out_of_stock' => 'true',
         ]);
 
         $this->assertSame('milk', $query->search);
         $this->assertSame(25, $query->perPage);
+        $this->assertFalse($query->isActive);
+        $this->assertTrue($query->isOutOfStock);
     }
 
     public function test_banner_data_outputs_only_allowed_banner_attributes(): void

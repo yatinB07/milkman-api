@@ -14,6 +14,6 @@ class ListCategoriesAction
 
     public function execute(ListQueryData $query): LengthAwarePaginator
     {
-        return $this->categories->paginate($query->search, $query->perPage);
+        return $this->categories->paginate($query->search, $query->perPage, $query->isActive);
     }
 }

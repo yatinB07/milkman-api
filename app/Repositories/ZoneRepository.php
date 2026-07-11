@@ -14,9 +14,10 @@ class ZoneRepository
     ) {}
 
     /** @return LengthAwarePaginator<int, Zone> */
-    public function paginate(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    public function paginate(?string $search = null, int $perPage = 15, ?bool $isActive = null): LengthAwarePaginator
     {
         return Zone::query()
+            ->when($isActive !== null, fn ($query) => $query->where('is_active', $isActive))
             ->when($search, function ($query, string $search): void {
                 $query->where(function ($query) use ($search): void {
                     $query

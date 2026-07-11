@@ -14,6 +14,6 @@ class ListStoresAction
 
     public function execute(ListQueryData $query): LengthAwarePaginator
     {
-        return $this->stores->paginate($query->search, $query->perPage);
+        return $this->stores->paginate($query->search, $query->perPage, $query->isActive);
     }
 }

@@ -11,10 +11,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class ProductRepository
 {
     /** @return LengthAwarePaginator<int, Product> */
-    public function paginate(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    public function paginate(?string $search = null, int $perPage = 15, ?bool $isActive = null): LengthAwarePaginator
     {
         return Product::query()
             ->with(['store', 'storeCategory'])
+            ->when($isActive !== null, fn ($query) => $query->where('is_active', $isActive))
             ->when($search, function ($query, string $search): void {
                 $query->where(function ($query) use ($search): void {
                     $query->where('title', 'like', "%{$search}%")

@@ -10,9 +10,10 @@ use Illuminate\Database\Eloquent\Collection;
 class CategoryRepository
 {
     /** @return LengthAwarePaginator<int, Category> */
-    public function paginate(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    public function paginate(?string $search = null, int $perPage = 15, ?bool $isActive = null): LengthAwarePaginator
     {
         return Category::query()
+            ->when($isActive !== null, fn ($query) => $query->where('is_active', $isActive))
             ->when($search, function ($query, string $search): void {
                 $query->where('title', 'like', "%{$search}%");
             })

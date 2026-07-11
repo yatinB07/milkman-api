@@ -27,10 +27,11 @@ use Illuminate\Database\Eloquent\Collection;
 class StoreRepository
 {
     /** @return LengthAwarePaginator<int, Store> */
-    public function paginate(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    public function paginate(?string $search = null, int $perPage = 15, ?bool $isActive = null): LengthAwarePaginator
     {
         return Store::query()
             ->with('zone')
+            ->when($isActive !== null, fn ($query) => $query->where('is_active', $isActive))
             ->when($search, function ($query, string $search): void {
                 $query->where(function ($query) use ($search): void {
                     $query->where('title', 'like', "%{$search}%")

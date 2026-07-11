@@ -14,6 +14,6 @@ class ListProductVariantsAction
 
     public function execute(ListQueryData $query): LengthAwarePaginator
     {
-        return $this->variants->paginate($query->search, $query->perPage);
+        return $this->variants->paginate($query->search, $query->perPage, $query->isOutOfStock);
     }
 }
