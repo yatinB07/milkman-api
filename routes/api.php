@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Admin\AdminDashboardController;
 use App\Http\Controllers\Api\V1\Admin\AdminEarningReportController;
 use App\Http\Controllers\Api\V1\Admin\AdminProfileController;
+use App\Http\Controllers\Api\V1\Admin\AdminUploadController;
 use App\Http\Controllers\Api\V1\Admin\BannerController;
 use App\Http\Controllers\Api\V1\Admin\CashCollectionController;
 use App\Http\Controllers\Api\V1\Admin\CategoryController;
@@ -107,6 +108,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('profile.show');
             Route::put('profile', [AdminProfileController::class, 'update'])
                 ->name('profile.update');
+            Route::post('uploads', AdminUploadController::class)
+                ->name('uploads.store');
             Route::apiResource('banners', BannerController::class)
                 ->only(['index', 'show', 'store', 'update', 'destroy']);
             Route::apiResource('categories', CategoryController::class)

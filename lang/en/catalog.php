@@ -46,6 +46,7 @@ return [
     'favorite_deleted' => 'Favorite deleted successfully.',
     'favorite_not_found' => 'Favorite was not found.',
     'favorite_updated' => 'Favorite updated successfully.',
+    'file_uploaded' => 'File uploaded successfully.',
     'faq_created' => 'FAQ created successfully.',
     'faq_deleted' => 'FAQ deleted successfully.',
     'faq_not_found' => 'FAQ was not found.',
