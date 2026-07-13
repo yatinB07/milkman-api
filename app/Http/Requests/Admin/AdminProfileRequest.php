@@ -18,7 +18,7 @@ class AdminProfileRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['sometimes', 'nullable', 'string', 'min:8'],
         ];
     }
 

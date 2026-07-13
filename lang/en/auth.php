@@ -2,6 +2,8 @@
 
 return [
     'admin_profile_updated' => 'Admin profile updated successfully.',
+    'admin_password_updated' => 'Admin password updated successfully.',
+    'current_password_mismatch' => 'The current password is incorrect.',
     'inactive_account' => 'This account is inactive.',
     'customer_email_available' => 'New email address.',
     'customer_email_unavailable' => 'Email address already exists.',

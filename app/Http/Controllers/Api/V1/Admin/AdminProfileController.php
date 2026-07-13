@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Actions\Admin\Profile\ShowAdminProfileAction;
+use App\Actions\Admin\Profile\UpdateAdminPasswordAction;
 use App\Actions\Admin\Profile\UpdateAdminProfileAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AdminPasswordRequest;
 use App\Http\Requests\Admin\AdminProfileRequest;
 use App\Http\Resources\Admin\AdminProfileResource;
 use App\Models\Admin;
@@ -26,6 +28,17 @@ class AdminProfileController extends Controller
     ): JsonResponse {
         return response()->json([
             'message' => __('auth.admin_profile_updated'),
+            'data' => new AdminProfileResource($update->execute($this->admin($request, $auth), $request->toData())),
+        ]);
+    }
+
+    public function password(
+        AdminPasswordRequest $request,
+        IdentityAuthService $auth,
+        UpdateAdminPasswordAction $update,
+    ): JsonResponse {
+        return response()->json([
+            'message' => __('auth.admin_password_updated'),
             'data' => new AdminProfileResource($update->execute($this->admin($request, $auth), $request->toData())),
         ]);
     }

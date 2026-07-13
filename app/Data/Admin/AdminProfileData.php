@@ -16,11 +16,13 @@ final readonly class AdminProfileData
     /** @param array<string, mixed> $data */
     public static function fromArray(array $data): self
     {
-        return new self(array_filter(
+        $attributes = array_filter(
             $data,
             fn (string $field): bool => in_array($field, self::FIELDS, true),
             ARRAY_FILTER_USE_KEY,
-        ));
+        );
+
+        return new self(array_filter($attributes, fn (mixed $value): bool => $value !== null && $value !== ''));
     }
 
     /** @return array<string, mixed> */

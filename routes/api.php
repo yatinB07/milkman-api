@@ -108,6 +108,8 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
                 ->name('profile.show');
             Route::put('profile', [AdminProfileController::class, 'update'])
                 ->name('profile.update');
+            Route::put('password', [AdminProfileController::class, 'password'])
+                ->name('password.update');
             Route::post('uploads', AdminUploadController::class)
                 ->name('uploads.store');
             Route::apiResource('banners', BannerController::class)

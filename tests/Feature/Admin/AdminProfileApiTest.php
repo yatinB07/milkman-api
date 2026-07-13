@@ -29,7 +29,7 @@ class AdminProfileApiTest extends TestCase
             ->assertJsonMissingPath('data.password');
     }
 
-    public function test_admin_can_update_profile_username_and_password(): void
+    public function test_admin_can_update_profile_username(): void
     {
         [$admin, $token] = $this->adminToken([
             'username' => 'old-admin',
@@ -40,7 +40,6 @@ class AdminProfileApiTest extends TestCase
             ->putJson('/api/v1/admin/profile', [
                 'name' => 'Updated Admin',
                 'username' => 'updated-admin',
-                'password' => 'new-secret-password',
             ])
             ->assertOk()
             ->assertJsonPath('message', 'Admin profile updated successfully.')
@@ -53,8 +52,30 @@ class AdminProfileApiTest extends TestCase
 
         $this->assertSame('Updated Admin', $admin->getAttribute('name'));
         $this->assertSame('updated-admin', $admin->getAttribute('username'));
-        $this->assertTrue(Hash::check('new-secret-password', $admin->getAttribute('password')));
-        $this->assertFalse(Hash::check('old-secret-password', $admin->getAttribute('password')));
+        $this->assertTrue(Hash::check('old-secret-password', $admin->getAttribute('password')));
+    }
+
+    public function test_admin_can_update_profile_without_changing_password(): void
+    {
+        [$admin, $token] = $this->adminToken([
+            'username' => 'old-admin',
+            'password' => 'old-secret-password',
+        ]);
+
+        $this->withToken($token)
+            ->putJson('/api/v1/admin/profile', [
+                'name' => 'Updated Admin',
+                'username' => 'updated-admin',
+            ])
+            ->assertOk()
+            ->assertJsonPath('data.name', 'Updated Admin')
+            ->assertJsonPath('data.username', 'updated-admin');
+
+        $admin->refresh();
+
+        $this->assertSame('Updated Admin', $admin->getAttribute('name'));
+        $this->assertSame('updated-admin', $admin->getAttribute('username'));
+        $this->assertTrue(Hash::check('old-secret-password', $admin->getAttribute('password')));
     }
 
     public function test_admin_profile_rejects_other_identity_tokens(): void
@@ -73,6 +94,44 @@ class AdminProfileApiTest extends TestCase
             ->assertJsonPath('message', 'This token cannot access the requested identity area.');
     }
 
+    public function test_admin_can_update_password_with_current_password(): void
+    {
+        [$admin, $token] = $this->adminToken([
+            'password' => 'old-secret-password',
+        ]);
+
+        $this->withToken($token)
+            ->putJson('/api/v1/admin/password', [
+                'current_password' => 'old-secret-password',
+                'password' => 'new-secret-password',
+                'password_confirmation' => 'new-secret-password',
+            ])
+            ->assertOk()
+            ->assertJsonPath('message', 'Admin password updated successfully.')
+            ->assertJsonMissingPath('data.password');
+
+        $admin->refresh();
+
+        $this->assertTrue(Hash::check('new-secret-password', $admin->getAttribute('password')));
+        $this->assertFalse(Hash::check('old-secret-password', $admin->getAttribute('password')));
+    }
+
+    public function test_admin_password_update_rejects_wrong_current_password(): void
+    {
+        [, $token] = $this->adminToken([
+            'password' => 'old-secret-password',
+        ]);
+
+        $this->withToken($token)
+            ->putJson('/api/v1/admin/password', [
+                'current_password' => 'wrong-password',
+                'password' => 'new-secret-password',
+                'password_confirmation' => 'new-secret-password',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonPath('message', 'The current password is incorrect.');
+    }
+
     public function test_admin_profile_update_validates_input(): void
     {
         [, $token] = $this->adminToken();
@@ -81,10 +140,23 @@ class AdminProfileApiTest extends TestCase
             ->putJson('/api/v1/admin/profile', [
                 'name' => '',
                 'username' => '',
-                'password' => 'short',
             ])
             ->assertUnprocessable()
-            ->assertJsonValidationErrors(['name', 'username', 'password']);
+            ->assertJsonValidationErrors(['name', 'username']);
+    }
+
+    public function test_admin_password_update_validates_input(): void
+    {
+        [, $token] = $this->adminToken();
+
+        $this->withToken($token)
+            ->putJson('/api/v1/admin/password', [
+                'current_password' => '',
+                'password' => 'short',
+                'password_confirmation' => 'different',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['current_password', 'password']);
     }
 
     /**
